@@ -1,0 +1,73 @@
+/* Grid de extras — filas con separación visual */
+.grid-extras {
+    -fx-hgap: 16;
+    -fx-vgap: 10;
+    -fx-padding: 4 0;
+}
+
+/* Checkbox de extras */
+.check-extra .box {
+    -fx-background-color: #2e3148;
+    -fx-border-color: #4a506b;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-min-width: 16px;
+    -fx-min-height: 16px;
+}
+
+.check-extra:selected .box {
+    -fx-background-color: #4f6ef7;
+    -fx-border-color: #4f6ef7;
+}
+
+.check-extra:selected .mark {
+    -fx-background-color: white;
+}
+
+.check-extra .text {
+    -fx-fill: #c8cce0;
+    -fx-font-size: 13px;
+}
+
+/* Checkbox de combustible — más grande */
+.check-combustible .box {
+    -fx-background-color: #2e3148;
+    -fx-border-color: #4a506b;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-min-width: 20px;
+    -fx-min-height: 20px;
+}
+
+.check-combustible:selected .box {
+    -fx-background-color: #22c55e;
+    -fx-border-color: #22c55e;
+}
+
+.check-combustible .text {
+    -fx-fill: #e8eaf0;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+/* ComboBox editable de marcas */
+.combo-box-editable .text-field {
+    -fx-background-color: #2e3148;
+    -fx-text-fill: #e8eaf0;
+    -fx-background-radius: 8 0 0 8;
+}
+
+.combo-box .list-view {
+    -fx-background-color: #212436;
+    -fx-border-color: #2e3148;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #2e3148;
+    -fx-text-fill: #e8eaf0;
+}
+
+.combo-box .list-cell:selected {
+    -fx-background-color: rgba(79, 110, 247, 0.25);
+    -fx-text-fill: #4f6ef7;
+}

@@ -1,0 +1,64 @@
+/* Fila de documento del checklist */
+.fila-documento:hover {
+    -fx-background-color: rgba(79, 110, 247, 0.06);
+    -fx-border-color: #2e3148;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+}
+
+/* Checkbox del checklist — caja */
+.check-documento .box {
+    -fx-background-color: #2e3148;
+    -fx-border-color: #4a506b;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-min-width: 18px;
+    -fx-min-height: 18px;
+}
+
+.check-documento:selected .box {
+    -fx-background-color: #4f6ef7;
+    -fx-border-color: #4f6ef7;
+}
+
+.check-documento:selected .mark {
+    -fx-background-color: white;
+}
+
+/* Tarjeta de tipo de matrícula — seleccionable */
+.tarjeta-matricula {
+    -fx-border-width: 2;
+    -fx-border-color: #2e3148;
+    -fx-cursor: hand;
+}
+
+.tarjeta-matricula:hover {
+    -fx-border-color: #4f6ef7;
+    -fx-background-color: #252840;
+}
+
+.tarjeta-matricula-seleccionada {
+    -fx-border-color: #4f6ef7;
+    -fx-background-color: rgba(79, 110, 247, 0.1);
+}
+
+/* Área de texto de preguntas al vendedor */
+.text-area .content {
+    -fx-background-color: #1a1d27;
+    -fx-background-radius: 8;
+}
+
+.text-area {
+    -fx-background-color: #1a1d27;
+    -fx-text-fill: #e8eaf0;
+    -fx-border-color: #2e3148;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-font-family: "Consolas", monospace;
+    -fx-font-size: 13px;
+}
+
+.text-area:focused {
+    -fx-border-color: #4f6ef7;
+}

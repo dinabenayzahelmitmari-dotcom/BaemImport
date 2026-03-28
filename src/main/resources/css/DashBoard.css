@@ -1,0 +1,17 @@
+/* DashBoard.css — Estilos específicos del Dashboard */
+/* Los estilos globales se heredan de main.css        */
+
+/* Tarjeta de métrica con hover destacado */
+.tarjeta-metrica {
+    -fx-effect: dropshadow(gaussian, rgba(79,110,247,0.08), 16, 0, 0, 4);
+}
+
+.tarjeta-metrica:hover {
+    -fx-effect: dropshadow(gaussian, rgba(79,110,247,0.22), 20, 0, 0, 6);
+}
+
+/* Separador de fases en la línea de progreso */
+.linea-fase {
+    -fx-background-color: #2e3148;
+    -fx-pref-height: 2;
+}

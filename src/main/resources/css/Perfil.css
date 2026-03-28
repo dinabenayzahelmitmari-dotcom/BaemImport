@@ -1,0 +1,65 @@
+/* Campo de contraseña */
+.password-field {
+    -fx-background-color: #2e3148;
+    -fx-text-fill: #e8eaf0;
+    -fx-prompt-text-fill: #8890a8;
+    -fx-background-radius: 8;
+    -fx-border-color: #3a3f5c;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-padding: 8 12;
+    -fx-font-size: 14px;
+}
+
+.password-field:focused {
+    -fx-border-color: #4f6ef7;
+    -fx-background-color: #252840;
+}
+
+/* Sección de seguridad — fondo diferenciado */
+.bloque-seguridad {
+    -fx-background-color: rgba(239, 68, 68, 0.04);
+    -fx-border-color: rgba(239, 68, 68, 0.2);
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-border-width: 1;
+    -fx-padding: 20;
+}
+
+/* Avatar placeholder */
+.avatar-placeholder {
+    -fx-background-color: #4f6ef7;
+    -fx-background-radius: 50;
+    -fx-min-width: 64px;
+    -fx-min-height: 64px;
+    -fx-max-width: 64px;
+    -fx-max-height: 64px;
+    -fx-alignment: center;
+}
+
+.avatar-iniciales {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+/* Sección de datos fiscales — fondo diferenciado */
+.bloque-fiscal {
+    -fx-background-color: rgba(79, 110, 247, 0.04);
+    -fx-border-color: rgba(79, 110, 247, 0.15);
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-border-width: 1;
+}
+
+/* DatePicker del perfil */
+.date-picker .text-field {
+    -fx-background-color: #2e3148;
+    -fx-text-fill: #e8eaf0;
+    -fx-background-radius: 8;
+    -fx-border-color: #3a3f5c;
+}
+
+/* Mensaje de éxito o error */
+.mensaje-perfil-ok  { -fx-text-fill: #22c55e; -fx-font-size: 13px; }
+.mensaje-perfil-err { -fx-text-fill: #ef4444; -fx-font-size: 13px; }

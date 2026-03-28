@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<!-- Gestión de vehículos: lista y formulario de importaciones -->
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.controller.GestionVehiculosController"
+            styleClass="fondo-principal"
+            stylesheets="@../css/main.css">
+
+    <!-- Menú lateral (igual en todas las pantallas) -->
+    <left>
+        <VBox styleClass="menu-lateral" spacing="4">
+            <padding><Insets top="24" right="12" bottom="24" left="12"/></padding>
+            <Label text="🚗 BAEMIMPORT" styleClass="menu-logo"/>
+            <Label text="Importación desde Alemania" styleClass="menu-logo-sub"/>
+            <padding><Insets bottom="28"/></padding>
+            <Label text="MENÚ" style="-fx-font-size:10px; -fx-text-fill:#4f6ef7; -fx-padding:0 0 6 8;"/>
+            <Button text="📊  Dashboard"         styleClass="btn-nav" maxWidth="Infinity" onAction="#irDashboard"/>
+            <Button text="🚙  Mis Vehículos"     styleClass="btn-nav, btn-nav-activo" maxWidth="Infinity"/>
+            <Button text="🔍  Buscar Vehículo"   styleClass="btn-nav" maxWidth="Infinity" onAction="#irBusqueda"/>
+            <Button text="🇩🇪  Fase Alemania"    styleClass="btn-nav" maxWidth="Infinity" onAction="#irFaseAlemania"/>
+            <Button text="🚛  Transporte"         styleClass="btn-nav" maxWidth="Infinity" onAction="#irTransporte"/>
+            <Button text="🇪🇸  Fase España"      styleClass="btn-nav" maxWidth="Infinity" onAction="#irFaseEspana"/>
+            <Button text="📁  Documentos"         styleClass="btn-nav" maxWidth="Infinity" onAction="#irDocumentos"/>
+            <Separator styleClass="separador"/>
+            <Button text="👤  Mi Perfil"          styleClass="btn-nav" maxWidth="Infinity" onAction="#irPerfil"/>
+        </VBox>
+    </left>
+
+    <center>
+        <SplitPane dividerPositions="0.55">
+
+            <!-- Panel izquierdo: lista de vehículos -->
+            <VBox spacing="16">
+                <padding><Insets top="32" right="16" bottom="32" left="32"/></padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="Mis Vehículos" styleClass="titulo-pagina" HBox.hgrow="ALWAYS"/>
+                    <Button text="+ Nueva importación" styleClass="btn-primario"
+                            onAction="#mostrarFormularioNuevo"/>
+                </HBox>
+
+                <!-- Campo de búsqueda -->
+                <TextField fx:id="campoBusqueda" styleClass="campo-texto"
+                           promptText="🔍 Buscar por marca o modelo..."
+                           onKeyReleased="#filtrarVehiculos"/>
+
+                <!-- Tabla de vehículos -->
+                <TableView fx:id="tablaVehiculos" styleClass="" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colMarca"   text="Marca"   prefWidth="100"/>
+                        <TableColumn fx:id="colModelo"  text="Modelo"  prefWidth="140"/>
+                        <TableColumn fx:id="colVin"     text="VIN"     prefWidth="140"/>
+                        <TableColumn fx:id="colEstado"  text="Estado"  prefWidth="110"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Sin vehículos registrados" styleClass="texto-secundario"/>
+                    </placeholder>
+                </TableView>
+
+                <!-- Acciones sobre selección -->
+                <HBox spacing="12">
+                    <Button text="✏️ Editar"   styleClass="btn-secundario" onAction="#editarVehiculo"/>
+                    <Button text="🗑️ Eliminar" styleClass="btn-peligro"    onAction="#eliminarVehiculo"/>
+                    <Button text="📋 Ver proceso" styleClass="btn-primario" onAction="#verProceso"/>
+                </HBox>
+            </VBox>
+
+            <!-- Panel derecho: formulario -->
+            <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+                <VBox spacing="20" fx:id="panelFormulario">
+                    <padding><Insets top="32" right="32" bottom="32" left="16"/></padding>
+
+                    <Label fx:id="lblTituloFormulario" text="Nuevo Vehículo" styleClass="titulo-seccion"/>
+                    <Separator styleClass="separador"/>
+
+                    <!-- Marca y modelo -->
+                    <HBox spacing="12">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="MARCA" styleClass="etiqueta-campo"/>
+                            <TextField fx:id="campoMarca" styleClass="campo-texto"
+                                       promptText="Ej: BMW" maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="MODELO" styleClass="etiqueta-campo"/>
+                            <TextField fx:id="campoModelo" styleClass="campo-texto"
+                                       promptText="Ej: Serie 3" maxWidth="Infinity"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- VIN -->
+                    <VBox spacing="6">
+                        <Label text="VIN (Nº de bastidor)" styleClass="etiqueta-campo"/>
+                        <TextField fx:id="campoVin" styleClass="campo-texto"
+                                   promptText="17 caracteres alfanuméricos" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- Precio -->
+                    <VBox spacing="6">
+                        <Label text="PRECIO DE COMPRA (€)" styleClass="etiqueta-campo"/>
+                        <TextField fx:id="campoPrecio" styleClass="campo-texto"
+                                   promptText="Ej: 25000" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- Vendedor -->
+                    <VBox spacing="6">
+                        <Label text="VENDEDOR / CONCESIONARIO" styleClass="etiqueta-campo"/>
+                        <TextField fx:id="campoVendedor" styleClass="campo-texto"
+                                   promptText="Nombre del vendedor" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- Estado del proceso -->
+                    <VBox spacing="6">
+                        <Label text="ESTADO DEL PROCESO" styleClass="etiqueta-campo"/>
+                        <ComboBox fx:id="comboEstado" styleClass="combo-box" maxWidth="Infinity"
+                                  promptText="Seleccionar estado"/>
+                    </VBox>
+
+                    <!-- Mensaje de validación -->
+                    <Label fx:id="lblMensaje" styleClass="texto-secundario" wrapText="true"/>
+
+                    <!-- Botones del formulario -->
+                    <HBox spacing="12">
+                        <Button text="💾 Guardar" styleClass="btn-primario"  onAction="#guardarVehiculo"/>
+                        <Button text="Cancelar"   styleClass="btn-secundario" onAction="#limpiarFormulario"/>
+                    </HBox>
+                </VBox>
+            </ScrollPane>
+
+        </SplitPane>
+    </center>
+
+</BorderPane>

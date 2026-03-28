@@ -1,0 +1,55 @@
+/* Fila de la tabla — hover */
+.table-row-cell:hover {
+    -fx-background-color: rgba(79, 110, 247, 0.08);
+}
+
+/* Cabecera de la tabla */
+.table-view .column-header-background {
+    -fx-background-color: #161827;
+}
+
+.table-view .filler {
+    -fx-background-color: #161827;
+}
+
+/* Barra de búsqueda */
+.campo-busqueda-vehiculo {
+    -fx-background-color: #2e3148;
+    -fx-text-fill: #e8eaf0;
+    -fx-prompt-text-fill: #8890a8;
+    -fx-background-radius: 8;
+    -fx-border-color: #3a3f5c;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-padding: 9 12;
+    -fx-font-size: 13px;
+}
+
+.campo-busqueda-vehiculo:focused {
+    -fx-border-color: #4f6ef7;
+}
+
+/* Panel del formulario — separación visual del split */
+.panel-formulario {
+    -fx-background-color: #161827;
+    -fx-border-color: transparent transparent transparent #2e3148;
+    -fx-border-width: 0 0 0 1;
+}
+
+/* SplitPane divider */
+.split-pane > .split-pane-divider {
+    -fx-background-color: #2e3148;
+    -fx-padding: 0 1;
+}
+
+/* Etiqueta de error en formulario */
+.etiqueta-error {
+    -fx-text-fill: #ef4444;
+    -fx-font-size: 12px;
+}
+
+/* Etiqueta de éxito en formulario */
+.etiqueta-exito {
+    -fx-text-fill: #22c55e;
+    -fx-font-size: 12px;
+}

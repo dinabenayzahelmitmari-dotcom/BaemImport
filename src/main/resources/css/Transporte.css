@@ -1,0 +1,64 @@
+/* Tarjeta de tipo de transporte — seleccionable */
+.tarjeta-transporte {
+    -fx-border-width: 2;
+    -fx-border-color: #2e3148;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-cursor: hand;
+    -fx-transition: all 0.15s;
+}
+
+.tarjeta-transporte:hover {
+    -fx-border-color: #4f6ef7;
+    -fx-background-color: rgba(79, 110, 247, 0.05);
+}
+
+.tarjeta-transporte-seleccionada {
+    -fx-border-color: #4f6ef7;
+    -fx-background-color: rgba(79, 110, 247, 0.12);
+}
+
+/* Radio button dentro de tarjeta */
+.radio-transporte .radio {
+    -fx-background-color: #2e3148;
+    -fx-border-color: #4a506b;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 3;
+}
+
+.radio-transporte:selected .radio {
+    -fx-background-color: #4f6ef7;
+    -fx-border-color: #4f6ef7;
+}
+
+.radio-transporte:selected .dot {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+}
+
+.radio-transporte .text {
+    -fx-fill: #e8eaf0;
+    -fx-font-size: 13px;
+}
+
+/* DatePicker de fechas de transporte */
+.date-picker .text-field {
+    -fx-background-color: #2e3148;
+    -fx-text-fill: #e8eaf0;
+    -fx-background-radius: 8;
+    -fx-border-color: #3a3f5c;
+}
+
+/* Nota adicional */
+.area-notas .content {
+    -fx-background-color: #2e3148;
+}
+
+.area-notas {
+    -fx-text-fill: #e8eaf0;
+    -fx-background-color: #2e3148;
+    -fx-border-color: #3a3f5c;
+    -fx-border-radius: 8;
+    -fx-font-size: 13px;
+}

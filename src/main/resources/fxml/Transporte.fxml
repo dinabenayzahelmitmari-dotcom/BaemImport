@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<!-- Transporte: selección de tipo, fechas y documentos de transporte -->
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.controller.TransporteController"
+            styleClass="fondo-principal"
+            stylesheets="@../css/main.css">
+
+    <left>
+        <VBox styleClass="menu-lateral" spacing="4">
+            <padding><Insets top="24" right="12" bottom="24" left="12"/></padding>
+            <Label text="🚗 BAEMIMPORT" styleClass="menu-logo"/>
+            <Label text="Importación desde Alemania" styleClass="menu-logo-sub"/>
+            <Label text="MENÚ" style="-fx-font-size:10px; -fx-text-fill:#4f6ef7; -fx-padding:0 0 6 8;"/>
+            <Button text="📊  Dashboard"        styleClass="btn-nav" maxWidth="Infinity" onAction="#irDashboard"/>
+            <Button text="🚙  Mis Vehículos"    styleClass="btn-nav" maxWidth="Infinity" onAction="#irVehiculos"/>
+            <Button text="🔍  Buscar Vehículo"  styleClass="btn-nav" maxWidth="Infinity" onAction="#irBusqueda"/>
+            <Button text="🇩🇪  Fase Alemania"   styleClass="btn-nav" maxWidth="Infinity" onAction="#irFaseAlemania"/>
+            <Button text="🚛  Transporte"        styleClass="btn-nav, btn-nav-activo" maxWidth="Infinity"/>
+            <Button text="🇪🇸  Fase España"     styleClass="btn-nav" maxWidth="Infinity" onAction="#irFaseEspana"/>
+            <Button text="📁  Documentos"        styleClass="btn-nav" maxWidth="Infinity" onAction="#irDocumentos"/>
+            <Separator styleClass="separador"/>
+            <Button text="👤  Mi Perfil"         styleClass="btn-nav" maxWidth="Infinity" onAction="#irPerfil"/>
+        </VBox>
+    </left>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <VBox spacing="24">
+                <padding><Insets top="32" right="32" bottom="32" left="32"/></padding>
+
+                <!-- Cabecera -->
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="🚛  Transporte" styleClass="titulo-pagina"/>
+                        <Label text="Gestiona cómo llegará tu vehículo desde Alemania" styleClass="subtitulo"/>
+                    </VBox>
+                    <Label fx:id="lblEstadoTransporte" text="Pendiente" styleClass="badge-pendiente"/>
+                </HBox>
+
+                <!-- Selección del tipo de transporte -->
+                <VBox styleClass="tarjeta" spacing="16">
+                    <Label text="🚗  Tipo de transporte" styleClass="titulo-seccion"/>
+                    <Separator styleClass="separador"/>
+
+                    <HBox spacing="16">
+                        <!-- Conducción -->
+                        <VBox styleClass="tarjeta" spacing="10" HBox.hgrow="ALWAYS" fx:id="tarjetaConduccion"
+                              style="-fx-cursor:hand;">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label text="🧑‍✈️" style="-fx-font-size:26px;"/>
+                                <VBox spacing="3">
+                                    <Label text="Conducción propia" styleClass="titulo-seccion"/>
+                                    <Label text="Vas a buscar el coche y lo conduces hasta España" styleClass="texto-secundario" wrapText="true"/>
+                                </VBox>
+                            </HBox>
+                            <Label text="Coste: 0 € (solo desplazamiento)" styleClass="texto-primario"/>
+                            <RadioButton fx:id="radioConduccion" text="Seleccionar esta opción"
+                                         toggleGroup="$grupoTransporte" onAction="#seleccionarConduccion"/>
+                        </VBox>
+
+                        <!-- Camión -->
+                        <VBox styleClass="tarjeta" spacing="10" HBox.hgrow="ALWAYS" fx:id="tarjetaCamion"
+                              style="-fx-cursor:hand;">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label text="🚛" style="-fx-font-size:26px;"/>
+                                <VBox spacing="3">
+                                    <Label text="Transporte en camión" styleClass="titulo-seccion"/>
+                                    <Label text="Una empresa de transporte lo trae directamente" styleClass="texto-secundario" wrapText="true"/>
+                                </VBox>
+                            </HBox>
+                            <Label text="Coste estimado: 400–900 €" styleClass="texto-primario"/>
+                            <RadioButton fx:id="radioCamion" text="Seleccionar esta opción"
+                                         toggleGroup="$grupoTransporte" onAction="#seleccionarCamion"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <Label text="Tipo seleccionado:" styleClass="etiqueta-campo"/>
+                        <Label fx:id="lblTipoSeleccionado" text="Ninguno" styleClass="badge-pendiente"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Fechas -->
+                <VBox styleClass="tarjeta" spacing="16">
+                    <Label text="📅  Fechas" styleClass="titulo-seccion"/>
+                    <Separator styleClass="separador"/>
+
+                    <HBox spacing="24">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="FECHA DE SALIDA (Alemania)" styleClass="etiqueta-campo"/>
+                            <DatePicker fx:id="fechaSalida" styleClass="campo-texto"
+                                        promptText="dd/MM/yyyy" maxWidth="Infinity"/>
+                        </VBox>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="FECHA ESTIMADA DE LLEGADA (España)" styleClass="etiqueta-campo"/>
+                            <DatePicker fx:id="fechaLlegada" styleClass="campo-texto"
+                                        promptText="dd/MM/yyyy" maxWidth="Infinity"/>
+                        </VBox>
+                    </HBox>
+
+                    <VBox spacing="6">
+                        <Label text="EMPRESA DE TRANSPORTE (si aplica)" styleClass="etiqueta-campo"/>
+                        <TextField fx:id="campoEmpresaTransporte" styleClass="campo-texto"
+                                   promptText="Nombre de la empresa" maxWidth="Infinity"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Documentos de transporte -->
+                <VBox styleClass="tarjeta" spacing="14">
+                    <Label text="📄  Documentos del transporte" styleClass="titulo-seccion"/>
+                    <Separator styleClass="separador"/>
+
+                    <!-- Seguro -->
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <CheckBox fx:id="chkSeguroTransporte" onAction="#actualizarEstado"/>
+                        <VBox HBox.hgrow="ALWAYS" spacing="2">
+                            <Label text="Seguro de transporte" styleClass="texto-normal"/>
+                            <Label text="Cubre posibles daños durante el trayecto" styleClass="texto-secundario"/>
+                        </VBox>
+                        <Button text="📎 Subir" styleClass="btn-secundario" onAction="#subirSeguro"/>
+                        <Label fx:id="estadoSeguroTransporte" text="Pendiente" styleClass="badge-pendiente"/>
+                    </HBox>
+
+                    <!-- Contrato -->
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <CheckBox fx:id="chkContratoTransporte" onAction="#actualizarEstado"/>
+                        <VBox HBox.hgrow="ALWAYS" spacing="2">
+                            <Label text="Contrato de transporte" styleClass="texto-normal"/>
+                            <Label text="Acuerdo firmado con la empresa de transporte" styleClass="texto-secundario"/>
+                        </VBox>
+                        <Button text="📎 Subir" styleClass="btn-secundario" onAction="#subirContrato"/>
+                        <Label fx:id="estadoContratoTransporte" text="Pendiente" styleClass="badge-pendiente"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Notas adicionales -->
+                <VBox styleClass="tarjeta" spacing="10">
+                    <Label text="📝  Notas adicionales" styleClass="titulo-seccion"/>
+                    <TextArea fx:id="campoNotas" styleClass="campo-texto"
+                              promptText="Anota cualquier detalle relevante del transporte..."
+                              prefRowCount="3" wrapText="true"/>
+                </VBox>
+
+                <!-- Botones de acción -->
+                <HBox spacing="12" alignment="CENTER_RIGHT">
+                    <Button text="⬅  Volver: Alemania"  styleClass="btn-secundario" onAction="#irFaseAlemania"/>
+                    <Button text="💾 Guardar transporte" styleClass="btn-primario"    onAction="#guardarTransporte"/>
+                    <Button text="Siguiente: España  ➡" styleClass="btn-primario"    onAction="#irFaseEspana"/>
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

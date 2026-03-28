@@ -1,0 +1,65 @@
+/* Bloque de calculadora de impuestos */
+.bloque-calculadora {
+    -fx-background-color: #161827;
+    -fx-background-radius: 10;
+    -fx-border-color: #2e3148;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-padding: 16;
+}
+
+/* Resultado destacado del impuesto */
+.resultado-impuesto {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f59e0b;
+}
+
+/* Fila de resultado individual */
+.fila-resultado {
+    -fx-padding: 6 0;
+    -fx-border-color: transparent transparent #2e3148 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* Enlace a web externa */
+.btn-enlace-web {
+    -fx-background-color: transparent;
+    -fx-text-fill: #4f6ef7;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-underline: true;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.btn-enlace-web:hover {
+    -fx-text-fill: #7b96ff;
+}
+
+/* DatePicker de cita ITV */
+.date-picker .text-field {
+    -fx-background-color: #2e3148;
+    -fx-text-fill: #e8eaf0;
+    -fx-border-color: #3a3f5c;
+    -fx-background-radius: 8 0 0 8;
+}
+
+.date-picker-popup {
+    -fx-background-color: #1a1d27;
+    -fx-border-color: #2e3148;
+}
+
+.date-picker-popup .month-year-pane {
+    -fx-background-color: #212436;
+}
+
+.date-picker-popup .day-cell {
+    -fx-text-fill: #e8eaf0;
+    -fx-background-color: transparent;
+}
+
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: #4f6ef7;
+    -fx-text-fill: white;
+}
