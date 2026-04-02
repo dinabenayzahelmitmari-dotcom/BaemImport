@@ -45,7 +45,7 @@ public class PerfilController implements Initializable {
         campoEmail.setText("carlos@email.com");
         campoTelefono.setText("+34 600 000 000");
         fechaNacimiento.setValue(LocalDate.of(1990, 5, 15));
-        campoDireccion.setText("Calle Mayor, 1, 2ºA");
+        campoDireccion.setText("Calle Mayor, 1, 2A");
         campoCiudad.setText("Madrid");
         campoCp.setText("28001");
         campoProvincia.setText("Madrid");
@@ -58,14 +58,14 @@ public class PerfilController implements Initializable {
     private void guardarPerfil() {
         if (!validarObligatorios() || !validarFormatos()) return;
         // TODO: UsuarioService.actualizar(construirUsuario())
-        mensaje("✅ Perfil guardado correctamente.", "#22c55e");
+        mensaje("Perfil guardado correctamente.", "#22c55e");
     }
 
     private boolean validarObligatorios() {
         if (campoNombre.getText().isBlank() || campoDni.getText().isBlank() ||
                 campoEmail.getText().isBlank()  || campoDireccion.getText().isBlank() ||
                 campoCiudad.getText().isBlank()) {
-            mensaje("⚠️ Nombre, DNI, email, dirección y ciudad son obligatorios.", "#ef4444");
+            mensaje("Nombre, DNI, email, direccion y ciudad son obligatorios.", "#ef4444");
             return false;
         }
         return true;
@@ -73,14 +73,14 @@ public class PerfilController implements Initializable {
 
     private boolean validarFormatos() {
         if (!campoEmail.getText().contains("@")) {
-            mensaje("⚠️ El email no tiene un formato válido.", "#ef4444"); return false;
+            mensaje("El email no tiene un formato válido.", "#ef4444"); return false;
         }
         if (!campoCp.getText().isBlank() && !campoCp.getText().matches("\\d{5}")) {
-            mensaje("⚠️ El código postal debe tener 5 dígitos.", "#ef4444"); return false;
+            mensaje("El codigo postal debe tener 5 dígitos.", "#ef4444"); return false;
         }
         String iban = campoIban.getText().replaceAll("\\s", "");
         if (!iban.isBlank() && (iban.length() < 15 || iban.length() > 34)) {
-            mensaje("⚠️ El IBAN no tiene un formato correcto.", "#ef4444"); return false;
+            mensaje("El IBAN no tiene un formato correcto.", "#ef4444"); return false;
         }
         return true;
     }
@@ -90,17 +90,17 @@ public class PerfilController implements Initializable {
         if (campoPasswordActual.getText().isBlank() ||
                 campoPasswordNueva.getText().isBlank()  ||
                 campoPasswordConfirmar.getText().isBlank()) {
-            mensaje("⚠️ Rellena los tres campos de contraseña.", "#ef4444"); return;
+            mensaje("Rellena los tres campos de contrasena.", "#ef4444"); return;
         }
         if (!campoPasswordNueva.getText().equals(campoPasswordConfirmar.getText())) {
-            mensaje("⚠️ La nueva contraseña y la confirmación no coinciden.", "#ef4444"); return;
+            mensaje("La nueva contrasena y la confirmación no coinciden.", "#ef4444"); return;
         }
         if (campoPasswordNueva.getText().length() < 6) {
-            mensaje("⚠️ La contraseña debe tener al menos 6 caracteres.", "#ef4444"); return;
+            mensaje("La contrasena debe tener al menos 6 caracteres.", "#ef4444"); return;
         }
         // TODO: UsuarioService.cambiarPassword(actual, nueva)
         campoPasswordActual.clear(); campoPasswordNueva.clear(); campoPasswordConfirmar.clear();
-        mensaje("✅ Contraseña cambiada correctamente.", "#22c55e");
+        mensaje("Contrasena cambiada correctamente.", "#22c55e");
     }
 
     private void mensaje(String txt, String color) {

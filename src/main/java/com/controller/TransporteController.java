@@ -40,7 +40,7 @@ public class TransporteController implements Initializable {
 
     @FXML
     private void seleccionarConduccion() {
-        lblTipoSeleccionado.setText("🧑‍✈️ Conducción propia");
+        lblTipoSeleccionado.setText("Conduccion propia");
         lblTipoSeleccionado.getStyleClass().removeAll("badge-pendiente", "badge-completado", "badge-en-proceso");
         lblTipoSeleccionado.getStyleClass().add("badge-en-proceso");
         campoEmpresaTransporte.setDisable(true);
@@ -49,7 +49,7 @@ public class TransporteController implements Initializable {
 
     @FXML
     private void seleccionarCamion() {
-        lblTipoSeleccionado.setText("🚛 Camión");
+        lblTipoSeleccionado.setText("Camion");
         lblTipoSeleccionado.getStyleClass().removeAll("badge-pendiente", "badge-completado", "badge-en-proceso");
         lblTipoSeleccionado.getStyleClass().add("badge-en-proceso");
         campoEmpresaTransporte.setDisable(false);
@@ -95,7 +95,7 @@ public class TransporteController implements Initializable {
 
     private void badge(Label lbl, boolean ok) {
         lbl.getStyleClass().removeAll("badge-completado", "badge-pendiente");
-        if (ok) { lbl.setText("✅ Subido");  lbl.getStyleClass().add("badge-completado"); }
+        if (ok) { lbl.setText("Subido");  lbl.getStyleClass().add("badge-completado"); }
         else    { lbl.setText("Pendiente");  lbl.getStyleClass().add("badge-pendiente"); }
     }
 
@@ -112,7 +112,7 @@ public class TransporteController implements Initializable {
         }
         // TODO: ProcesoImportacionService.guardarTransporte(...)
         actualizarEstado();
-        info("✅ Datos de transporte guardados correctamente.");
+        info("Datos de transporte guardados correctamente.");
     }
 
     private void info(String m)  { new Alert(Alert.AlertType.INFORMATION, m, ButtonType.OK).showAndWait(); }

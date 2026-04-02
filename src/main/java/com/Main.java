@@ -7,23 +7,29 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- * Punto de entrada de la aplicación BAEMIMPORT.
- * Carga el Dashboard como pantalla inicial.
+ * Punto de entrada de la aplicacion BAEMIMPORT.
+ * Carga la pantalla de Login como pantalla inicial.
  */
 public class Main extends Application {
 
+    private static Stage ventanaPrincipal;
+
     @Override
     public void start(Stage stage) throws Exception {
-        // Carga la pantalla inicial: Dashboard
-        Parent raiz = FXMLLoader.load(getClass().getResource("/fxml/DashBoard.fxml"));
+        ventanaPrincipal = stage;
 
-        Scene escena = new Scene(raiz, 1280, 800);
+        Parent raiz = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
+        Scene escena = new Scene(raiz, 900, 600);
 
-        stage.setTitle("BAEMIMPORT — Importación de vehículos desde Alemania");
+        stage.setTitle("BAEMIMPORT — Importacion de vehiculos desde Alemania");
         stage.setScene(escena);
-        stage.setMinWidth(900);
-        stage.setMinHeight(600);
+        stage.setMinWidth(800);
+        stage.setMinHeight(550);
         stage.show();
+    }
+
+    public static Stage getVentanaPrincipal() {
+        return ventanaPrincipal;
     }
 
     public static void main(String[] args) {

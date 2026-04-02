@@ -1,14 +1,12 @@
 package com.controller;
 
+import com.util.SesionUsuario;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -32,6 +30,7 @@ public class DashboardController implements Initializable {
     @FXML private Label       estadoEspana;
     @FXML private VBox        listaTareas;
     @FXML private Label       lblSinTareas;
+    @FXML private Label       lblUsuarioNombre;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -39,8 +38,13 @@ public class DashboardController implements Initializable {
     }
 
     private void cargarDatosDashboard() {
-        lblBienvenida.setText("Bienvenido de nuevo");
-        // TODO: cargar datos reales desde servicio
+        String nombre = "Usuario";
+        if (SesionUsuario.getInstancia().haySesionActiva()) {
+            nombre = SesionUsuario.getInstancia().getUsuarioActual().getNombre();
+        }
+        lblBienvenida.setText("Bienvenido de nuevo, " + nombre);
+        if (lblUsuarioNombre != null) lblUsuarioNombre.setText(nombre);
+
         actualizarResumen(1, 3, 45);
         actualizarVehiculoActivo("BMW Serie 3 2021", "En proceso", "Alemania");
         actualizarFases("en-proceso", "pendiente", "pendiente");
@@ -85,11 +89,10 @@ public class DashboardController implements Initializable {
 
     private void cargarTareasPendientes() {
         listaTareas.getChildren().clear();
-        // TODO: obtener desde ProcesoImportacionService
         String[] tareas = {
-                "📄  Subir Certificado de Conformidad (COC)",
-                "🔍  Revisar TÜV del vehículo",
-                "📦  Contratar seguro de transporte"
+                "Subir Certificado de Conformidad (COC)",
+                "Revisar TUV del vehiculo",
+                "Contratar seguro de transporte"
         };
         if (tareas.length == 0) {
             lblSinTareas.setVisible(true);
@@ -97,10 +100,13 @@ public class DashboardController implements Initializable {
         }
         for (String tarea : tareas) {
             HBox fila = new HBox(12);
-            fila.setStyle("-fx-alignment:center-left;");
+            fila.setStyle("-fx-alignment:center-left; -fx-padding:8 12; "
+                    + "-fx-background-color:#212436; -fx-background-radius:8;");
+            Label punto = new Label("");
+            punto.setStyle("-fx-text-fill:#f59e0b; -fx-font-size:16px;");
             Label texto = new Label(tarea);
             texto.getStyleClass().add("texto-normal");
-            fila.getChildren().addAll(new Label("⚠️"), texto);
+            fila.getChildren().addAll(punto, texto);
             listaTareas.getChildren().add(fila);
         }
     }
@@ -113,7 +119,19 @@ public class DashboardController implements Initializable {
     @FXML private void irFaseEspana()       { navegarA("/fxml/FaseEspana.fxml"); }
     @FXML private void irDocumentos()       { navegarA("/fxml/CentroDocumentos.fxml"); }
     @FXML private void irPerfil()           { navegarA("/fxml/Perfil.fxml"); }
-    @FXML private void abrirNotificaciones(){ /* TODO */ }
+    @FXML private void abrirNotificaciones(){ navegarA("/fxml/Notificaciones.fxml"); }
+
+    @FXML
+    private void cerrarSesion() {
+        SesionUsuario.getInstancia().cerrarSesion();
+        try {
+            Parent vista = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
+            Stage stage  = (Stage) lblBienvenida.getScene().getWindow();
+            stage.setScene(new Scene(vista, 900, 600));
+        } catch (IOException e) {
+            new Alert(Alert.AlertType.ERROR, "Error al cerrar sesion.", ButtonType.OK).showAndWait();
+        }
+    }
 
     private void navegarA(String ruta) {
         try {

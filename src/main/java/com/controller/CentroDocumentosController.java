@@ -1,6 +1,8 @@
 package com.controller;
 
 import com.model.Documento;
+import com.model.Vehiculo;
+import com.service.PdfService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -35,20 +37,21 @@ public class CentroDocumentosController implements Initializable {
     @FXML private Label                           lblInfoSeleccion;
 
     private final ObservableList<Documento> todos = FXCollections.observableArrayList();
+    private final PdfService pdfService = new PdfService();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         configurarColumnas();
         comboFiltroFase.setItems(FXCollections.observableArrayList(
-                "Todas las fases","Alemania","Transporte",
-                "España — ITV","España — Hacienda","España — DGT"));
+                "Todas las fases", "Alemania", "Transporte",
+                "Espana  ITV", "Espana  Hacienda", "Espana  DGT"));
         comboFiltroTipo.setItems(FXCollections.observableArrayList(
-                "Todos","PDF","Imagen","Word"));
+                "Todos", "PDF", "Imagen", "Word"));
         cargarDocumentos();
         tablaDocumentos.getSelectionModel().selectedItemProperty()
                 .addListener((obs, ant, sel) ->
                         lblInfoSeleccion.setText(sel == null ? "" :
-                                sel.getNombre() + " · " + sel.getFase() + " · " + sel.getFechaSubida()));
+                                sel.getNombre() + "  |  " + sel.getFase() + "  |  " + sel.getFechaSubida()));
     }
 
     private void configurarColumnas() {
@@ -61,16 +64,16 @@ public class CentroDocumentosController implements Initializable {
 
         colEstado.setCellFactory(col -> new TableCell<>() {
             @Override
-            protected void updateItem(String e, boolean v) {
-                super.updateItem(e, v);
-                if (v || e == null) { setText(null); setStyle(""); return; }
-                setText(e);
-                String c = switch (e) {
+            protected void updateItem(String estado, boolean vacio) {
+                super.updateItem(estado, vacio);
+                if (vacio || estado == null) { setText(null); setStyle(""); return; }
+                setText(estado);
+                String color = switch (estado) {
                     case "Validado"  -> "#22c55e";
                     case "Pendiente" -> "#ef4444";
                     default          -> "#f59e0b";
                 };
-                setStyle("-fx-text-fill:" + c + "; -fx-font-weight:bold;");
+                setStyle("-fx-text-fill:" + color + "; -fx-font-weight:bold;");
             }
         });
         tablaDocumentos.setItems(todos);
@@ -78,13 +81,13 @@ public class CentroDocumentosController implements Initializable {
 
     private void cargarDocumentos() {
         todos.clear();
-        // TODO: todos.addAll(documentoService.obtenerTodos())
+        // Datos de ejemplo; en produccion: documentoService.obtenerTodos()
         todos.addAll(
-                new Documento("Factura de compra",  "Alemania",   "PDF",   "BMW Serie 3", "27/03/2026", "Validado"),
-                new Documento("Tail 1",             "Alemania",   "PDF",   "BMW Serie 3", "27/03/2026", "Validado"),
-                new Documento("COC",                "Alemania",   "PDF",   "BMW Serie 3", "27/03/2026", "Pendiente"),
-                new Documento("Seguro transporte",  "Transporte", "PDF",   "BMW Serie 3", "27/03/2026", "Revisión"),
-                new Documento("Ficha técnica",      "España — ITV","PDF",  "BMW Serie 3", "27/03/2026", "Pendiente")
+                new Documento("Factura de compra",  "Alemania",       "PDF", "BMW Serie 3", LocalDate.now().toString(), "Validado"),
+                new Documento("Tail 1",             "Alemania",       "PDF", "BMW Serie 3", LocalDate.now().toString(), "Validado"),
+                new Documento("COC",                "Alemania",       "PDF", "BMW Serie 3", LocalDate.now().toString(), "Pendiente"),
+                new Documento("Seguro transporte",  "Transporte",     "PDF", "BMW Serie 3", LocalDate.now().toString(), "Revision"),
+                new Documento("Ficha tecnica",      "Espana  ITV",   "PDF", "BMW Serie 3", LocalDate.now().toString(), "Pendiente")
         );
     }
 
@@ -94,10 +97,10 @@ public class CentroDocumentosController implements Initializable {
         String fase = comboFiltroFase.getValue();
         String tipo = comboFiltroTipo.getValue();
         tablaDocumentos.setItems(todos.filtered(d -> {
-            boolean nombre  = txt.isBlank()  || d.getNombre().toLowerCase().contains(txt);
-            boolean porFase = fase == null   || fase.equals("Todas las fases") || d.getFase().equals(fase);
-            boolean porTipo = tipo == null   || tipo.equals("Todos") || d.getTipo().equalsIgnoreCase(tipo);
-            return nombre && porFase && porTipo;
+            boolean porNombre = txt.isBlank()  || d.getNombre().toLowerCase().contains(txt);
+            boolean porFase   = fase == null   || fase.equals("Todas las fases") || d.getFase().equals(fase);
+            boolean porTipo   = tipo == null   || tipo.equals("Todos") || d.getTipo().equalsIgnoreCase(tipo);
+            return porNombre && porFase && porTipo;
         }));
     }
 
@@ -127,10 +130,29 @@ public class CentroDocumentosController implements Initializable {
         FileChooser fc = new FileChooser();
         fc.setTitle("Guardar como...");
         fc.setInitialFileName(sel.getNombre() + ".pdf");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
         File destino = fc.showSaveDialog((Stage) tablaDocumentos.getScene().getWindow());
         if (destino != null) {
-            // TODO: DocumentoService.copiarA(sel.getId(), destino)
             info("Guardado en: " + destino.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    private void descargarInformePdf() {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Guardar informe PDF");
+        fc.setInitialFileName("Informe_Documentos_BAEMIMPORT.pdf");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
+        File destino = fc.showSaveDialog((Stage) tablaDocumentos.getScene().getWindow());
+        if (destino == null) return;
+        try {
+            // Vehiculo de ejemplo; en produccion se carga desde servicio
+            Vehiculo vehiculoDemo = new Vehiculo("BMW", "Serie 3", "WBA12345678901234",
+                    24000.0, "AutoHaus Berlin", "En proceso");
+            pdfService.generarInformeDocumentos(vehiculoDemo, destino);
+            info("Informe PDF generado en: " + destino.getName());
+        } catch (Exception e) {
+            aviso("No se pudo generar el PDF: " + e.getMessage());
         }
     }
 
@@ -139,12 +161,9 @@ public class CentroDocumentosController implements Initializable {
         Documento sel = tablaDocumentos.getSelectionModel().getSelectedItem();
         if (sel == null) { aviso("Selecciona un documento para eliminar."); return; }
         Alert c = new Alert(Alert.AlertType.CONFIRMATION,
-                "¿Eliminar '" + sel.getNombre() + "'?", ButtonType.YES, ButtonType.NO);
+                "Eliminar '" + sel.getNombre() + "'?", ButtonType.YES, ButtonType.NO);
         c.showAndWait().ifPresent(b -> {
-            if (b == ButtonType.YES) {
-                todos.remove(sel);
-                // TODO: DocumentoService.eliminar(sel.getId())
-            }
+            if (b == ButtonType.YES) todos.remove(sel);
         });
     }
 
@@ -159,7 +178,7 @@ public class CentroDocumentosController implements Initializable {
             String ext = f.getName().contains(".")
                     ? f.getName().substring(f.getName().lastIndexOf('.') + 1).toUpperCase() : "DOC";
             Documento nuevo = new Documento(
-                    f.getName(), "Sin asignar", ext, "Sin vehículo",
+                    f.getName(), "Sin asignar", ext, "Sin vehiculo",
                     LocalDate.now().toString(), "Pendiente");
             nuevo.setRutaArchivo(f.getAbsolutePath());
             todos.add(nuevo);

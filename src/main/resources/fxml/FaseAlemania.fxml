@@ -1,180 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<?import java.lang.String?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
 
-<!-- Fase Alemania: checklist documental, preguntas al vendedor y matrículas -->
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.controller.FaseAlemaniaController"
             styleClass="fondo-principal"
             stylesheets="@../css/main.css">
-
     <left>
         <VBox styleClass="menu-lateral" spacing="4">
             <padding><Insets top="24" right="12" bottom="24" left="12"/></padding>
-            <Label text="🚗 BAEMIMPORT" styleClass="menu-logo"/>
-            <Label text="Importación desde Alemania" styleClass="menu-logo-sub"/>
-            <Label text="MENÚ" style="-fx-font-size:10px; -fx-text-fill:#4f6ef7; -fx-padding:0 0 6 8;"/>
-            <Button text="📊  Dashboard"        styleClass="btn-nav" maxWidth="Infinity" onAction="#irDashboard"/>
-            <Button text="🚙  Mis Vehículos"    styleClass="btn-nav" maxWidth="Infinity" onAction="#irVehiculos"/>
-            <Button text="🔍  Buscar Vehículo"  styleClass="btn-nav" maxWidth="Infinity" onAction="#irBusqueda"/>
-            <Button text="🇩🇪  Fase Alemania"   styleClass="btn-nav, btn-nav-activo" maxWidth="Infinity"/>
-            <Button text="🚛  Transporte"        styleClass="btn-nav" maxWidth="Infinity" onAction="#irTransporte"/>
-            <Button text="🇪🇸  Fase España"     styleClass="btn-nav" maxWidth="Infinity" onAction="#irFaseEspana"/>
-            <Button text="📁  Documentos"        styleClass="btn-nav" maxWidth="Infinity" onAction="#irDocumentos"/>
+            <VBox alignment="CENTER_LEFT" spacing="2"><padding><Insets bottom="28"/></padding>
+                <Label text="BAEMIMPORT" styleClass="menu-logo"/>
+                <Label text="Importacion desde Alemania" styleClass="menu-logo-sub"/>
+            </VBox>
+            <Label text="MENU" style="-fx-font-size:10px; -fx-text-fill:#4f6ef7; -fx-padding:0 0 6 8;"/>
+            <Button text="Dashboard"       styleClass="btn-nav" maxWidth="Infinity" onAction="#irDashboard"/>
+            <Button text="Mis Vehiculos"   styleClass="btn-nav" maxWidth="Infinity" onAction="#irVehiculos"/>
+            <Button text="Buscar Vehiculo" styleClass="btn-nav" maxWidth="Infinity" onAction="#irBusqueda"/>
+            <Button text="Fase Alemania" maxWidth="Infinity">
+                <styleClass>
+                    <String fx:value="btn-nav"/>
+                    <String fx:value="btn-nav-activo"/>
+                </styleClass>
+            </Button>
+            <Button text="Transporte"      styleClass="btn-nav" maxWidth="Infinity" onAction="#irTransporte"/>
+            <Button text="Fase Espana"     styleClass="btn-nav" maxWidth="Infinity" onAction="#irFaseEspana"/>
+            <Button text="Documentos"      styleClass="btn-nav" maxWidth="Infinity" onAction="#irDocumentos"/>
             <Separator styleClass="separador"/>
-            <Button text="👤  Mi Perfil"         styleClass="btn-nav" maxWidth="Infinity" onAction="#irPerfil"/>
+            <Button text="Mi Perfil"       styleClass="btn-nav" maxWidth="Infinity" onAction="#irPerfil"/>
         </VBox>
     </left>
 
     <center>
         <ScrollPane fitToWidth="true" styleClass="scroll-pane">
-            <VBox spacing="24">
-                <padding><Insets top="32" right="32" bottom="32" left="32"/></padding>
+            <VBox spacing="24"><padding><Insets top="32" right="32" bottom="32" left="32"/></padding>
 
-                <!-- Cabecera -->
                 <HBox alignment="CENTER_LEFT" spacing="12">
                     <VBox spacing="4" HBox.hgrow="ALWAYS">
-                        <Label text="🇩🇪  Fase Alemania" styleClass="titulo-pagina"/>
-                        <Label text="Documentación, vendedor y matrículas de exportación" styleClass="subtitulo"/>
+                        <Label text="Fase Alemania" styleClass="titulo-pagina"/>
+                        <Label text="Documentacion y gestion en origen" styleClass="subtitulo"/>
                     </VBox>
                     <Label fx:id="lblProgreso" text="0 / 6 completados" styleClass="badge-pendiente"/>
                 </HBox>
 
-                <ProgressBar fx:id="barraProgreso" progress="0.0"
-                             styleClass="barra-progreso" maxWidth="Infinity"/>
+                <ProgressBar fx:id="barraProgreso" progress="0.0" styleClass="barra-progreso" maxWidth="Infinity"/>
 
-                <!-- Sección 1: Checklist de documentos -->
+                <!-- Checklist documentos -->
                 <VBox styleClass="tarjeta" spacing="14">
-                    <Label text="📄  Documentación obligatoria" styleClass="titulo-seccion"/>
-                    <Separator styleClass="separador"/>
-
-                    <!-- Factura -->
-                    <HBox alignment="CENTER_LEFT" spacing="12">
-                        <CheckBox fx:id="chkFactura" onAction="#actualizarProgreso"/>
-                        <VBox HBox.hgrow="ALWAYS" spacing="2">
-                            <Label text="Factura de compra" styleClass="texto-normal"/>
-                            <Label text="Documento de compraventa firmado por ambas partes" styleClass="texto-secundario"/>
-                        </VBox>
-                        <Button text="📎 Subir" styleClass="btn-secundario" onAction="#subirFactura"/>
-                        <Label fx:id="estadoFactura" text="Pendiente" styleClass="badge-pendiente"/>
-                    </HBox>
-
-                    <!-- Tail 1 -->
-                    <HBox alignment="CENTER_LEFT" spacing="12">
-                        <CheckBox fx:id="chkTail1" onAction="#actualizarProgreso"/>
-                        <VBox HBox.hgrow="ALWAYS" spacing="2">
-                            <Label text="Tail 1 (Ficha técnica alemana)" styleClass="texto-normal"/>
-                            <Label text="Documento de registro del vehículo en Alemania" styleClass="texto-secundario"/>
-                        </VBox>
-                        <Button text="📎 Subir" styleClass="btn-secundario" onAction="#subirTail1"/>
-                        <Label fx:id="estadoTail1" text="Pendiente" styleClass="badge-pendiente"/>
-                    </HBox>
-
-                    <!-- Tail 2 -->
-                    <HBox alignment="CENTER_LEFT" spacing="12">
-                        <CheckBox fx:id="chkTail2" onAction="#actualizarProgreso"/>
-                        <VBox HBox.hgrow="ALWAYS" spacing="2">
-                            <Label text="Tail 2 (Permiso de circulación)" styleClass="texto-normal"/>
-                            <Label text="Tarjeta de circulación alemana" styleClass="texto-secundario"/>
-                        </VBox>
-                        <Button text="📎 Subir" styleClass="btn-secundario" onAction="#subirTail2"/>
-                        <Label fx:id="estadoTail2" text="Pendiente" styleClass="badge-pendiente"/>
-                    </HBox>
-
-                    <!-- COC -->
-                    <HBox alignment="CENTER_LEFT" spacing="12">
-                        <CheckBox fx:id="chkCoc" onAction="#actualizarProgreso"/>
-                        <VBox HBox.hgrow="ALWAYS" spacing="2">
-                            <Label text="Certificado de Conformidad (COC)" styleClass="texto-normal"/>
-                            <Label text="Imprescindible para la homologación en España" styleClass="texto-secundario"/>
-                        </VBox>
-                        <Button text="📎 Subir" styleClass="btn-secundario" onAction="#subirCoc"/>
-                        <Label fx:id="estadoCoc" text="Pendiente" styleClass="badge-pendiente"/>
-                    </HBox>
-
-                    <!-- Seguro de matrículas -->
-                    <HBox alignment="CENTER_LEFT" spacing="12">
-                        <CheckBox fx:id="chkSeguroMatriculas" onAction="#actualizarProgreso"/>
-                        <VBox HBox.hgrow="ALWAYS" spacing="2">
-                            <Label text="Seguro de matrículas de exportación" styleClass="texto-normal"/>
-                            <Label text="Necesario para circular con matrícula temporal" styleClass="texto-secundario"/>
-                        </VBox>
-                        <Button text="📎 Subir" styleClass="btn-secundario" onAction="#subirSeguroMatriculas"/>
-                        <Label fx:id="estadoSeguroMatriculas" text="Pendiente" styleClass="badge-pendiente"/>
-                    </HBox>
-
-                    <!-- TÜV -->
-                    <HBox alignment="CENTER_LEFT" spacing="12">
-                        <CheckBox fx:id="chkTuv" onAction="#actualizarProgreso"/>
-                        <VBox HBox.hgrow="ALWAYS" spacing="2">
-                            <Label text="TÜV (Inspección técnica alemana)" styleClass="texto-normal"/>
-                            <Label text="Equivalente a la ITV española, debe estar vigente" styleClass="texto-secundario"/>
-                        </VBox>
-                        <Button text="📎 Subir" styleClass="btn-secundario" onAction="#subirTuv"/>
-                        <Label fx:id="estadoTuv" text="Pendiente" styleClass="badge-pendiente"/>
-                    </HBox>
-                </VBox>
-
-                <!-- Sección 2: Preguntas al vendedor -->
-                <VBox styleClass="tarjeta" spacing="14">
-                    <Label text="💬  Preguntas al vendedor" styleClass="titulo-seccion"/>
-                    <Separator styleClass="separador"/>
-                    <Label text="Plantilla editable. Puedes copiarla o enviarla directamente." styleClass="texto-secundario"/>
-
-                    <TextArea fx:id="areaPreguntas" styleClass="campo-texto"
-                              wrapText="true" prefRowCount="8"
-                              style="-fx-font-family: monospace;"/>
-
-                    <HBox spacing="12">
-                        <Button text="📋 Copiar texto"        styleClass="btn-secundario" onAction="#copiarPreguntas"/>
-                        <Button text="📧 Enviar por email"    styleClass="btn-secundario" onAction="#enviarEmail"/>
-                        <Button text="💬 Enviar por WhatsApp" styleClass="btn-secundario" onAction="#enviarWhatsapp"/>
-                        <Button text="🔄 Restaurar plantilla" styleClass="btn-secundario" onAction="#restaurarPlantilla"/>
-                    </HBox>
-                </VBox>
-
-                <!-- Sección 3: Matrículas de exportación -->
-                <VBox styleClass="tarjeta" spacing="14">
-                    <Label text="🚘  Matrículas de exportación" styleClass="titulo-seccion"/>
+                    <Label text="Documentos obligatorios" styleClass="titulo-seccion"/>
                     <Separator styleClass="separador"/>
 
                     <HBox spacing="16">
-                        <!-- Matrícula roja -->
-                        <VBox styleClass="tarjeta" spacing="8" HBox.hgrow="ALWAYS">
-                            <Label text="🔴  Matrícula Roja" styleClass="titulo-seccion"/>
-                            <Label text="Para vehículos sin seguro propio. Válida 5 días." styleClass="texto-secundario" wrapText="true"/>
-                            <Label text="Coste estimado: 30–60 €" styleClass="texto-primario"/>
-                            <RadioButton fx:id="radioRoja" text="Seleccionar" toggleGroup="$grupoMatricula"/>
-                        </VBox>
-
-                        <!-- Matrícula amarilla -->
-                        <VBox styleClass="tarjeta" spacing="8" HBox.hgrow="ALWAYS">
-                            <Label text="🟡  Matrícula Amarilla" styleClass="titulo-seccion"/>
-                            <Label text="Para vehículos con seguro propio. Válida hasta 1 año." styleClass="texto-secundario" wrapText="true"/>
-                            <Label text="Coste estimado: 60–120 €" styleClass="texto-primario"/>
-                            <RadioButton fx:id="radioAmarilla" text="Seleccionar" toggleGroup="$grupoMatricula"/>
+                        <VBox spacing="10" HBox.hgrow="ALWAYS">
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="chkFactura" text="Factura de compra" onAction="#actualizarProgreso" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="estadoFactura" text="Pendiente" styleClass="badge-pendiente"/>
+                                <Button text="Subir" styleClass="btn-secundario" onAction="#subirFactura"/>
+                            </HBox>
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="chkTail1" text="Tail 1 (titulo del vehiculo)" onAction="#actualizarProgreso" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="estadoTail1" text="Pendiente" styleClass="badge-pendiente"/>
+                                <Button text="Subir" styleClass="btn-secundario" onAction="#subirTail1"/>
+                            </HBox>
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="chkTail2" text="Tail 2 (certificado de matriculacion)" onAction="#actualizarProgreso" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="estadoTail2" text="Pendiente" styleClass="badge-pendiente"/>
+                                <Button text="Subir" styleClass="btn-secundario" onAction="#subirTail2"/>
+                            </HBox>
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="chkCoc" text="COC — Certificado de Conformidad" onAction="#actualizarProgreso" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="estadoCoc" text="Pendiente" styleClass="badge-pendiente"/>
+                                <Button text="Subir" styleClass="btn-secundario" onAction="#subirCoc"/>
+                            </HBox>
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="chkSeguroMatriculas" text="Seguro de matriculas de traslado" onAction="#actualizarProgreso" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="estadoSeguroMatriculas" text="Pendiente" styleClass="badge-pendiente"/>
+                                <Button text="Subir" styleClass="btn-secundario" onAction="#subirSeguroMatriculas"/>
+                            </HBox>
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="chkTuv" text="TUV — Inspeccion tecnica alemana" onAction="#actualizarProgreso" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="estadoTuv" text="Pendiente" styleClass="badge-pendiente"/>
+                                <Button text="Subir" styleClass="btn-secundario" onAction="#subirTuv"/>
+                            </HBox>
                         </VBox>
                     </HBox>
-
-                    <HBox spacing="12" alignment="CENTER_LEFT">
-                        <Label text="Tipo seleccionado:" styleClass="etiqueta-campo"/>
-                        <Label fx:id="lblTipoMatricula" text="Ninguno" styleClass="badge-pendiente"/>
-                    </HBox>
-
-                    <Button text="💾 Guardar selección" styleClass="btn-primario"
-                            onAction="#guardarMatricula"/>
                 </VBox>
 
-                <!-- Botón siguiente paso -->
-                <HBox alignment="CENTER_RIGHT">
-                    <Button text="Siguiente: Transporte  ➡" styleClass="btn-primario"
-                            style="-fx-font-size:14px;" onAction="#irTransporte"/>
-                </HBox>
+                <!-- Tipo de matricula -->
+                <VBox styleClass="tarjeta" spacing="14">
+                    <Label text="Tipo de matricula de traslado" styleClass="titulo-seccion"/>
+                    <Separator styleClass="separador"/>
+                    <HBox spacing="24" alignment="CENTER_LEFT">
+                        <RadioButton fx:id="radioRoja"     text="Matricula roja (exportacion)" onAction="#guardarMatricula"/>
+                        <RadioButton fx:id="radioAmarilla" text="Matricula amarilla (traslado propio)" onAction="#guardarMatricula"/>
+                        <Label fx:id="lblTipoMatricula" text="Sin seleccionar" styleClass="badge-pendiente"/>
+                    </HBox>
+                    <Button text="Confirmar tipo de matricula" styleClass="btn-primario" onAction="#guardarMatricula"/>
+                </VBox>
+
+                <!-- Plantilla de preguntas al vendedor -->
+                <VBox styleClass="tarjeta" spacing="14">
+                    <Label text="Plantilla de preguntas al vendedor" styleClass="titulo-seccion"/>
+                    <Separator styleClass="separador"/>
+                    <TextArea fx:id="areaPreguntas" styleClass="campo-texto" prefRowCount="10" wrapText="true"/>
+                    <HBox spacing="12">
+                        <Button text="Copiar al portapapeles" styleClass="btn-secundario"  onAction="#copiarPreguntas"/>
+                        <Button text="Enviar por email"       styleClass="btn-primario"    onAction="#enviarEmail"/>
+                        <Button text="Enviar por WhatsApp"    styleClass="btn-secundario"  onAction="#enviarWhatsapp"/>
+                        <Button text="Restaurar plantilla"    styleClass="btn-secundario"  onAction="#restaurarPlantilla"/>
+                    </HBox>
+                </VBox>
 
             </VBox>
         </ScrollPane>
     </center>
-
 </BorderPane>

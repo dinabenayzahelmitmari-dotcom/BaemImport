@@ -85,16 +85,16 @@ public class GestionVehiculosController implements Initializable {
     @FXML
     private void mostrarFormularioNuevo() {
         vehiculoEnEdicion = null;
-        lblTituloFormulario.setText("Nuevo Vehículo");
+        lblTituloFormulario.setText("Nuevo Vehiculo");
         limpiarFormulario();
     }
 
     @FXML
     private void editarVehiculo() {
         Vehiculo sel = tablaVehiculos.getSelectionModel().getSelectedItem();
-        if (sel == null) { aviso("Selecciona un vehículo para editar."); return; }
+        if (sel == null) { aviso("Selecciona un vehiculo para editar."); return; }
         vehiculoEnEdicion = sel;
-        lblTituloFormulario.setText("Editar Vehículo");
+        lblTituloFormulario.setText("Editar Vehiculo");
         campoMarca.setText(sel.getMarca());
         campoModelo.setText(sel.getModelo());
         campoVin.setText(sel.getVin());
@@ -117,7 +117,7 @@ public class GestionVehiculosController implements Initializable {
         if (vehiculoEnEdicion == null) {
             listaVehiculos.add(new Vehiculo(marca, modelo, vin, precio, vendedor, estado));
             // TODO: vehiculoService.guardar(nuevo)
-            mensaje("✅ Vehículo creado correctamente.", "#22c55e");
+            mensaje("Vehiculo creado correctamente.", "#22c55e");
         } else {
             vehiculoEnEdicion.setMarca(marca);
             vehiculoEnEdicion.setModelo(modelo);
@@ -127,7 +127,7 @@ public class GestionVehiculosController implements Initializable {
             vehiculoEnEdicion.setEstado(estado);
             // TODO: vehiculoService.actualizar(vehiculoEnEdicion)
             tablaVehiculos.refresh();
-            mensaje("✅ Vehículo actualizado.", "#22c55e");
+            mensaje("Vehiculo actualizado.", "#22c55e");
         }
         limpiarFormulario();
     }
@@ -135,9 +135,9 @@ public class GestionVehiculosController implements Initializable {
     @FXML
     private void eliminarVehiculo() {
         Vehiculo sel = tablaVehiculos.getSelectionModel().getSelectedItem();
-        if (sel == null) { aviso("Selecciona un vehículo para eliminar."); return; }
+        if (sel == null) { aviso("Selecciona un vehiculo para eliminar."); return; }
         Alert c = new Alert(Alert.AlertType.CONFIRMATION,
-                "¿Eliminar " + sel.getMarca() + " " + sel.getModelo() + "?",
+                "Eliminar " + sel.getMarca() + " " + sel.getModelo() + "?",
                 ButtonType.YES, ButtonType.NO);
         c.showAndWait().ifPresent(b -> {
             if (b == ButtonType.YES) {
@@ -153,11 +153,11 @@ public class GestionVehiculosController implements Initializable {
         if (campoMarca.getText().isBlank() || campoModelo.getText().isBlank() ||
                 campoVin.getText().length() != 17 || campoPrecio.getText().isBlank() ||
                 comboEstado.getValue() == null) {
-            mensaje("⚠️ Completa todos los campos. El VIN debe tener 17 caracteres.", "#ef4444");
+            mensaje("Completa todos los campos. El VIN debe tener 17 caracteres.", "#ef4444");
             return false;
         }
         try { Double.parseDouble(campoPrecio.getText().trim()); }
-        catch (NumberFormatException e) { mensaje("⚠️ El precio debe ser un número.", "#ef4444"); return false; }
+        catch (NumberFormatException e) { mensaje("El precio debe ser un numero.", "#ef4444"); return false; }
         return true;
     }
 

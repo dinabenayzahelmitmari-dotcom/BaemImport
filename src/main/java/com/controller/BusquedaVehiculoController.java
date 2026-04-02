@@ -81,13 +81,13 @@ public class BusquedaVehiculoController implements Initializable {
         if (chkPilotoAutomatico.isSelected())    extras.add("Piloto automático");
 
         // TODO: busquedaVehiculoService.guardar(...)
-        mensaje("✅ Preferencias guardadas correctamente.", "#22c55e");
+        mensaje("Preferencias guardadas correctamente.", "#22c55e");
     }
 
     private boolean validar() {
         if ((comboMarca.getValue() == null || comboMarca.getValue().isBlank())
                 && campoModelo.getText().isBlank()) {
-            mensaje("⚠️ Indica al menos la marca o el modelo.", "#ef4444");
+            mensaje("Indica al menos la marca o el modelo.", "#ef4444");
             return false;
         }
         if (!campoAnioMin.getText().isBlank()) {
@@ -95,17 +95,17 @@ public class BusquedaVehiculoController implements Initializable {
                 int a = Integer.parseInt(campoAnioMin.getText().trim());
                 if (a < 1990 || a > 2025) throw new NumberFormatException();
             } catch (NumberFormatException e) {
-                mensaje("⚠️ El año debe estar entre 1990 y 2025.", "#ef4444");
+                mensaje("El año debe estar entre 1990 y 2025.", "#ef4444");
                 return false;
             }
         }
         if (!campoPrecioMax.getText().isBlank()) {
             try { Double.parseDouble(campoPrecioMax.getText().trim()); }
-            catch (NumberFormatException e) { mensaje("⚠️ El precio debe ser un número.", "#ef4444"); return false; }
+            catch (NumberFormatException e) { mensaje("El precio debe ser un numero.", "#ef4444"); return false; }
         }
         if (!campoKmMax.getText().isBlank()) {
             try { Integer.parseInt(campoKmMax.getText().trim()); }
-            catch (NumberFormatException e) { mensaje("⚠️ Los km deben ser un número entero.", "#ef4444"); return false; }
+            catch (NumberFormatException e) { mensaje("Los km deben ser un numero entero.", "#ef4444"); return false; }
         }
         return true;
     }

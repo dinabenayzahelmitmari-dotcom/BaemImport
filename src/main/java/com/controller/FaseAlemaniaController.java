@@ -44,14 +44,14 @@ public class FaseAlemaniaController implements Initializable {
     private final ToggleGroup grupoMatricula = new ToggleGroup();
 
     private static final String PLANTILLA =
-            "Hola, estoy interesado en el vehículo. Me gustaría hacerle las siguientes preguntas:\n\n" +
-                    "1. ¿El vehículo funciona correctamente y sin ningún problema?\n" +
-                    "2. ¿Ha sufrido algún accidente o reparación importante?\n" +
-                    "3. ¿Cuándo fue el último mantenimiento realizado y qué se hizo?\n" +
-                    "4. ¿El TÜV está vigente? ¿Hasta qué fecha?\n" +
-                    "5. ¿Dispone del historial de revisiones del vehículo?\n" +
-                    "6. ¿Tiene todos los documentos originales (Tail 1, Tail 2, factura)?\n" +
-                    "7. ¿Ha tenido el vehículo algún propietario anterior?\n\n" +
+            "Hola, estoy interesado en el vehiculo. Me gustaria hacerle las siguientes preguntas:\n\n" +
+                    "1. El vehiculo funciona correctamente y sin ningun problema?\n" +
+                    "2. Ha sufrido algun accidente o reparacion importante?\n" +
+                    "3. Cuando fue el ultimo mantenimiento realizado y que se hizo?\n" +
+                    "4. El TUV esta vigente? Hasta que fecha?\n" +
+                    "5. Dispone del historial de revisiones del vehiculo?\n" +
+                    "6. Tiene todos los documentos originales (Tail 1, Tail 2, factura)?\n" +
+                    "7. Ha tenido el vehiculo algun propietario anterior?\n\n" +
                     "Muchas gracias de antemano.";
 
     @Override
@@ -68,7 +68,7 @@ public class FaseAlemaniaController implements Initializable {
         Label[]    badges = { estadoFactura, estadoTail1, estadoTail2, estadoCoc, estadoSeguroMatriculas, estadoTuv };
         int completados = 0;
         for (int i = 0; i < checks.length; i++) {
-            badge(badges[i], checks[i].isSelected());
+            actualizarBadge(badges[i], checks[i].isSelected());
             if (checks[i].isSelected()) completados++;
         }
         barraProgreso.setProgress((double) completados / checks.length);
@@ -79,10 +79,10 @@ public class FaseAlemaniaController implements Initializable {
         else                                   lblProgreso.getStyleClass().add("badge-pendiente");
     }
 
-    private void badge(Label lbl, boolean ok) {
+    private void actualizarBadge(Label lbl, boolean ok) {
         lbl.getStyleClass().removeAll("badge-completado", "badge-pendiente");
-        if (ok) { lbl.setText("✅ Subido");  lbl.getStyleClass().add("badge-completado"); }
-        else    { lbl.setText("Pendiente");  lbl.getStyleClass().add("badge-pendiente"); }
+        if (ok) { lbl.setText("Subido");    lbl.getStyleClass().add("badge-completado"); }
+        else    { lbl.setText("Pendiente"); lbl.getStyleClass().add("badge-pendiente"); }
     }
 
     @FXML private void subirFactura()          { seleccionarArchivo(chkFactura,          estadoFactura); }
@@ -100,9 +100,8 @@ public class FaseAlemaniaController implements Initializable {
         File f = fc.showOpenDialog((Stage) barraProgreso.getScene().getWindow());
         if (f != null) {
             chk.setSelected(true);
-            badge(badge, true);
+            actualizarBadge(badge, true);
             actualizarProgreso();
-            // TODO: DocumentoService.guardar(f, vehiculoId, tipo)
         }
     }
 
@@ -119,7 +118,7 @@ public class FaseAlemaniaController implements Initializable {
         try {
             String cuerpo = URLEncoder.encode(areaPreguntas.getText(), StandardCharsets.UTF_8)
                     .replace("+", "%20");
-            String asunto = URLEncoder.encode("Preguntas sobre el vehículo", StandardCharsets.UTF_8);
+            String asunto = URLEncoder.encode("Preguntas sobre el vehiculo", StandardCharsets.UTF_8);
             Desktop.getDesktop().mail(new URI("mailto:?subject=" + asunto + "&body=" + cuerpo));
         } catch (Exception e) { error("No se pudo abrir el cliente de email."); }
     }
@@ -137,17 +136,16 @@ public class FaseAlemaniaController implements Initializable {
     @FXML
     private void guardarMatricula() {
         if (radioRoja.isSelected()) {
-            lblTipoMatricula.setText("🔴 Roja");
+            lblTipoMatricula.setText("Matricula roja");
             lblTipoMatricula.getStyleClass().removeAll("badge-pendiente", "badge-completado");
             lblTipoMatricula.getStyleClass().add("badge-en-proceso");
         } else if (radioAmarilla.isSelected()) {
-            lblTipoMatricula.setText("🟡 Amarilla");
+            lblTipoMatricula.setText("Matricula amarilla");
             lblTipoMatricula.getStyleClass().removeAll("badge-pendiente", "badge-en-proceso");
             lblTipoMatricula.getStyleClass().add("badge-completado");
         } else {
-            aviso("Selecciona un tipo de matrícula.");
+            aviso("Selecciona un tipo de matricula.");
         }
-        // TODO: ProcesoImportacionService.guardarTipoMatricula(...)
     }
 
     private void info(String m)  { new Alert(Alert.AlertType.INFORMATION, m, ButtonType.OK).showAndWait(); }

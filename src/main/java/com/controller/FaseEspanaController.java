@@ -1,5 +1,7 @@
 package com.controller;
 
+import com.model.Vehiculo;
+import com.service.PdfService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,23 +41,27 @@ public class FaseEspanaController implements Initializable {
     @FXML private ComboBox<String> comboEstadoDgt;
     @FXML private Label            badgeDgt;
 
+    private final PdfService pdfService = new PdfService();
+    private double ultimoImpMatriculacion = 0;
+    private double ultimoImpCirculacion   = 0;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         comboProvincia.setItems(FXCollections.observableArrayList(
-                "Albacete","Alicante","Almería","Asturias","Ávila","Badajoz","Barcelona",
-                "Burgos","Cáceres","Cádiz","Cantabria","Castellón","Ciudad Real","Córdoba",
-                "A Coruña","Cuenca","Girona","Granada","Guadalajara","Huelva","Huesca",
-                "Illes Balears","Jaén","León","Lleida","Lugo","Madrid","Málaga","Murcia",
+                "Albacete","Alicante","Almeria","Asturias","Avila","Badajoz","Barcelona",
+                "Burgos","Caceres","Cadiz","Cantabria","Castellon","Ciudad Real","Cordoba",
+                "A Coruna","Cuenca","Girona","Granada","Guadalajara","Huelva","Huesca",
+                "Illes Balears","Jaen","Leon","Lleida","Lugo","Madrid","Malaga","Murcia",
                 "Navarra","Ourense","Palencia","Las Palmas","Pontevedra","La Rioja",
                 "Salamanca","Santa Cruz de Tenerife","Segovia","Sevilla","Soria",
                 "Tarragona","Teruel","Toledo","Valencia","Valladolid","Zamora","Zaragoza"
         ));
         comboEstadoDgt.setItems(FXCollections.observableArrayList(
                 "Sin iniciar",
-                "Documentación presentada",
-                "En revisión",
-                "Aprobado — pendiente de matrícula",
-                "Matriculado ✅"
+                "Documentacion presentada",
+                "En revision",
+                "Aprobado  pendiente de matricula",
+                "Matriculado"
         ));
         actualizarProgreso();
     }
@@ -64,19 +70,16 @@ public class FaseEspanaController implements Initializable {
     private void actualizarProgreso() {
         int completados = 0;
 
-        // ITV
         boolean itvOk = chkItvSuperada.isSelected() && chkFichaTecnica.isSelected();
         badgeEstado(badgeItv, itvOk ? "completado" : chkFichaTecnica.isSelected() ? "en-proceso" : "pendiente");
         badgeDoc(estadoFichaTecnica, chkFichaTecnica.isSelected());
         if (itvOk) completados++;
 
-        // Hacienda
         badgeEstado(badgeHacienda, chkHaciendaPagada.isSelected() ? "completado" : "pendiente");
         if (chkHaciendaPagada.isSelected()) completados++;
 
-        // DGT
         String dgtVal = comboEstadoDgt.getValue();
-        boolean dgtOk = "Matriculado ✅".equals(dgtVal);
+        boolean dgtOk = "Matriculado".equals(dgtVal);
         badgeEstado(badgeDgt, dgtOk ? "completado" : dgtVal != null ? "en-proceso" : "pendiente");
         badgeDoc(estadoDocDgt, chkDocDgt.isSelected());
         if (dgtOk) completados++;
@@ -89,16 +92,16 @@ public class FaseEspanaController implements Initializable {
     private void badgeEstado(Label lbl, String estado) {
         lbl.getStyleClass().removeAll("badge-completado", "badge-en-proceso", "badge-pendiente");
         switch (estado) {
-            case "completado" -> { lbl.setText("✅ Completado"); lbl.getStyleClass().add("badge-completado"); }
-            case "en-proceso" -> { lbl.setText("En proceso");   lbl.getStyleClass().add("badge-en-proceso"); }
-            default           -> { lbl.setText("Pendiente");    lbl.getStyleClass().add("badge-pendiente"); }
+            case "completado" -> { lbl.setText("Completado"); lbl.getStyleClass().add("badge-completado"); }
+            case "en-proceso" -> { lbl.setText("En proceso"); lbl.getStyleClass().add("badge-en-proceso"); }
+            default           -> { lbl.setText("Pendiente");  lbl.getStyleClass().add("badge-pendiente"); }
         }
     }
 
     private void badgeDoc(Label lbl, boolean ok) {
         lbl.getStyleClass().removeAll("badge-completado", "badge-pendiente");
-        if (ok) { lbl.setText("✅ Subido");  lbl.getStyleClass().add("badge-completado"); }
-        else    { lbl.setText("Pendiente");  lbl.getStyleClass().add("badge-pendiente"); }
+        if (ok) { lbl.setText("Subido");    lbl.getStyleClass().add("badge-completado"); }
+        else    { lbl.setText("Pendiente"); lbl.getStyleClass().add("badge-pendiente"); }
     }
 
     @FXML private void subirFichaTecnica() { seleccionarArchivo(chkFichaTecnica, estadoFichaTecnica); }
@@ -114,8 +117,11 @@ public class FaseEspanaController implements Initializable {
     }
 
     /**
-     * Calcula el Impuesto de Matriculación según tramos de CO₂ (2024):
-     * < 120 g/km → 0%  |  120–160 → 4,75%  |  160–200 → 9,75%  |  > 200 → 14,75%
+     * Calcula el Impuesto de Matriculacion segun tramos de CO2 (vigentes 2024):
+     *   menor de 120 g/km  0%
+     *   120160 g/km       4,75%
+     *   160200 g/km       9,75%
+     *   mayor de 200 g/km  14,75%
      */
     @FXML
     private void calcularImpuesto() {
@@ -126,19 +132,44 @@ public class FaseEspanaController implements Initializable {
             double tipo;
             String tipoLabel;
             if      (emisiones < 120) { tipo = 0.0;   tipoLabel = "0% (menos de 120 g/km)"; }
-            else if (emisiones < 160) { tipo = 4.75;  tipoLabel = "4,75% (120–160 g/km)"; }
-            else if (emisiones < 200) { tipo = 9.75;  tipoLabel = "9,75% (160–200 g/km)"; }
-            else                      { tipo = 14.75; tipoLabel = "14,75% (más de 200 g/km)"; }
+            else if (emisiones < 160) { tipo = 4.75;  tipoLabel = "4,75% (120160 g/km)"; }
+            else if (emisiones < 200) { tipo = 9.75;  tipoLabel = "9,75% (160200 g/km)"; }
+            else                      { tipo = 14.75; tipoLabel = "14,75% (mas de 200 g/km)"; }
 
-            double impMatriculacion = precio * (tipo / 100.0);
-            double impCirculacion   = emisiones < 120 ? 0 : emisiones < 160 ? 62 : emisiones < 200 ? 125 : 185;
+            ultimoImpMatriculacion = precio * (tipo / 100.0);
+            ultimoImpCirculacion   = emisiones < 120 ? 0 : emisiones < 160 ? 62 : emisiones < 200 ? 125 : 185;
 
             lblTipoGravamen.setText(tipoLabel);
-            lblImpuestoMatriculacion.setText(String.format("%.2f €", impMatriculacion));
-            lblImpuestoCirculacion.setText(String.format("%.2f €", impCirculacion));
+            lblImpuestoMatriculacion.setText(String.format("%.2f EUR", ultimoImpMatriculacion));
+            lblImpuestoCirculacion.setText(String.format("%.2f EUR", ultimoImpCirculacion));
 
         } catch (NumberFormatException e) {
-            aviso("Introduce valores numéricos válidos para precio y emisiones.");
+            aviso("Introduce valores numericos validos para precio y emisiones.");
+        }
+    }
+
+    @FXML
+    private void descargarInformeImpuestos() {
+        if (campoPrecioCalculo.getText().isBlank() || campoEmisiones.getText().isBlank()) {
+            aviso("Calcula los impuestos primero.");
+            return;
+        }
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Guardar informe de impuestos");
+        fc.setInitialFileName("Informe_Impuestos_BAEMIMPORT.pdf");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
+        File destino = fc.showSaveDialog((Stage) barraProgreso.getScene().getWindow());
+        if (destino == null) return;
+        try {
+            double precio    = Double.parseDouble(campoPrecioCalculo.getText().trim());
+            double emisiones = Double.parseDouble(campoEmisiones.getText().trim());
+            Vehiculo vehiculoDemo = new Vehiculo("BMW", "Serie 3", "WBA12345678901234",
+                    precio, "AutoHaus Berlin", "En proceso");
+            pdfService.generarInformeImpuestos(vehiculoDemo, precio, emisiones,
+                    ultimoImpMatriculacion, ultimoImpCirculacion, destino);
+            info("Informe de impuestos generado: " + destino.getName());
+        } catch (Exception e) {
+            aviso("No se pudo generar el PDF: " + e.getMessage());
         }
     }
 
@@ -153,10 +184,9 @@ public class FaseEspanaController implements Initializable {
 
     @FXML
     private void guardarEstadoDgt() {
-        if (comboEstadoDgt.getValue() == null) { aviso("Selecciona el estado del trámite."); return; }
+        if (comboEstadoDgt.getValue() == null) { aviso("Selecciona el estado del tramite."); return; }
         actualizarProgreso();
-        // TODO: ProcesoImportacionService.guardarEstadoDgt(comboEstadoDgt.getValue())
-        info("✅ Estado DGT guardado: " + comboEstadoDgt.getValue());
+        info("Estado DGT guardado: " + comboEstadoDgt.getValue());
     }
 
     private void info(String m)  { new Alert(Alert.AlertType.INFORMATION, m, ButtonType.OK).showAndWait(); }

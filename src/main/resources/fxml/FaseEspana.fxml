@@ -1,187 +1,153 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<?import java.lang.String?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
 
-<!-- Fase España: ITV, Hacienda (impuestos) y DGT (matriculación) -->
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.controller.FaseEspanaController"
             styleClass="fondo-principal"
             stylesheets="@../css/main.css">
-
     <left>
         <VBox styleClass="menu-lateral" spacing="4">
             <padding><Insets top="24" right="12" bottom="24" left="12"/></padding>
-            <Label text="🚗 BAEMIMPORT" styleClass="menu-logo"/>
-            <Label text="Importación desde Alemania" styleClass="menu-logo-sub"/>
-            <Label text="MENÚ" style="-fx-font-size:10px; -fx-text-fill:#4f6ef7; -fx-padding:0 0 6 8;"/>
-            <Button text="📊  Dashboard"        styleClass="btn-nav" maxWidth="Infinity" onAction="#irDashboard"/>
-            <Button text="🚙  Mis Vehículos"    styleClass="btn-nav" maxWidth="Infinity" onAction="#irVehiculos"/>
-            <Button text="🔍  Buscar Vehículo"  styleClass="btn-nav" maxWidth="Infinity" onAction="#irBusqueda"/>
-            <Button text="🇩🇪  Fase Alemania"   styleClass="btn-nav" maxWidth="Infinity" onAction="#irFaseAlemania"/>
-            <Button text="🚛  Transporte"        styleClass="btn-nav" maxWidth="Infinity" onAction="#irTransporte"/>
-            <Button text="🇪🇸  Fase España"     styleClass="btn-nav, btn-nav-activo" maxWidth="Infinity"/>
-            <Button text="📁  Documentos"        styleClass="btn-nav" maxWidth="Infinity" onAction="#irDocumentos"/>
+            <VBox alignment="CENTER_LEFT" spacing="2"><padding><Insets bottom="28"/></padding>
+                <Label text="BAEMIMPORT" styleClass="menu-logo"/>
+                <Label text="Importacion desde Alemania" styleClass="menu-logo-sub"/>
+            </VBox>
+            <Label text="MENU" style="-fx-font-size:10px; -fx-text-fill:#4f6ef7; -fx-padding:0 0 6 8;"/>
+            <Button text="Dashboard"       styleClass="btn-nav" maxWidth="Infinity" onAction="#irDashboard"/>
+            <Button text="Mis Vehiculos"   styleClass="btn-nav" maxWidth="Infinity" onAction="#irVehiculos"/>
+            <Button text="Buscar Vehiculo" styleClass="btn-nav" maxWidth="Infinity" onAction="#irBusqueda"/>
+            <Button text="Fase Alemania"   styleClass="btn-nav" maxWidth="Infinity" onAction="#irFaseAlemania"/>
+            <Button text="Transporte"      styleClass="btn-nav" maxWidth="Infinity" onAction="#irTransporte"/>
+            <Button text="Fase Espana" maxWidth="Infinity">
+                <styleClass>
+                    <String fx:value="btn-nav"/>
+                    <String fx:value="btn-nav-activo"/>
+                </styleClass>
+            </Button>
+            <Button text="Documentos"      styleClass="btn-nav" maxWidth="Infinity" onAction="#irDocumentos"/>
             <Separator styleClass="separador"/>
-            <Button text="👤  Mi Perfil"         styleClass="btn-nav" maxWidth="Infinity" onAction="#irPerfil"/>
+            <Button text="Mi Perfil"       styleClass="btn-nav" maxWidth="Infinity" onAction="#irPerfil"/>
         </VBox>
     </left>
 
     <center>
         <ScrollPane fitToWidth="true" styleClass="scroll-pane">
-            <VBox spacing="24">
-                <padding><Insets top="32" right="32" bottom="32" left="32"/></padding>
+            <VBox spacing="24"><padding><Insets top="32" right="32" bottom="32" left="32"/></padding>
 
-                <!-- Cabecera -->
                 <HBox alignment="CENTER_LEFT" spacing="12">
                     <VBox spacing="4" HBox.hgrow="ALWAYS">
-                        <Label text="🇪🇸  Fase España" styleClass="titulo-pagina"/>
-                        <Label text="ITV, liquidación de impuestos y matriculación en la DGT" styleClass="subtitulo"/>
+                        <Label text="Fase Espana" styleClass="titulo-pagina"/>
+                        <Label text="ITV, Hacienda y matriculacion en la DGT" styleClass="subtitulo"/>
                     </VBox>
                     <Label fx:id="lblProgreso" text="0 / 3 completados" styleClass="badge-pendiente"/>
                 </HBox>
 
-                <ProgressBar fx:id="barraProgreso" progress="0.0"
-                             styleClass="barra-progreso" maxWidth="Infinity"/>
+                <ProgressBar fx:id="barraProgreso" progress="0.0" styleClass="barra-progreso" maxWidth="Infinity"/>
 
-                <!-- SECCIÓN ITV -->
-                <VBox styleClass="tarjeta" spacing="16">
-                    <HBox alignment="CENTER_LEFT">
-                        <Label text="🔧  ITV (Inspección Técnica de Vehículos)" styleClass="titulo-seccion" HBox.hgrow="ALWAYS"/>
+                <!-- ITV -->
+                <VBox styleClass="tarjeta" spacing="14">
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <Label text="ITV — Inspeccion Tecnica de Vehiculos" styleClass="titulo-seccion" HBox.hgrow="ALWAYS"/>
                         <Label fx:id="badgeItv" text="Pendiente" styleClass="badge-pendiente"/>
                     </HBox>
                     <Separator styleClass="separador"/>
-
-                    <HBox spacing="24">
-                        <!-- Cita ITV -->
+                    <HBox spacing="16">
                         <VBox spacing="6" HBox.hgrow="ALWAYS">
-                            <Label text="FECHA DE CITA" styleClass="etiqueta-campo"/>
-                            <DatePicker fx:id="fechaCitaItv" styleClass="campo-texto"
-                                        promptText="dd/MM/yyyy" maxWidth="Infinity"/>
+                            <Label text="FECHA DE CITA ITV" styleClass="etiqueta-campo"/>
+                            <DatePicker fx:id="fechaCitaItv" styleClass="campo-texto" maxWidth="Infinity"/>
                         </VBox>
-
-                        <!-- Provincia -->
                         <VBox spacing="6" HBox.hgrow="ALWAYS">
                             <Label text="PROVINCIA" styleClass="etiqueta-campo"/>
-                            <ComboBox fx:id="comboProvincia" styleClass="combo-box"
-                                      promptText="Selecciona provincia" maxWidth="Infinity"/>
+                            <ComboBox fx:id="comboProvincia" styleClass="combo-box" maxWidth="Infinity"/>
                         </VBox>
                     </HBox>
-
-                    <!-- Ficha técnica -->
-                    <HBox alignment="CENTER_LEFT" spacing="12">
-                        <CheckBox fx:id="chkFichaTecnica" onAction="#actualizarProgreso"/>
-                        <VBox HBox.hgrow="ALWAYS" spacing="2">
-                            <Label text="Ficha técnica del vehículo" styleClass="texto-normal"/>
-                            <Label text="Necesaria para la inspección inicial" styleClass="texto-secundario"/>
+                    <HBox spacing="16" alignment="CENTER_LEFT">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="chkFichaTecnica" text="Ficha tecnica subida" onAction="#actualizarProgreso"/>
+                                <Label fx:id="estadoFichaTecnica" text="Pendiente" styleClass="badge-pendiente"/>
+                            </HBox>
+                            <CheckBox fx:id="chkItvSuperada" text="ITV superada" onAction="#actualizarProgreso"/>
                         </VBox>
-                        <Button text="📎 Subir" styleClass="btn-secundario" onAction="#subirFichaTecnica"/>
-                        <Label fx:id="estadoFichaTecnica" text="Pendiente" styleClass="badge-pendiente"/>
+                        <VBox spacing="6">
+                            <Button text="Subir ficha tecnica" styleClass="btn-secundario" onAction="#subirFichaTecnica"/>
+                            <Button text="Pedir cita ITV"      styleClass="btn-secundario" onAction="#abrirWebItv"/>
+                        </VBox>
                     </HBox>
-
-                    <CheckBox fx:id="chkItvSuperada" text="✅  ITV superada"
-                              styleClass="texto-normal" onAction="#actualizarProgreso"/>
-
-                    <Button text="🌐 Solicitar cita ITV online" styleClass="btn-secundario"
-                            onAction="#abrirWebItv"/>
                 </VBox>
 
-                <!-- SECCIÓN HACIENDA -->
-                <VBox styleClass="tarjeta" spacing="16">
-                    <HBox alignment="CENTER_LEFT">
-                        <Label text="🏛️  Hacienda — Impuestos" styleClass="titulo-seccion" HBox.hgrow="ALWAYS"/>
+                <!-- Hacienda -->
+                <VBox styleClass="tarjeta" spacing="14">
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <Label text="Hacienda — Impuesto de Matriculacion" styleClass="titulo-seccion" HBox.hgrow="ALWAYS"/>
                         <Label fx:id="badgeHacienda" text="Pendiente" styleClass="badge-pendiente"/>
                     </HBox>
                     <Separator styleClass="separador"/>
-
-                    <!-- Calculadora de impuesto de matriculación -->
-                    <VBox styleClass="tarjeta" spacing="12"
-                          style="-fx-background-color:#1a1d27;">
-                        <Label text="Calculadora de Impuesto de Matriculación" styleClass="titulo-seccion"/>
-
-                        <HBox spacing="16">
-                            <VBox spacing="6" HBox.hgrow="ALWAYS">
-                                <Label text="PRECIO DE COMPRA (€)" styleClass="etiqueta-campo"/>
-                                <TextField fx:id="campoPrecioCalculo" styleClass="campo-texto"
-                                           promptText="Ej: 25000" maxWidth="Infinity"/>
-                            </VBox>
-                            <VBox spacing="6" HBox.hgrow="ALWAYS">
-                                <Label text="EMISIONES CO₂ (g/km)" styleClass="etiqueta-campo"/>
-                                <TextField fx:id="campoEmisiones" styleClass="campo-texto"
-                                           promptText="Ej: 120" maxWidth="Infinity"/>
-                            </VBox>
-                        </HBox>
-
-                        <Button text="🧮 Calcular impuesto" styleClass="btn-primario"
-                                onAction="#calcularImpuesto"/>
-
-                        <VBox spacing="6">
-                            <HBox spacing="12" alignment="CENTER_LEFT">
-                                <Label text="Tipo de gravamen:" styleClass="etiqueta-campo" minWidth="160"/>
-                                <Label fx:id="lblTipoGravamen" text="—" styleClass="texto-normal"/>
-                            </HBox>
-                            <HBox spacing="12" alignment="CENTER_LEFT">
-                                <Label text="Impuesto matriculación:" styleClass="etiqueta-campo" minWidth="160"/>
-                                <Label fx:id="lblImpuestoMatriculacion" text="— €"
-                                       style="-fx-font-size:18px; -fx-font-weight:bold; -fx-text-fill:#f59e0b;"/>
-                            </HBox>
-                            <HBox spacing="12" alignment="CENTER_LEFT">
-                                <Label text="Impuesto circulación (est.):" styleClass="etiqueta-campo" minWidth="160"/>
-                                <Label fx:id="lblImpuestoCirculacion" text="— €" styleClass="texto-primario"/>
-                            </HBox>
+                    <HBox spacing="16">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="PRECIO DE COMPRA (EUR)" styleClass="etiqueta-campo"/>
+                            <TextField fx:id="campoPrecioCalculo" styleClass="campo-texto"
+                                       promptText="Ej: 24000" maxWidth="Infinity"/>
                         </VBox>
-                    </VBox>
-
-                    <CheckBox fx:id="chkHaciendaPagada" text="✅  Impuestos liquidados en Hacienda"
-                              styleClass="texto-normal" onAction="#actualizarProgreso"/>
-
-                    <Button text="🌐 Ir al portal de la AEAT" styleClass="btn-secundario"
-                            onAction="#abrirAeat"/>
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="EMISIONES CO2 (g/km)" styleClass="etiqueta-campo"/>
+                            <TextField fx:id="campoEmisiones" styleClass="campo-texto"
+                                       promptText="Ej: 145" maxWidth="Infinity"/>
+                        </VBox>
+                    </HBox>
+                    <HBox spacing="12">
+                        <Button text="Calcular impuestos" styleClass="btn-primario"  onAction="#calcularImpuesto"/>
+                        <Button text="Descargar informe PDF" styleClass="btn-exito"  onAction="#descargarInformeImpuestos"/>
+                        <Button text="Sede AEAT" styleClass="btn-secundario"         onAction="#abrirAeat"/>
+                    </HBox>
+                    <HBox spacing="32">
+                        <VBox spacing="4">
+                            <Label text="TIPO DE GRAVAMEN" styleClass="etiqueta-campo"/>
+                            <Label fx:id="lblTipoGravamen" text="—" styleClass="texto-primario"/>
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="IMPUESTO MATRICULACION" styleClass="etiqueta-campo"/>
+                            <Label fx:id="lblImpuestoMatriculacion" text="—" styleClass="texto-normal"/>
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text="IMPUESTO CIRCULACION" styleClass="etiqueta-campo"/>
+                            <Label fx:id="lblImpuestoCirculacion" text="—" styleClass="texto-normal"/>
+                        </VBox>
+                    </HBox>
+                    <CheckBox fx:id="chkHaciendaPagada" text="Impuesto de matriculacion pagado" onAction="#actualizarProgreso"/>
                 </VBox>
 
-                <!-- SECCIÓN DGT -->
-                <VBox styleClass="tarjeta" spacing="16">
-                    <HBox alignment="CENTER_LEFT">
-                        <Label text="🚘  DGT — Matriculación" styleClass="titulo-seccion" HBox.hgrow="ALWAYS"/>
+                <!-- DGT -->
+                <VBox styleClass="tarjeta" spacing="14">
+                    <HBox alignment="CENTER_LEFT" spacing="12">
+                        <Label text="DGT — Matriculacion definitiva" styleClass="titulo-seccion" HBox.hgrow="ALWAYS"/>
                         <Label fx:id="badgeDgt" text="Pendiente" styleClass="badge-pendiente"/>
                     </HBox>
                     <Separator styleClass="separador"/>
-
-                    <!-- Documentos DGT -->
-                    <HBox alignment="CENTER_LEFT" spacing="12">
-                        <CheckBox fx:id="chkDocDgt" onAction="#actualizarProgreso"/>
-                        <VBox HBox.hgrow="ALWAYS" spacing="2">
-                            <Label text="Paquete de documentos para la DGT" styleClass="texto-normal"/>
-                            <Label text="COC, ficha técnica, justificante HACIENDA, ITV" styleClass="texto-secundario"/>
+                    <HBox spacing="16" alignment="CENTER_LEFT">
+                        <VBox spacing="6" HBox.hgrow="ALWAYS">
+                            <Label text="ESTADO DEL TRAMITE DGT" styleClass="etiqueta-campo"/>
+                            <ComboBox fx:id="comboEstadoDgt" styleClass="combo-box" maxWidth="Infinity"
+                                      onAction="#actualizarProgreso"/>
                         </VBox>
-                        <Button text="📎 Subir" styleClass="btn-secundario" onAction="#subirDocsDgt"/>
-                        <Label fx:id="estadoDocDgt" text="Pendiente" styleClass="badge-pendiente"/>
+                        <VBox spacing="6">
+                            <HBox spacing="12" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="chkDocDgt" text="Documentacion DGT subida" onAction="#actualizarProgreso"/>
+                                <Label fx:id="estadoDocDgt" text="Pendiente" styleClass="badge-pendiente"/>
+                            </HBox>
+                        </VBox>
                     </HBox>
-
-                    <VBox spacing="6">
-                        <Label text="ESTADO DEL TRÁMITE DGT" styleClass="etiqueta-campo"/>
-                        <ComboBox fx:id="comboEstadoDgt" styleClass="combo-box"
-                                  promptText="Selecciona el estado actual" maxWidth="Infinity"
-                                  onAction="#actualizarProgreso"/>
-                    </VBox>
-
                     <HBox spacing="12">
-                        <Button text="🌐 Ir a la sede DGT" styleClass="btn-secundario"
-                                onAction="#abrirDgt"/>
-                        <Button text="💾 Guardar estado" styleClass="btn-primario"
-                                onAction="#guardarEstadoDgt"/>
+                        <Button text="Guardar estado DGT" styleClass="btn-primario"   onAction="#guardarEstadoDgt"/>
+                        <Button text="Subir docs DGT"     styleClass="btn-secundario" onAction="#subirDocsDgt"/>
+                        <Button text="Sede DGT"           styleClass="btn-secundario" onAction="#abrirDgt"/>
                     </HBox>
                 </VBox>
-
-                <!-- Botones de navegación -->
-                <HBox spacing="12" alignment="CENTER_RIGHT">
-                    <Button text="⬅  Volver: Transporte"   styleClass="btn-secundario" onAction="#irTransporte"/>
-                    <Button text="📁 Ver documentos finales" styleClass="btn-primario"   onAction="#irDocumentos"/>
-                </HBox>
 
             </VBox>
         </ScrollPane>
     </center>
-
 </BorderPane>
