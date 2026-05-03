@@ -1,0 +1,39 @@
+.alerts-list { display: flex; flex-direction: column; gap: 10px; }
+
+.alert-card {
+  padding: 14px 16px;
+  cursor: pointer;
+}
+.alert-top {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+}
+.alert-tipo-badge {
+  font-family: var(--font-display);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.5px; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 20px;
+}
+.alert-title {
+  font-family: var(--font-display);
+  font-size: 16px; font-weight: 700;
+  color: var(--navy); margin-bottom: 4px;
+}
+.alert-msg {
+  font-size: 13px; color: var(--grey-500);
+  line-height: 1.4; margin-bottom: 8px;
+}
+.alert-action {
+  font-family: var(--font-display);
+  font-size: 12px; font-weight: 600;
+  color: var(--navy); letter-spacing: 0.3px;
+}
+
+.alerts-info {
+  display: flex; gap: 10px; align-items: flex-start;
+  margin-top: 8px;
+  background: var(--grey-50); border: 1px solid var(--grey-200);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  font-size: 12px; color: var(--grey-500); line-height: 1.5;
+}
+.alerts-info svg { color: var(--grey-400); flex-shrink: 0; margin-top: 1px; }
