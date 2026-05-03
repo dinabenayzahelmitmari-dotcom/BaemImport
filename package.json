@@ -1,0 +1,12 @@
+{
+  "name": "appbaemimport",
+  "version": "1.0.0",
+  "description": "BAEMIMPORT - Importación de Vehículos Alemania-España",
+  "main": "app-runner.js",
+  "scripts": {
+    "start": "node app-runner.js",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+  },
+  "author": "BAEMIMPORT",
+  "license": "ISC"
+}

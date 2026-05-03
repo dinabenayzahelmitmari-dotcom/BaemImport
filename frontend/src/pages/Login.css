@@ -1,0 +1,107 @@
+.login-screen {
+  min-height: 100vh;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  gap: 0;
+}
+
+.login-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.login-logo-wrap {
+  filter: drop-shadow(0 4px 16px rgba(200,16,46,0.25));
+  margin-bottom: 4px;
+}
+
+.login-brand {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: 4px;
+}
+
+.login-tagline {
+  font-family: var(--font-display);
+  font-size: 11px;
+  color: var(--grey-500);
+  letter-spacing: 1.5px;
+  text-align: center;
+  border-top: 1px solid var(--grey-200);
+  padding-top: 12px;
+  width: 100%;
+  text-align: center;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--white);
+  border: 1px solid var(--grey-200);
+  border-radius: var(--radius-xl);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-lg);
+  animation: fadeInUp 0.5s 0.1s ease forwards;
+  opacity: 0;
+}
+
+.login-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+
+.login-desc {
+  font-size: 14px;
+  color: var(--grey-500);
+  margin-bottom: 24px;
+}
+
+.login-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff0f2;
+  border: 1px solid #ffd0d7;
+  color: var(--red-dark);
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-footer {
+  margin-top: 32px;
+  font-size: 12px;
+  color: var(--grey-300);
+  text-align: center;
+  animation: fadeInUp 0.5s 0.2s ease forwards;
+  opacity: 0;
+}
+
+/* Red accent line on brand */
+.login-brand-line {
+  width: 48px;
+  height: 3px;
+  background: var(--red);
+  border-radius: 2px;
+  margin: 0 auto;
+}
