@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Invoice = require("../models/Factura");
-const Client = require("../models/Clienteee");
+const Client = require("../models/Cliente");
 const { authMiddleware } = require("../middleware/auth");
 const emailService = require("../services/email");
 const pdfService = require("../services/pdf");

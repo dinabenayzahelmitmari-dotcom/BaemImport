@@ -16,7 +16,7 @@ const expenseSchema = new mongoose.Schema(
     },
     creadoPor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
-  { timestamps: true, collection: "gastos" }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Expense", expenseSchema);

@@ -31,7 +31,7 @@ const invoiceSchema = new mongoose.Schema(
     notas: { type: String },
     creadoPor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
-  { timestamps: true, collection: "facturas" }
+  { timestamps: true }
 );
 
 invoiceSchema.pre("save", async function (next) {

@@ -24,7 +24,7 @@ const quoteSchema = new mongoose.Schema(
     condiciones: { type: String, default: "Precios indicados sin IVA salvo que se indique lo contrario. Presupuesto sujeto a disponibilidad del vehículo." },
     creadoPor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
-  { timestamps: true, collection: "presupuestos" }
+  { timestamps: true }
 );
 
 quoteSchema.pre("save", async function (next) {

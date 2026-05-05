@@ -20,8 +20,10 @@ const vehicleSchema = new mongoose.Schema(
     fotos: [{ type: String }],
     creadoPor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
-  { timestamps: true, collection: "vehiculos" }
+  { timestamps: true }
 );
+
+vehicleSchema.index({ vin: 1 }, { unique: true, sparse: true });
 
 vehicleSchema.pre("save", function (next) {
   if (this.precio && this.precioCompra) {

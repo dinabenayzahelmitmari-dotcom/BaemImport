@@ -20,5 +20,16 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
+  },
+  "pkg": {
+    "assets": [
+      "../frontend/build/**/*",
+      "uploads/**/*",
+      "assets/**/*"
+    ],
+    "scripts": [
+      "./**/*.js",
+      "node_modules/es-get-iterator/**/*.js"
+    ]
   }
 }
