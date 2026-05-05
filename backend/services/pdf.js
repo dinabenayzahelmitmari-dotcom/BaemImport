@@ -93,7 +93,6 @@ const pdfService = {
       y += 60;
 
       // Datos cliente y empresa
-      const colW = (doc.page.width - 80) / 2;
       y = sectionTitle(doc, "DATOS DEL CLIENTE", y);
       doc.fillColor(NAVY).font("Helvetica-Bold").fontSize(10).text(`${cliente.nombre} ${cliente.apellidos || ""}`, 30, y);
       doc.fillColor(GREY).font("Helvetica").fontSize(9)

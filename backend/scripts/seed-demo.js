@@ -215,7 +215,7 @@ async function main() {
         notif.mensaje,
         `<p>${notif.mensaje}</p>`
       );
-    } catch {}
+    } catch (_e) {}
   }
 
   console.log("Seed demo completado.");

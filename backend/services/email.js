@@ -237,6 +237,10 @@ const emailService = {
  * Mantenerlo aqui evita duplicar logica en servicios paralelos.
  */
 async function sendEmail(to, subject, text, html, attachments = []) {
+  if (String(process.env.DISABLE_EMAIL || "0") === "1") {
+    // Useful for tests / CI: avoid sending real emails.
+    return { disabled: true };
+  }
   const safeSubject = subject || "BAEMIMPORT";
   const safeText = text || "";
   const safeHtml = html || htmlBase(`<div class="red-bar"></div><p>${safeText}</p>`, safeSubject);

@@ -16,7 +16,7 @@ router.post("/login", async (req, res) => {
     if (!ok) return res.status(401).json({ error: "Credenciales incorrectas" });
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
     res.json({ token, user: { _id: user._id, nombre: user.nombre, email: user.email, rol: user.rol } });
-  } catch (err) { res.status(500).json({ error: "Error al iniciar sesion" }); }
+  } catch (_err) { res.status(500).json({ error: "Error al iniciar sesion" }); }
 });
 
 router.post("/register", async (req, res) => {

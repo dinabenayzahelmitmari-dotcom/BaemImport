@@ -81,6 +81,20 @@ Para cargar datos demo (vehiculos, pedido, tareas, mensajes, notificaciones) y c
 node backend/scripts/seed-demo.js
 ```
 
+## Calidad (lint + tests)
+
+Lint backend:
+
+```bash
+npm run lint
+```
+
+Tests backend (usa MongoDB local `baemimport_test`):
+
+```bash
+npm run test:backend
+```
+
 ---
 
 ## Roles de Usuario

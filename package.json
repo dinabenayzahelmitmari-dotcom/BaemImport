@@ -8,7 +8,10 @@
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
     "build:frontend": "cd frontend && npm run build",
     "start:prod": "node backend/server.js",
-    "build:exe": "npm run build:frontend && cd backend && npx pkg -t node18-win-x64 -o ..\\\\baemimport-new server.js"
+    "build:exe": "npm run build:frontend && cd backend && npx pkg -t node18-win-x64 -o ..\\\\baemimport-new server.js",
+    "lint": "npx eslint app-runner.js backend eslint.config.cjs",
+    "format": "npx prettier -w .",
+    "test:backend": "cd backend && npm test"
   },
   "author": "BAEMIMPORT",
   "license": "ISC",
@@ -21,5 +24,11 @@
     "scripts": [
       "backend/**/*.js"
     ]
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.3.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.8.3"
   }
 }

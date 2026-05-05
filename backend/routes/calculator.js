@@ -8,10 +8,10 @@ router.post("/calcular", authMiddleware, (req, res) => {
     const {
       precioCompraEUR,      // Precio compra en Alemania (€)
       anio,                  // Año del vehículo
-      cilindrada,            // cc
+      _cilindrada,            // cc (no usado en este calculo)
       combustible,           // tipo combustible
       co2,                   // g/km CO2
-      kilometros,
+      _kilometros,
       transporteAlemania,    // coste transporte hasta frontera/España
       gastosHomologacion,    // ITV, homologación
       gastosGestion,         // gestoría, documentación

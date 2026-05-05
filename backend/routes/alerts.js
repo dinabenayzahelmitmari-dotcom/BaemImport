@@ -9,7 +9,6 @@ router.get("/", authMiddleware, async (req, res) => {
     const alertas = [];
     const ahora = new Date();
     const en3Dias = new Date(ahora.getTime() + 3 * 24 * 60 * 60 * 1000);
-    const en7Dias = new Date(ahora.getTime() + 7 * 24 * 60 * 60 * 1000);
     const hace15Dias = new Date(ahora.getTime() - 15 * 24 * 60 * 60 * 1000);
     const hace30Dias = new Date(ahora.getTime() - 30 * 24 * 60 * 60 * 1000);
 
@@ -79,7 +78,7 @@ router.get("/", authMiddleware, async (req, res) => {
     });
 
     res.json(alertas);
-  } catch (err) {
+  } catch (_err) {
     res.status(500).json({ error: "Error al calcular alertas" });
   }
 });

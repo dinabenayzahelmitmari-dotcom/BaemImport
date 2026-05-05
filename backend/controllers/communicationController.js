@@ -1,14 +1,14 @@
 const { sendEmail } = require("../services/email");
 const { generarPresupuesto, generarFactura } = require("../services/pdf");
-const { processAiQuery } = require('../services/aiService');
+const { processAiQuery } = require("../services/aiService");
 
 const sendClientEmail = async (req, res) => {
   try {
     const { to, subject, message, attachments } = req.body;
     await sendEmail(to, subject, message, `<p>${message}</p>`, attachments);
     res.json({ success: true, message: 'Email enviado correctamente' });
-  } catch (error) {
-    res.status(500).json({ error: 'Error al enviar el email' });
+  } catch (_error) {
+    res.status(500).json({ error: "Error al enviar el email" });
   }
 };
 
@@ -27,8 +27,8 @@ const downloadPDF = async (req, res) => {
       'Content-Length': pdfBuffer.length,
     });
     res.send(pdfBuffer);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al generar el PDF' });
+  } catch (_error) {
+    res.status(500).json({ error: "Error al generar el PDF" });
   }
 };
 
@@ -37,8 +37,8 @@ const askAI = async (req, res) => {
     const { query } = req.body;
     const response = await processAiQuery(query);
     res.json({ response });
-  } catch (error) {
-    res.status(500).json({ error: 'Error en el asistente de IA' });
+  } catch (_error) {
+    res.status(500).json({ error: "Error en el asistente de IA" });
   }
 };
 
