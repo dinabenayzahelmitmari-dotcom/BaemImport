@@ -1,7 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const Vehicle = require('./models/Vehiculo');
-const Client = require('./models/Clienteee');
+const Client = require('./models/Cliente');
 const Order = require('./models/Pedido');
 const Task = require('./models/Tarea');
 const Notification = require('./models/Notificacion');

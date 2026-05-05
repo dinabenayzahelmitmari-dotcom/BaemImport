@@ -11,6 +11,7 @@ router.post("/login", async (req, res) => {
     if (!email || !password) return res.status(400).json({ error: "Email y contrasena requeridos" });
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) return res.status(401).json({ error: "Credenciales incorrectas" });
+    if (user.activo === false) return res.status(403).json({ error: "Usuario desactivado" });
     const ok = await bcrypt.compare(password, user.password);
     if (!ok) return res.status(401).json({ error: "Credenciales incorrectas" });
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });

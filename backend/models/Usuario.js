@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
     rol: { type: String, enum: ["admin", "vendedor", "cliente"], default: "cliente" },
     activo: { type: Boolean, default: true },
   },
-  { timestamps: true, collection: "usuarios" }
+  { timestamps: true }
 );
 
 userSchema.pre("save", async function (next) {

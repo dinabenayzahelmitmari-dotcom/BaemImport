@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const VehicleRequest = require("../models/VehiculoRequest");
+const VehicleRequest = require("../models/SolicitudVehiculo");
 const Vehicle = require("../models/Vehiculo");
 const Order = require("../models/Pedido");
 const { authMiddleware } = require("../middleware/auth");

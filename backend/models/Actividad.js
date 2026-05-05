@@ -14,7 +14,7 @@ const activitySchema = new mongoose.Schema(
     usuario: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     meta: { type: mongoose.Schema.Types.Mixed },
   },
-  { timestamps: true, collection: "actividades" }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Activity", activitySchema);

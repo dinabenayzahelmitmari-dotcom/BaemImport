@@ -19,7 +19,8 @@ const orderSchema = new mongoose.Schema(
     },
     fase: {
       type: String,
-      enum: ["alemania", "españa"],
+      // ASCII-only values to avoid mojibake issues across environments
+      enum: ["alemania", "espana"],
       default: "alemania",
     },
     fechaEntregaEstimada: { type: Date },
@@ -45,7 +46,7 @@ const orderSchema = new mongoose.Schema(
     },
     creadoPor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
-  { timestamps: true, collection: "pedidos" }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Order", orderSchema);
