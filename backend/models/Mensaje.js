@@ -7,7 +7,7 @@ const messageSchema = new mongoose.Schema(
     texto: { type: String, required: true },
     leido: { type: Boolean, default: false },
   },
-  { timestamps: true, collection: "mensajes" }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Message", messageSchema);

@@ -52,7 +52,7 @@ BAEMIMPORT es una solucion integral diseñada para optimizar y automatizar el fl
    ```
 2. **Configurar Backend**:
    - Acceder a la carpeta backend
-   - Crear archivo .env con las siguientes variables:
+   - Crear archivo `.env` (puedes partir de `backend/.env.example`) con las siguientes variables:
      ```env
      PORT=5000
      MONGO_URI=tu_mongo_uri
@@ -72,6 +72,14 @@ BAEMIMPORT es una solucion integral diseñada para optimizar y automatizar el fl
      npm install
      npm start
      ```
+
+## Datos de demostracion (seed)
+
+Para cargar datos demo (vehiculos, pedido, tareas, mensajes, notificaciones) y crear un vendedor/cliente:
+
+```bash
+node backend/scripts/seed-demo.js
+```
 
 ---
 

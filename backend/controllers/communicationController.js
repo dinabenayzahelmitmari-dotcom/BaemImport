@@ -1,5 +1,5 @@
-const { sendEmail } = require('../services/emailService');
-const { generateDocumentPDF } = require('../services/pdfService');
+const { sendEmail } = require("../services/email");
+const { generarPresupuesto, generarFactura } = require("../services/pdf");
 const { processAiQuery } = require('../services/aiService');
 
 const sendClientEmail = async (req, res) => {
@@ -14,8 +14,12 @@ const sendClientEmail = async (req, res) => {
 
 const downloadPDF = async (req, res) => {
   try {
-    const data = req.body; // In a real app, fetch from DB using ID
-    const pdfBuffer = await generateDocumentPDF(data, data.type || 'PRESUPUESTO');
+    const data = req.body; // En un caso real, buscar por ID en BBDD
+    const type = (data.type || "PRESUPUESTO").toUpperCase();
+
+    let pdfBuffer;
+    if (type === "FACTURA") pdfBuffer = await generarFactura(data, data.cliente || {});
+    else pdfBuffer = await generarPresupuesto(data, data.cliente || {}, data.vehiculoDesc || "");
     
     res.set({
       'Content-Type': 'application/pdf',

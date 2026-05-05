@@ -67,13 +67,13 @@ export default function ClientDashboard() {
       </div>
 
       <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
-        <button 
+        <button
           onClick={() => setActiveTab('request')}
           className={`btn ${activeTab === 'request' ? 'btn-navy' : 'btn-outline'}`}
           style={{ flex: 1 }}>
           1. Solicitar Vehículo
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab('chat')}
           className={`btn ${activeTab === 'chat' ? 'btn-navy' : 'btn-outline'}`}
           style={{ flex: 1 }}>
@@ -93,23 +93,23 @@ export default function ClientDashboard() {
           <form onSubmit={handleFormSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div className="form-group">
               <label className="form-label">Marca</label>
-              <input className="form-input" required value={formData.marca} onChange={e => setFormData({...formData, marca: e.target.value})} placeholder="Ej: BMW" />
+              <input className="form-input" required value={formData.marca} onChange={e => setFormData({ ...formData, marca: e.target.value })} placeholder="Ej: BMW" />
             </div>
             <div className="form-group">
               <label className="form-label">Modelo</label>
-              <input className="form-input" required value={formData.modelo} onChange={e => setFormData({...formData, modelo: e.target.value})} placeholder="Ej: Serie 3" />
+              <input className="form-input" required value={formData.modelo} onChange={e => setFormData({ ...formData, modelo: e.target.value })} placeholder="Ej: Serie 3" />
             </div>
             <div className="form-group">
               <label className="form-label">Año mínimo</label>
-              <input className="form-input" type="number" required value={formData.anioDesde} onChange={e => setFormData({...formData, anioDesde: e.target.value})} placeholder="Ej: 2020" />
+              <input className="form-input" type="number" required value={formData.anioDesde} onChange={e => setFormData({ ...formData, anioDesde: e.target.value })} placeholder="Ej: 2020" />
             </div>
             <div className="form-group">
               <label className="form-label">Presupuesto máx (€)</label>
-              <input className="form-input" type="number" required value={formData.presupuesto} onChange={e => setFormData({...formData, presupuesto: e.target.value})} placeholder="Ej: 35000" />
+              <input className="form-input" type="number" required value={formData.presupuesto} onChange={e => setFormData({ ...formData, presupuesto: e.target.value })} placeholder="Ej: 35000" />
             </div>
             <div className="form-group">
               <label className="form-label">Combustible</label>
-              <select className="form-input" value={formData.combustible} onChange={e => setFormData({...formData, combustible: e.target.value})}>
+              <select className="form-input" value={formData.combustible} onChange={e => setFormData({ ...formData, combustible: e.target.value })}>
                 <option>Diesel</option>
                 <option>Gasolina</option>
                 <option>Hibrido</option>
@@ -118,14 +118,14 @@ export default function ClientDashboard() {
             </div>
             <div className="form-group">
               <label className="form-label">Transmisión</label>
-              <select className="form-input" value={formData.transmision} onChange={e => setFormData({...formData, transmision: e.target.value})}>
+              <select className="form-input" value={formData.transmision} onChange={e => setFormData({ ...formData, transmision: e.target.value })}>
                 <option>Automatico</option>
                 <option>Manual</option>
               </select>
             </div>
             <div className="form-group" style={{ gridColumn: 'span 2' }}>
               <label className="form-label">Extras y Comentarios</label>
-              <textarea className="form-input" rows="4" value={formData.extras} onChange={e => setFormData({...formData, extras: e.target.value})} placeholder="Ej: Techo solar, Pack M, color negro..." />
+              <textarea className="form-input" rows="4" value={formData.extras} onChange={e => setFormData({ ...formData, extras: e.target.value })} placeholder="Ej: Techo solar, Pack M, color negro..." />
             </div>
             <div style={{ gridColumn: 'span 2', marginTop: 10 }}>
               <button className="btn btn-primary btn-full" type="submit">Enviar mi solicitud</button>
@@ -143,15 +143,15 @@ export default function ClientDashboard() {
               <div style={{ textAlign: 'center', padding: 40, color: 'var(--grey-400)', fontSize: 13 }}>Inicia una conversación con nosotros...</div>
             )}
             {messages.map(m => (
-              <div key={m._id} style={{ 
-                alignSelf: m.remitente === vendor?._id ? 'flex-start' : 'flex-end', 
-                background: m.remitente === vendor?._id ? 'white' : 'var(--red)', 
+              <div key={m._id} style={{
+                alignSelf: m.remitente === vendor?._id ? 'flex-start' : 'flex-end',
+                background: m.remitente === vendor?._id ? 'white' : 'var(--red)',
                 color: m.remitente === vendor?._id ? 'var(--navy)' : 'white',
-                padding: '10px 14px', 
-                borderRadius: m.remitente === vendor?._id ? '12px 12px 12px 2px' : '12px 12px 2px 12px', 
-                fontSize: 13, 
+                padding: '10px 14px',
+                borderRadius: m.remitente === vendor?._id ? '12px 12px 12px 2px' : '12px 12px 2px 12px',
+                fontSize: 13,
                 maxWidth: '80%',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.05)' 
+                boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
               }}>
                 {m.texto}
                 <div style={{ fontSize: 9, opacity: 0.7, marginTop: 4, textAlign: 'right' }}>{new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>

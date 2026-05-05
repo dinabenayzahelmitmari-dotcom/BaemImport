@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const Client = require("../models/Clienteee");
+const Client = require("../models/Cliente");
 const Order = require("../models/Pedido");
 const Vehicle = require("../models/Vehiculo");
 const { authMiddleware } = require("../middleware/auth");
 const emailService = require("../services/email");
-const { sendEmail } = require("../services/emailService");
+const { sendEmail } = require("../services/email");
 
 // Enviar email manual personalizado
 router.post("/manual", authMiddleware, async (req, res) => {

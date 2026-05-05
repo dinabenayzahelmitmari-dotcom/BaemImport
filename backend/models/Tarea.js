@@ -27,7 +27,7 @@ const taskSchema = new mongoose.Schema(
     fechaLimite: { type: Date },
     completadaEn: { type: Date },
   },
-  { timestamps: true, collection: "tareas" }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Task", taskSchema);

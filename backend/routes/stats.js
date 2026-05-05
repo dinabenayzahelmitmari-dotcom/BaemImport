@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Vehicle = require("../models/Vehiculo");
 const Order = require("../models/Pedido");
-const Client = require("../models/Clienteee");
+const Client = require("../models/Cliente");
 const { authMiddleware } = require("../middleware/auth");
 
 router.get("/dashboard", authMiddleware, async (req, res) => {

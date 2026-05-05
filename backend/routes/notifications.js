@@ -40,6 +40,7 @@ router.put("/leer-todas", authMiddleware, async (req, res) => {
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const notif = await Notification.create(req.body);
+    // El envio por email se gestiona en el hook del modelo Notificacion.
     res.status(201).json(notif);
   } catch (err) {
     res.status(400).json({ error: err.message });

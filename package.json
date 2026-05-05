@@ -5,8 +5,21 @@
   "main": "app-runner.js",
   "scripts": {
     "start": "node app-runner.js",
-    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build:frontend": "cd frontend && npm run build",
+    "start:prod": "node backend/server.js",
+    "build:exe": "npm run build:frontend && cd backend && npx pkg -t node18-win-x64 -o ..\\\\baemimport-new server.js"
   },
   "author": "BAEMIMPORT",
-  "license": "ISC"
+  "license": "ISC",
+  "pkg": {
+    "assets": [
+      "frontend/build/**/*",
+      "backend/uploads/**/*",
+      "backend/assets/**/*"
+    ],
+    "scripts": [
+      "backend/**/*.js"
+    ]
+  }
 }

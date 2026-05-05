@@ -232,4 +232,26 @@ const emailService = {
   },
 };
 
-module.exports = emailService;
+/**
+ * Envio de email generico (API usada por el resto del backend).
+ * Mantenerlo aqui evita duplicar logica en servicios paralelos.
+ */
+async function sendEmail(to, subject, text, html, attachments = []) {
+  const safeSubject = subject || "BAEMIMPORT";
+  const safeText = text || "";
+  const safeHtml = html || htmlBase(`<div class="red-bar"></div><p>${safeText}</p>`, safeSubject);
+
+  const info = await transporter.sendMail({
+    from: `"${EMPRESA.nombre}" <${EMPRESA.email}>`,
+    to,
+    subject: safeSubject,
+    text: safeText,
+    html: safeHtml,
+    attachments,
+  });
+
+  console.log("Email enviado: %s", info.messageId);
+  return info;
+}
+
+module.exports = { ...emailService, sendEmail };

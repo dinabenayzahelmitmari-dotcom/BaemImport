@@ -10,9 +10,10 @@ const vehicleRequestSchema = new mongoose.Schema(
     combustible: { type: String },
     transmision: { type: String },
     extras: { type: String },
-    estado: { type: String, enum: ["pendiente", "en_revisión", "contactado", "finalizado"], default: "pendiente" },
+    // ASCII-only values to avoid mojibake issues across environments
+    estado: { type: String, enum: ["pendiente", "en_revision", "contactado", "finalizado"], default: "pendiente" },
   },
-  { timestamps: true, collection: "solicitudes_vehiculos" }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("VehicleRequest", vehicleRequestSchema);

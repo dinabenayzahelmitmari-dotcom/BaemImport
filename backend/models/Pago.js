@@ -14,7 +14,7 @@ const paymentSchema = new mongoose.Schema(
     fecha: { type: Date, default: Date.now },
     comprobanteUrl: { type: String }, // URL opcional al comprobante subido
   },
-  { timestamps: true, collection: "pagos" }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Payment", paymentSchema);
