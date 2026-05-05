@@ -31,7 +31,7 @@ router.get("/", authMiddleware, async (req, res) => {
     ]);
 
     res.json({ vehiculos, clientes, pedidos });
-  } catch (err) {
+  } catch (_err) {
     res.status(500).json({ error: "Error en la búsqueda" });
   }
 });

@@ -11,6 +11,12 @@ const transporter = nodemailer.createTransport({
   tls: { rejectUnauthorized: false },
 });
 
+async function sendMail(options) {
+  // For tests/CI: avoid sending real emails and avoid noisy errors when MAIL_* is not set.
+  if (String(process.env.DISABLE_EMAIL || "0") === "1") return { disabled: true };
+  return transporter.sendMail(options);
+}
+
 const EMPRESA = {
   nombre: "BAEMIMPORT",
   email: process.env.MAIL_USER,
@@ -88,7 +94,7 @@ const emailService = {
       <p>Si tiene alguna consulta, no dude en contactarnos.</p>`;
     
     try {
-      await transporter.sendMail({
+      await sendMail({
         from: `"BAEMIMPORT" <${EMPRESA.email}>`,
         to: cliente.email,
         subject: `Bienvenido a BAEMIMPORT, ${cliente.nombre}`,
@@ -114,7 +120,7 @@ const emailService = {
       <p>Nos pondremos en contacto con usted para informarle sobre el estado de su vehiculo.</p>`;
     
     try {
-      await transporter.sendMail({
+      await sendMail({
         from: `"BAEMIMPORT" <${EMPRESA.email}>`,
         to: cliente.email,
         subject: `Pedido confirmado - ${vehiculo.marca} ${vehiculo.modelo}`,
@@ -141,7 +147,7 @@ const emailService = {
       <p>${presupuesto.condiciones || ""}</p>`;
     
     try {
-      await transporter.sendMail({
+      await sendMail({
         from: `"BAEMIMPORT" <${EMPRESA.email}>`,
         to: cliente.email,
         subject: `Presupuesto ${presupuesto.numero} - BAEMIMPORT`,
@@ -165,7 +171,7 @@ const emailService = {
       <p>Contactenos para coordinar la fecha y lugar de entrega que mejor le convenga.</p>`;
     
     try {
-      await transporter.sendMail({
+      await sendMail({
         from: `"BAEMIMPORT" <${EMPRESA.email}>`,
         to: cliente.email,
         subject: `Su vehiculo ${vehiculo.marca} ${vehiculo.modelo} esta listo`,
@@ -191,7 +197,7 @@ const emailService = {
       <p>Para cualquier consulta sobre esta factura, contacte con nosotros indicando el numero de referencia.</p>`;
     
     try {
-      await transporter.sendMail({
+      await sendMail({
         from: `"BAEMIMPORT" <${EMPRESA.email}>`,
         to: cliente.email,
         subject: `Factura ${factura.numero} - BAEMIMPORT`,
@@ -203,7 +209,7 @@ const emailService = {
   // Notificacion interna al equipo
   async notificacionInterna(asunto, cuerpo, destinatarios) {
     try {
-      await transporter.sendMail({
+      await sendMail({
         from: `"BAEMIMPORT Sistema" <${EMPRESA.email}>`,
         to: Array.isArray(destinatarios) ? destinatarios.join(", ") : destinatarios,
         subject: `[BAEMIMPORT] ${asunto}`,
@@ -222,7 +228,7 @@ const emailService = {
       <p>${mensaje}</p>`;
     
     try {
-      await transporter.sendMail({
+      await sendMail({
         from: `"BAEMIMPORT" <${EMPRESA.email}>`,
         to: cliente.email,
         subject: asunto,
@@ -237,11 +243,15 @@ const emailService = {
  * Mantenerlo aqui evita duplicar logica en servicios paralelos.
  */
 async function sendEmail(to, subject, text, html, attachments = []) {
+  if (String(process.env.DISABLE_EMAIL || "0") === "1") {
+    // Useful for tests / CI: avoid sending real emails.
+    return { disabled: true };
+  }
   const safeSubject = subject || "BAEMIMPORT";
   const safeText = text || "";
   const safeHtml = html || htmlBase(`<div class="red-bar"></div><p>${safeText}</p>`, safeSubject);
 
-  const info = await transporter.sendMail({
+  const info = await sendMail({
     from: `"${EMPRESA.nombre}" <${EMPRESA.email}>`,
     to,
     subject: safeSubject,

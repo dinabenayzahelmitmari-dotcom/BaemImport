@@ -3,7 +3,6 @@ const router = express.Router();
 const VehicleRequest = require("../models/SolicitudVehiculo");
 const { authMiddleware } = require("../middleware/auth");
 const { sendEmail } = require("../services/email");
-const User = require("../models/Usuario");
 
 // Crear solicitud (Cliente)
 router.post("/", authMiddleware, async (req, res) => {

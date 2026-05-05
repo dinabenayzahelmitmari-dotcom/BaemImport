@@ -93,7 +93,7 @@ router.post("/", authMiddleware, async (req, res) => {
     // Email confirmacion
     try {
       await emailService.confirmacionPedido(populated, populated.cliente, populated.vehiculo);
-    } catch {}
+    } catch (_e) {}
 
     res.status(201).json(populated);
   } catch (err) {
@@ -123,7 +123,9 @@ router.put("/:id", authMiddleware, async (req, res) => {
     // Automatizacion: Cambiar fase segun pasosImportacion
     if (req.body.pasosImportacion) {
       const pasos = req.body.pasosImportacion;
-      if (pasos.transporte_espana && current.fase !== "espana") req.body.fase = "espana";
+      // Compat: aceptar claves antiguas con caracteres especiales si existieran
+      const transporteEspana = pasos.transporte_espana || pasos.transporte_españa;
+      if (transporteEspana && current.fase !== "espana") req.body.fase = "espana";
       if (pasos.transporte_domicilio && current.estado !== "completado") req.body.estado = "completado";
     }
 

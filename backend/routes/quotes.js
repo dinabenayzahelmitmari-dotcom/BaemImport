@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const Quote = require("../models/Presupuesto");
-const Client = require("../models/Cliente");
-const Vehicle = require("../models/Vehiculo");
 const { authMiddleware } = require("../middleware/auth");
 const emailService = require("../services/email");
 const pdfService = require("../services/pdf");
