@@ -17,7 +17,7 @@ const Task = require("../models/Tarea");
 const Notification = require("../models/Notificacion");
 const VehicleRequest = require("../models/SolicitudVehiculo");
 const Message = require("../models/Mensaje");
-const { sendEmail } = require("../services/emailService");
+const { sendEmail } = require("../services/email");
 
 async function upsertUser({ nombre, email, password, rol }) {
   const e = email.toLowerCase();

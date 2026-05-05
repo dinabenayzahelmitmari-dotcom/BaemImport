@@ -5,7 +5,7 @@ const Notification = require("../models/Notificacion");
 const Client = require("../models/Cliente");
 const { authMiddleware } = require("../middleware/auth");
 const emailService = require("../services/email");
-const { sendEmail } = require("../services/emailService");
+const { sendEmail } = require("../services/email");
 
 router.get("/", authMiddleware, async (req, res) => {
   try {

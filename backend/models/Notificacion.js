@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const User = require("./Usuario");
-const { sendEmail } = require("../services/emailService");
+const { sendEmail } = require("../services/email");
 
 const notificationSchema = new mongoose.Schema(
   {
