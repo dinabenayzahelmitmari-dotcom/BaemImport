@@ -11,7 +11,8 @@
     "build:exe": "npm run build:frontend && cd backend && npx pkg -t node18-win-x64 -o ..\\\\baemimport-new server.js",
     "lint": "npx eslint app-runner.js backend eslint.config.cjs",
     "format": "npx prettier -w .",
-    "test:backend": "cd backend && npm test"
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "cd frontend && npm test"
   },
   "author": "BAEMIMPORT",
   "license": "ISC",
