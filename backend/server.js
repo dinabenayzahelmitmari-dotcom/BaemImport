@@ -22,6 +22,12 @@ mongoose.set("autoIndex", true);
 const app = createApp();
 
 const basePort = Number(process.env.PORT) || 8080;
+// Bind to all interfaces when requested (LAN/Internet access).
+// Leave undefined to keep Node's default behavior.
+const host =
+  process.env.HOST && String(process.env.HOST).trim()
+    ? String(process.env.HOST).trim()
+    : undefined;
 const maxPortAttempts = 20;
 let browserOpened = false;
 
@@ -44,8 +50,9 @@ function openBrowser(url) {
 }
 
 const tryListen = (port, attempt = 0) => {
-  const server = app.listen(port, () => {
-    console.log(`Backend en puerto ${port}`);
+  const server = app.listen(port, host, () => {
+    const bind = host || "default";
+    console.log(`Backend en ${bind}:${port}`);
     if (port !== basePort) {
       console.log(`Puerto ${basePort} estaba en uso. Usando ${port}.`);
     }
