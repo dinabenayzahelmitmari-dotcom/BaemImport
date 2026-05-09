@@ -28,7 +28,7 @@ export default function Clients() {
         </div>
       </div>
       <div style={{ marginBottom:16 }} className="fade-in fade-in-1">
-        <input className="form-input" placeholder="Buscar por nombre, email, telefono..."
+        <input className="form-input" placeholder="Buscar por nombre, email, teléfono..."
           value={search} onChange={e => setSearch(e.target.value)} />
       </div>
       {loading ? (

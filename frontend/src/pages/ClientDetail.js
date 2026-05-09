@@ -29,7 +29,7 @@ export default function ClientDetail() {
   }, [id]);
 
   const handleDelete = async () => {
-    if (!window.confirm('Eliminar este cliente?')) return;
+    if (!window.confirm('¿Eliminar este cliente?')) return;
     await axios.delete(`/api/clients/${id}`);
     navigate('/clients');
   };
@@ -66,7 +66,7 @@ export default function ClientDetail() {
         </div>
       )}
       <div className="detail-header fade-in">
-        <button className="btn btn-ghost btn-sm" onClick={() => navigate('/clients')}>Atras</button>
+        <button className="btn btn-ghost btn-sm" onClick={() => navigate('/clients')}>Atrás</button>
         <div className="detail-header-actions">
           <button className="btn btn-outline btn-sm" onClick={() => navigate(`/clients/${id}/edit`)}>Editar</button>
           <button className="btn btn-danger btn-sm" onClick={handleDelete}>Eliminar</button>
@@ -84,7 +84,7 @@ export default function ClientDetail() {
           </div>
         </div>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'10px 16px' }}>
-          {[['Telefono', client.telefono], ['Email', client.email], ['Direccion', client.direccion], ['Ciudad', client.ciudad]].filter(([,v]) => v).map(([k, v]) => (
+          {[['Teléfono', client.telefono], ['Email', client.email], ['Dirección', client.direccion], ['Ciudad', client.ciudad]].filter(([,v]) => v).map(([k, v]) => (
             <div key={k}>
               <p style={{ fontSize:11, color:'var(--grey-500)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.5px' }}>{k}</p>
               <p style={{ fontSize:14, color:'var(--navy)', marginTop:2 }}>{v}</p>
@@ -113,7 +113,7 @@ export default function ClientDetail() {
       <div className="fade-in fade-in-3">
         <p style={{ fontFamily:'var(--font-display)', fontSize:13, fontWeight:700, color:'var(--grey-500)', letterSpacing:'1.2px', textTransform:'uppercase', marginBottom:10 }}>Pedidos ({orders.length})</p>
         {orders.length === 0 ? (
-          <div className="empty-state" style={{ padding:'32px 24px' }}><h3>Sin pedidos</h3><p>Este cliente no tiene pedidos aun</p></div>
+          <div className="empty-state" style={{ padding:'32px 24px' }}><h3>Sin pedidos</h3><p>Este cliente no tiene pedidos aún</p></div>
         ) : (
           <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
             {orders.map(o => (

@@ -7,7 +7,7 @@ import './Layout.css';
 
 const NAV_ITEMS = [
   { path: '/',          label: 'Inicio',        icon: HomeIcon },
-  { path: '/vehicles',  label: 'Vehiculos',     icon: CarIcon },
+  { path: '/vehicles',  label: 'Vehículos',     icon: CarIcon },
   { path: '/clients',   label: 'Clientes',      icon: UsersIcon },
   { path: '/orders',    label: 'Pedidos',        icon: BoxIcon },
   { path: '/quotes',    label: 'Presupuestos',  icon: FileTextIcon },
@@ -15,7 +15,7 @@ const NAV_ITEMS = [
 
 const SIDEBAR_ITEMS = [
   { path: '/',            label: 'Dashboard',    icon: HomeIcon },
-  { path: '/vehicles',    label: 'Vehiculos',    icon: CarIcon },
+  { path: '/vehicles',    label: 'Vehículos',    icon: CarIcon },
   { path: '/clients',     label: 'Clientes',     icon: UsersIcon },
   { path: '/orders',      label: 'Pedidos',       icon: BoxIcon },
   { path: '/quotes',      label: 'Presupuestos', icon: FileTextIcon },

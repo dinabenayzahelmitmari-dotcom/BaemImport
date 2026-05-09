@@ -23,7 +23,7 @@ function drawHeader(doc) {
   doc.translate(50, 50).rotate(45).rect(-16, -16, 32, 32).fill(RED).restore();
   // Nombre empresa
   doc.fillColor("#ffffff").font("Helvetica-Bold").fontSize(22).text("BAEMIMPORT", 80, 28);
-  doc.fillColor(GREY).font("Helvetica").fontSize(9).text("IMPORTACION DE VEHICULOS · ALEMANIA — ESPANA", 80, 55);
+  doc.fillColor(GREY).font("Helvetica").fontSize(9).text("IMPORTACIÓN DE VEHÍCULOS · ALEMANIA — ESPAÑA", 80, 55);
   // Datos empresa derecha
   doc.fillColor(GREY).font("Helvetica").fontSize(8)
     .text(EMPRESA.email, 350, 28, { align: "right", width: 200 })
@@ -38,7 +38,7 @@ function drawFooter(doc, pageNum) {
   doc.fillColor(GREY).font("Helvetica").fontSize(8)
     .text(`${EMPRESA.nombre} · CIF: ${EMPRESA.cif} · ${EMPRESA.direccion}`, 30, y + 12, { align: "center", width: doc.page.width - 60 })
     .text(`Tel: ${EMPRESA.telefono} · ${EMPRESA.email}`, 30, y + 26, { align: "center", width: doc.page.width - 60 });
-  doc.fillColor(GREY).text(`Pagina ${pageNum}`, doc.page.width - 80, y + 18, { width: 60, align: "right" });
+  doc.fillColor(GREY).text(`Página ${pageNum}`, doc.page.width - 80, y + 18, { width: 60, align: "right" });
 }
 
 function sectionTitle(doc, texto, y) {
@@ -115,14 +115,14 @@ const pdfService = {
       y += 50;
 
       // Tabla desglose
-      y = sectionTitle(doc, "DESGLOSE ECONOMICO", y);
+      y = sectionTitle(doc, "DESGLOSE ECONÓMICO", y);
       y = tableRow(doc, [
         { text: "CONCEPTO", x: 35, w: 300 },
         { text: "IMPORTE", x: 440, w: 100, align: "right" },
       ], y, true);
 
       const filas = [
-        ["Precio base del vehiculo", presupuesto.precioBase],
+        ["Precio base del vehículo", presupuesto.precioBase],
         presupuesto.descuento ? ["Descuento aplicado", -presupuesto.descuento] : null,
         presupuesto.gastosTransporte ? ["Gastos de transporte", presupuesto.gastosTransporte] : null,
         presupuesto.gastosGestion ? ["Gastos de gestion", presupuesto.gastosGestion] : null,
@@ -243,7 +243,7 @@ const pdfService = {
       y += 50;
       if (factura.metodoPago) {
         doc.fillColor(GREY).font("Helvetica").fontSize(9)
-          .text(`Metodo de pago: ${factura.metodoPago}`, 30, y);
+          .text(`Método de pago: ${factura.metodoPago}`, 30, y);
         if (factura.metodoPago === "Transferencia bancaria") {
           doc.text(`IBAN: ${EMPRESA.iban} · Beneficiario: ${EMPRESA.nombre}`, 30, y + 14);
         }
@@ -272,7 +272,7 @@ const pdfService = {
 
       let y = 120;
 
-      doc.fillColor(RED).font("Helvetica-Bold").fontSize(18).text("FICHA DE VEHICULO", 30, y);
+      doc.fillColor(RED).font("Helvetica-Bold").fontSize(18).text("FICHA DE VEHÍCULO", 30, y);
       doc.fillColor(NAVY).font("Helvetica-Bold").fontSize(20).text(`${vehiculo.marca} ${vehiculo.modelo}`, 30, y + 28);
       doc.fillColor(GREY).font("Helvetica").fontSize(12).text(`${vehiculo.anio} · ${vehiculo.combustible} · ${vehiculo.transmision}`, 30, y + 52);
 
@@ -283,13 +283,13 @@ const pdfService = {
 
       y += 90;
 
-      y = sectionTitle(doc, "CARACTERISTICAS TECNICAS", y);
+      y = sectionTitle(doc, "CARACTERÍSTICAS TÉCNICAS", y);
       const specs = [
-        ["Marca", vehiculo.marca], ["Modelo", vehiculo.modelo], ["Ano", vehiculo.anio],
-        ["Combustible", vehiculo.combustible], ["Transmision", vehiculo.transmision],
-        ["Kilometros", `${vehiculo.kilometros?.toLocaleString("es-ES")} km`],
+        ["Marca", vehiculo.marca], ["Modelo", vehiculo.modelo], ["Año", vehiculo.anio],
+        ["Combustible", vehiculo.combustible], ["Transmisión", vehiculo.transmision],
+        ["Kilómetros", `${vehiculo.kilometros?.toLocaleString("es-ES")} km`],
         ["Color", vehiculo.color || "N/D"], ["VIN", vehiculo.vin || "N/D"],
-        ["Ubicacion", vehiculo.ubicacion],
+        ["Ubicación", vehiculo.ubicacion],
       ];
 
       specs.forEach((s, i) => {
@@ -303,7 +303,7 @@ const pdfService = {
 
       y += Math.ceil(specs.length / 2) * 22 + 24;
 
-      y = sectionTitle(doc, "DATOS ECONOMICOS", y);
+      y = sectionTitle(doc, "DATOS ECONÓMICOS", y);
       const econ = [
         ["Precio de venta", `${vehiculo.precio?.toLocaleString("es-ES")} EUR`],
         ["Precio de compra", vehiculo.precioCompra ? `${vehiculo.precioCompra.toLocaleString("es-ES")} EUR` : "N/D"],
@@ -344,7 +344,7 @@ const pdfService = {
 
       if (vehiculo.descripcion) {
         y += 32;
-        y = sectionTitle(doc, "DESCRIPCION", y);
+        y = sectionTitle(doc, "DESCRIPCIÓN", y);
         doc.fillColor("#495057").font("Helvetica").fontSize(9).text(vehiculo.descripcion, 30, y, { width: doc.page.width - 60 });
       }
 

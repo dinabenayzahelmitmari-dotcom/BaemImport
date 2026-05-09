@@ -62,7 +62,7 @@ function htmlBase(contenido, asunto) {
 <div class="wrapper">
   <div class="header">
     <span class="brand">BAEMIMPORT</span>
-    <span class="tagline">IMPORTACION DE VEHICULOS · ALEMANIA — ESPANA</span>
+    <span class="tagline">IMPORTACIÓN DE VEHÍCULOS · ALEMANIA — ESPAÑA</span>
   </div>
   <div class="content">
     ${contenido}
@@ -70,7 +70,7 @@ function htmlBase(contenido, asunto) {
   <div class="footer">
     <p>${EMPRESA.nombre} · ${EMPRESA.direccion}</p>
     <p>Tel: ${EMPRESA.telefono} · <a href="mailto:${EMPRESA.email}">${EMPRESA.email}</a></p>
-    <p style="margin-top:8px; color:#495057; font-size:11px;">Este correo ha sido enviado de forma automatica por el sistema de gestion BAEMIMPORT.</p>
+    <p style="margin-top:8px; color:#495057; font-size:11px;">Este correo ha sido enviado de forma automática por el sistema de gestión BAEMIMPORT.</p>
   </div>
 </div>
 </body>
@@ -83,13 +83,13 @@ const emailService = {
     const contenido = `
       <div class="red-bar"></div>
       <h2>Bienvenido a BAEMIMPORT, ${cliente.nombre}</h2>
-      <p>Gracias por confiar en nosotros. Somos especialistas en importacion de vehiculos desde Alemania con mas de 10 anos de experiencia.</p>
-      <p>Su expediente ha quedado registrado en nuestro sistema. Nuestro equipo se pondra en contacto con usted a la mayor brevedad para asesorarle personalmente.</p>
+      <p>Gracias por confiar en nosotros. Somos especialistas en importación de vehículos desde Alemania con más de 10 años de experiencia.</p>
+      <p>Su expediente ha quedado registrado en nuestro sistema. Nuestro equipo se pondrá en contacto con usted a la mayor brevedad para asesorarle personalmente.</p>
       <div class="detail-box">
         <p style="margin:0; font-weight:700; color:#0d1b2e; margin-bottom:8px;">Sus datos de contacto registrados:</p>
         <div class="detail-row"><span class="detail-label">Nombre</span><span class="detail-value">${cliente.nombre} ${cliente.apellidos || ""}</span></div>
         <div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">${cliente.email}</span></div>
-        <div class="detail-row"><span class="detail-label">Telefono</span><span class="detail-value">${cliente.telefono || "No indicado"}</span></div>
+        <div class="detail-row"><span class="detail-label">Teléfono</span><span class="detail-value">${cliente.telefono || "No indicado"}</span></div>
       </div>
       <p>Si tiene alguna consulta, no dude en contactarnos.</p>`;
     
@@ -161,21 +161,21 @@ const emailService = {
     if (!cliente.email) return;
     const contenido = `
       <div class="red-bar"></div>
-      <h2>Su vehiculo esta listo para entrega</h2>
-      <p>Estimado ${cliente.nombre}, nos complace informarle de que su vehiculo ha completado todos los tramites y esta listo para ser entregado:</p>
+      <h2>Su vehículo está listo para entrega</h2>
+      <p>Estimado ${cliente.nombre}, nos complace informarle de que su vehículo ha completado todos los trámites y está listo para ser entregado:</p>
       <div class="detail-box">
-        <div class="detail-row"><span class="detail-label">Vehiculo</span><span class="detail-value">${vehiculo.marca} ${vehiculo.modelo} ${vehiculo.anio}</span></div>
+        <div class="detail-row"><span class="detail-label">Vehículo</span><span class="detail-value">${vehiculo.marca} ${vehiculo.modelo} ${vehiculo.anio}</span></div>
         <div class="detail-row"><span class="detail-label">Color</span><span class="detail-value">${vehiculo.color || "No especificado"}</span></div>
         <div class="detail-row"><span class="detail-label">Estado</span><span class="detail-value"><span class="badge badge-success">Listo para entrega</span></span></div>
       </div>
-      <p>Contactenos para coordinar la fecha y lugar de entrega que mejor le convenga.</p>`;
+      <p>Contáctenos para coordinar la fecha y el lugar de entrega que mejor le convenga.</p>`;
     
     try {
       await sendMail({
         from: `"BAEMIMPORT" <${EMPRESA.email}>`,
         to: cliente.email,
-        subject: `Su vehiculo ${vehiculo.marca} ${vehiculo.modelo} esta listo`,
-        html: htmlBase(contenido, "Vehiculo listo para entrega"),
+        subject: `Su vehículo ${vehiculo.marca} ${vehiculo.modelo} está listo`,
+        html: htmlBase(contenido, "Vehículo listo para entrega"),
       });
     } catch (e) { console.error("Email vehiculo listo:", e.message); }
   },
@@ -186,15 +186,15 @@ const emailService = {
     const contenido = `
       <div class="red-bar"></div>
       <h2>Factura ${factura.numero}</h2>
-      <p>Estimado ${cliente.nombre}, le adjuntamos la factura correspondiente a su operacion con BAEMIMPORT:</p>
+      <p>Estimado ${cliente.nombre}, le adjuntamos la factura correspondiente a su operación con BAEMIMPORT:</p>
       <div class="detail-box">
-        <div class="detail-row"><span class="detail-label">Numero de factura</span><span class="detail-value">${factura.numero}</span></div>
+        <div class="detail-row"><span class="detail-label">Número de factura</span><span class="detail-value">${factura.numero}</span></div>
         <div class="detail-row"><span class="detail-label">Subtotal</span><span class="detail-value">${factura.subtotal?.toLocaleString("es-ES")} EUR</span></div>
         <div class="detail-row"><span class="detail-label">IVA (21%)</span><span class="detail-value">${factura.totalIva?.toLocaleString("es-ES")} EUR</span></div>
         <div class="detail-row"><span class="detail-label">TOTAL</span><span class="detail-value">${factura.total?.toLocaleString("es-ES")} EUR</span></div>
-        <div class="detail-row"><span class="detail-label">Metodo de pago</span><span class="detail-value">${factura.metodoPago}</span></div>
+        <div class="detail-row"><span class="detail-label">Método de pago</span><span class="detail-value">${factura.metodoPago}</span></div>
       </div>
-      <p>Para cualquier consulta sobre esta factura, contacte con nosotros indicando el numero de referencia.</p>`;
+      <p>Para cualquier consulta sobre esta factura, contacte con nosotros indicando el número de referencia.</p>`;
     
     try {
       await sendMail({
@@ -239,8 +239,8 @@ const emailService = {
 };
 
 /**
- * Envio de email generico (API usada por el resto del backend).
- * Mantenerlo aqui evita duplicar logica en servicios paralelos.
+ * Envío de email genérico (API usada por el resto del backend).
+ * Mantenerlo aquí evita duplicar lógica en servicios paralelos.
  */
 async function sendEmail(to, subject, text, html, attachments = []) {
   if (String(process.env.DISABLE_EMAIL || "0") === "1") {

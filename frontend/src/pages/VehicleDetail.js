@@ -4,7 +4,7 @@ import axios from 'axios';
 import './DetailPage.css';
 
 const ESTADO_BADGE = { disponible:'badge-success', reservado:'badge-warning', vendido:'badge-danger', en_transito:'badge-info' };
-const ESTADO_LABEL = { disponible:'Disponible', reservado:'Reservado', vendido:'Vendido', en_transito:'En transito' };
+const ESTADO_LABEL = { disponible:'Disponible', reservado:'Reservado', vendido:'Vendido', en_transito:'En tránsito' };
 
 export default function VehicleDetail() {
   const { id } = useParams();
@@ -33,7 +33,7 @@ export default function VehicleDetail() {
   useEffect(() => { load(); }, [id]);
 
   const handleDelete = async () => {
-    if (!window.confirm('¿Eliminar este vehiculo? Esta accion no se puede deshacer.')) return;
+    if (!window.confirm('¿Eliminar este vehículo? Esta acción no se puede deshacer.')) return;
     await axios.delete(`/api/vehicles/${id}`);
     navigate('/vehicles');
   };
@@ -94,7 +94,7 @@ export default function VehicleDetail() {
 
       <div className="detail-header fade-in">
         <button className="btn btn-ghost btn-sm" onClick={() => navigate('/vehicles')}>
-          <BackIcon /> Vehiculos
+          <BackIcon /> Vehículos
         </button>
         <div className="detail-header-actions">
           <button className="btn btn-outline btn-sm" onClick={descargarFicha} disabled={pdfLoading}>
@@ -152,10 +152,10 @@ export default function VehicleDetail() {
             </h3>
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'8px 16px' }}>
               {[
-                ['Kilometros', `${vehicle.kilometros?.toLocaleString('es-ES')} km`],
+                ['Kilómetros', `${vehicle.kilometros?.toLocaleString('es-ES')} km`],
                 ['Color', vehicle.color || '—'],
                 ['VIN', vehicle.vin || '—'],
-                ['Ubicacion', vehicle.ubicacion],
+                ['Ubicación', vehicle.ubicacion],
                 ['Combustible', vehicle.combustible],
                 ['Transmision', vehicle.transmision],
               ].map(([k, v]) => (
@@ -209,7 +209,7 @@ export default function VehicleDetail() {
                   <label className="form-label">Concepto</label>
                   <select className="form-input form-select" value={gastoForm.concepto}
                     onChange={e => setGastoForm(f => ({ ...f, concepto: e.target.value }))}>
-                    {['Precio compra','Transporte Alemania','Transporte Espana','Homologacion','ITV','Matricula','Arancel importacion','IVA importacion','Reparacion','Limpieza / Preparacion','Seguro transporte','Gestion documental','Otros']
+                    {['Precio compra','Transporte Alemania','Transporte España','Homologación','ITV','Matrícula','Arancel importación','IVA importación','Reparación','Limpieza / Preparación','Seguro transporte','Gestión documental','Otros']
                       .map(c => <option key={c}>{c}</option>)}
                   </select>
                 </div>
@@ -220,7 +220,7 @@ export default function VehicleDetail() {
                 </div>
               </div>
               <div className="form-group">
-                <label className="form-label">Descripcion (opcional)</label>
+                <label className="form-label">Descripción (opcional)</label>
                 <input className="form-input" placeholder="Detalle del gasto..." value={gastoForm.descripcion}
                   onChange={e => setGastoForm(f => ({ ...f, descripcion: e.target.value }))} />
               </div>
@@ -256,15 +256,15 @@ export default function VehicleDetail() {
               ))}
             </div>
           ) : (
-            <div className="empty-state"><h3>Sin gastos registrados</h3><p>Registra los gastos asociados a este vehiculo</p></div>
+            <div className="empty-state"><h3>Sin gastos registrados</h3><p>Registra los gastos asociados a este vehículo</p></div>
           )}
         </div>
       )}
 
       {tab === 'descripcion' && (
         <div className="card fade-in" style={{ padding:20 }}>
-          <h3 style={{ fontFamily:'var(--font-display)', fontSize:14, fontWeight:700, color:'var(--grey-500)', letterSpacing:'1px', textTransform:'uppercase', marginBottom:14 }}>Descripcion del vehiculo</h3>
-          <p style={{ color:'var(--grey-700)', lineHeight:1.7 }}>{vehicle.descripcion || 'Sin descripcion registrada.'}</p>
+          <h3 style={{ fontFamily:'var(--font-display)', fontSize:14, fontWeight:700, color:'var(--grey-500)', letterSpacing:'1px', textTransform:'uppercase', marginBottom:14 }}>Descripción del vehículo</h3>
+          <p style={{ color:'var(--grey-700)', lineHeight:1.7 }}>{vehicle.descripcion || 'Sin descripción registrada.'}</p>
         </div>
       )}
     </div>

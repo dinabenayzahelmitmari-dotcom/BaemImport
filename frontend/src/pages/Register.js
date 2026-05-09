@@ -12,8 +12,8 @@ export default function Register() {
   
     const handleSubmit = async (e) => {
       e.preventDefault(); setError('');
-      if (form.password !== form.confirmar) return setError('Las contrasenas no coinciden');
-      if (form.password.length < 6) return setError('La contrasena debe tener al menos 6 caracteres');
+      if (form.password !== form.confirmar) return setError('Las contraseñas no coinciden');
+      if (form.password.length < 6) return setError('La contraseña debe tener al menos 6 caracteres');
       setLoading(true);
       try {
         await axios.post('/api/auth/register', { 
@@ -41,7 +41,7 @@ export default function Register() {
   
           <div style={{ background:'white', borderRadius:20, padding:28, boxShadow:'0 24px 64px rgba(0,0,0,0.4)' }}>
             <h2 style={{ fontFamily:'var(--font-display)', fontSize:20, fontWeight:800, color:'var(--navy)', marginBottom:6 }}>Crear cuenta</h2>
-            <p style={{ fontSize:13, color:'var(--grey-500)', marginBottom:24 }}>Registrate para acceder al sistema</p>
+            <p style={{ fontSize:13, color:'var(--grey-500)', marginBottom:24 }}>Regístrate para acceder al sistema</p>
   
             {error && <div style={{ background:'#fff0f2', border:'1px solid #ffd0d7', color:'var(--red-dark)', padding:'10px 14px', borderRadius:8, fontSize:13, marginBottom:16 }}>{error}</div>}
   
@@ -68,22 +68,22 @@ export default function Register() {
                   onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="tu@email.com" />
               </div>
               <div className="form-group">
-                <label className="form-label">Contrasena</label>
+                <label className="form-label">Contraseña</label>
                 <input className="form-input" type="password" required minLength={6} value={form.password}
-                  onChange={e => setForm(f => ({ ...f, password: e.target.value }))} placeholder="Minimo 6 caracteres" />
+                  onChange={e => setForm(f => ({ ...f, password: e.target.value }))} placeholder="Mínimo 6 caracteres" />
               </div>
               <div className="form-group">
-                <label className="form-label">Confirmar contrasena</label>
+                <label className="form-label">Confirmar contraseña</label>
                 <input className="form-input" type="password" required value={form.confirmar}
-                  onChange={e => setForm(f => ({ ...f, confirmar: e.target.value }))} placeholder="Repite la contrasena" />
+                  onChange={e => setForm(f => ({ ...f, confirmar: e.target.value }))} placeholder="Repite la contraseña" />
               </div>
             <button className="btn btn-primary btn-full" type="submit" disabled={loading} style={{ marginTop:6 }}>
               {loading ? <span className="spinner" style={{ width:18, height:18, borderTopColor:'white' }} /> : 'Crear cuenta'}
             </button>
           </form>
           <p style={{ textAlign:'center', marginTop:20, fontSize:13, color:'var(--grey-500)' }}>
-            Ya tienes cuenta?{' '}
-            <Link to="/login" style={{ color:'var(--red)', fontWeight:700 }}>Iniciar sesion</Link>
+            ¿Ya tienes cuenta?{' '}
+            <Link to="/login" style={{ color:'var(--red)', fontWeight:700 }}>Iniciar sesión</Link>
           </p>
         </div>
       </div>

@@ -42,7 +42,7 @@ describe("Login page", () => {
 
     const user = userEvent.setup();
     await user.type(screen.getByPlaceholderText("tu@email.com"), "test@example.com");
-    await user.type(screen.getByPlaceholderText("Tu contrasena"), "pass123");
+    await user.type(screen.getByPlaceholderText("Tu contraseña"), "pass123");
     await user.click(screen.getByRole("button", { name: /entrar/i }));
 
     expect(axios.post).toHaveBeenCalledWith("/api/auth/login", {

@@ -81,14 +81,14 @@ async function connectMongoWithRetry() {
       await mongoose.connect(uri);
       console.log("MongoDB conectado");
       return;
-    } catch (err) {
-      const msg = err?.message || String(err);
-      console.error("Error MongoDB:", msg);
-      console.error("Asegurate de que MongoDB esta arrancado y accesible en MONGO_URI.");
-      await new Promise((r) => setTimeout(r, 2000));
+      } catch (err) {
+        const msg = err?.message || String(err);
+        console.error("Error MongoDB:", msg);
+        console.error("Asegúrate de que MongoDB está arrancado y accesible en MONGO_URI.");
+        await new Promise((r) => setTimeout(r, 2000));
+      }
     }
   }
-}
 
 connectMongoWithRetry().then(() => {
   tryListen(basePort);

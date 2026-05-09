@@ -12,7 +12,7 @@ const ESTADO_BADGE = {
 const ESTADO_LABEL = {
   disponible: 'Disponible',
   reservado: 'Reservado',
-  en_transito: 'En transito',
+  en_transito: 'En tránsito',
   vendido: 'Vendido',
 };
 
@@ -44,7 +44,7 @@ export default function Vehicles() {
     <div className="page">
       <div className="page-header fade-in">
         <div>
-          <h1 className="page-title">Vehiculos</h1>
+          <h1 className="page-title">Vehículos</h1>
           <p className="page-subtitle">{vehicles.length} en inventario</p>
         </div>
         <div className="page-header-actions">
@@ -57,7 +57,7 @@ export default function Vehicles() {
           ['', 'Todos'],
           ['disponible', 'Disponible'],
           ['reservado', 'Reservado'],
-          ['en_transito', 'En transito'],
+          ['en_transito', 'En tránsito'],
           ['vendido', 'Vendido'],
         ].map(([v, l]) => (
           <button
@@ -86,9 +86,9 @@ export default function Vehicles() {
         </div>
       ) : vehicles.length === 0 ? (
         <div className="empty-state">
-          <h3>Sin vehiculos</h3>
-          <p>No hay vehiculos con el filtro seleccionado</p>
-          <button className="btn btn-primary btn-sm" onClick={() => navigate('/vehicles/new')}>Nuevo vehiculo</button>
+          <h3>Sin vehículos</h3>
+          <p>No hay vehículos con el filtro seleccionado</p>
+          <button className="btn btn-primary btn-sm" onClick={() => navigate('/vehicles/new')}>Nuevo vehículo</button>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

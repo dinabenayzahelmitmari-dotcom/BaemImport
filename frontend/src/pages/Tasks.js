@@ -6,6 +6,14 @@ const PRIORIDAD_BADGE = { baja:'badge-grey', normal:'badge-info', alta:'badge-wa
 const PRIORIDAD_LABEL = { baja:'Baja', normal:'Normal', alta:'Alta', urgente:'Urgente' };
 const ESTADO_BADGE    = { pendiente:'badge-grey', en_progreso:'badge-info', completada:'badge-success', cancelada:'badge-danger' };
 const ESTADO_LABEL    = { pendiente:'Pendiente', en_progreso:'En progreso', completada:'Completada', cancelada:'Cancelada' };
+const CATEGORIA_LABEL = {
+  Importacion: 'Importación',
+  Documentacion: 'Documentación',
+  Cliente: 'Cliente',
+  Vehiculo: 'Vehículo',
+  Financiero: 'Financiero',
+  Otro: 'Otro',
+};
 
 const EMPTY_FORM = { titulo:'', descripcion:'', prioridad:'normal', categoria:'Otro', estado:'pendiente', fechaLimite:'' };
 
@@ -48,7 +56,7 @@ export default function Tasks() {
   };
 
   const eliminar = async (id) => {
-    if (!window.confirm('Eliminar esta tarea?')) return;
+    if (!window.confirm('¿Eliminar esta tarea?')) return;
     await axios.delete(`/api/tasks/${id}`);
     load();
   };
@@ -81,7 +89,7 @@ export default function Tasks() {
           {error && <div style={{ background:'#fff0f2', color:'var(--red-dark)', padding:'10px 14px', borderRadius:8, fontSize:13, marginBottom:12 }}>{error}</div>}
           <form onSubmit={handleSubmit} style={{ display:'flex', flexDirection:'column', gap:12 }}>
             <div className="form-group">
-              <label className="form-label">Titulo *</label>
+              <label className="form-label">Título *</label>
               <input className="form-input" required value={form.titulo} onChange={e => setForm(f => ({ ...f, titulo: e.target.value }))} placeholder="Describe la tarea brevemente..." />
             </div>
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:10 }}>
@@ -95,9 +103,11 @@ export default function Tasks() {
                 </select>
               </div>
               <div className="form-group">
-                <label className="form-label">Categoria</label>
+                <label className="form-label">Categoría</label>
                 <select className="form-input form-select" value={form.categoria} onChange={e => setForm(f => ({ ...f, categoria: e.target.value }))}>
-                  {['Importacion','Documentacion','Cliente','Vehiculo','Financiero','Otro'].map(c => <option key={c}>{c}</option>)}
+                  {Object.entries(CATEGORIA_LABEL).map(([value, label]) => (
+                    <option key={value} value={value}>{label}</option>
+                  ))}
                 </select>
               </div>
               <div className="form-group">
@@ -106,7 +116,7 @@ export default function Tasks() {
               </div>
             </div>
             <div className="form-group">
-              <label className="form-label">Descripcion</label>
+              <label className="form-label">Descripción</label>
               <textarea className="form-input" rows={2} value={form.descripcion} onChange={e => setForm(f => ({ ...f, descripcion: e.target.value }))} placeholder="Detalles adicionales..." />
             </div>
             <button className="btn btn-primary btn-sm" type="submit" disabled={saving}>
@@ -145,7 +155,7 @@ export default function Tasks() {
                   <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:4, flexWrap:'wrap' }}>
                     <span className={`badge ${PRIORIDAD_BADGE[t.prioridad]}`}>{PRIORIDAD_LABEL[t.prioridad]}</span>
                     <span className={`badge ${ESTADO_BADGE[t.estado]}`}>{ESTADO_LABEL[t.estado]}</span>
-                    <span className="badge badge-grey" style={{ fontSize:10 }}>{t.categoria}</span>
+                    <span className="badge badge-grey" style={{ fontSize:10 }}>{CATEGORIA_LABEL[t.categoria] || t.categoria}</span>
                   </div>
                   <p style={{ fontFamily:'var(--font-display)', fontSize:15, fontWeight:700, color: t.estado === 'completada' ? 'var(--grey-500)' : 'var(--navy)', textDecoration: t.estado === 'completada' ? 'line-through' : 'none' }}>
                     {t.titulo}
@@ -154,7 +164,7 @@ export default function Tasks() {
                   <div style={{ display:'flex', alignItems:'center', gap:12, marginTop:6 }}>
                     {t.fechaLimite && (
                       <span style={{ fontSize:11, color: new Date(t.fechaLimite) < new Date() && t.estado !== 'completada' ? 'var(--red)' : 'var(--grey-500)', fontWeight:600 }}>
-                        Limite: {new Date(t.fechaLimite).toLocaleDateString('es-ES')}
+                        Límite: {new Date(t.fechaLimite).toLocaleDateString('es-ES')}
                       </span>
                     )}
                     {t.asignadoA && <span style={{ fontSize:11, color:'var(--grey-500)' }}>Asignado a: {t.asignadoA.nombre}</span>}

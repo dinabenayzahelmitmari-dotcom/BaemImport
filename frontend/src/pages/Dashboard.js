@@ -28,7 +28,7 @@ export default function Dashboard() {
   }, []);
 
   const QUICK = [
-    { label: 'Nuevo Vehiculo',    path: '/vehicles/new',  color: 'var(--red)',     icon: PlusCarIcon },
+    { label: 'Nuevo vehículo',    path: '/vehicles/new',  color: 'var(--red)',     icon: PlusCarIcon },
     { label: 'Nuevo Cliente',     path: '/clients/new',   color: 'var(--navy)',    icon: PlusUserIcon },
     { label: 'Nuevo Pedido',      path: '/orders/new',    color: '#2e7d32',        icon: PlusBoxIcon },
     { label: 'Presupuesto',       path: '/quotes/new',    color: '#1565c0',        icon: DocIcon },
@@ -45,7 +45,7 @@ export default function Dashboard() {
   );
 
   const hora = new Date().getHours();
-  const saludo = hora < 13 ? 'Buenos dias' : hora < 20 ? 'Buenas tardes' : 'Buenas noches';
+  const saludo = hora < 13 ? 'Buenos días' : hora < 20 ? 'Buenas tardes' : 'Buenas noches';
 
   return (
     <div className="page">
@@ -90,7 +90,7 @@ export default function Dashboard() {
           {[
             { label: 'Disponibles', val: stats?.vehiculos?.disponibles || 0, color: '#2e7d32', bg: '#e8f5e9' },
             { label: 'Reservados',  val: stats?.vehiculos?.reservados  || 0, color: '#f57f17', bg: '#fff8e1' },
-            { label: 'En transito', val: stats?.vehiculos?.en_transito || 0, color: '#1565c0', bg: '#e3f2fd' },
+            { label: 'En tránsito', val: stats?.vehiculos?.en_transito || 0, color: '#1565c0', bg: '#e3f2fd' },
             { label: 'Vendidos',    val: stats?.vehiculos?.vendidos    || 0, color: '#c8102e', bg: '#fff0f2' },
           ].map(s => (
             <div key={s.label} className="dash-stock-item" style={{ background: s.bg }}>
@@ -101,9 +101,9 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Acciones rapidas */}
+      {/* Acciones rápidas */}
       <div className="dash-section fade-in fade-in-2">
-        <p className="dash-section-title">Acciones rapidas</p>
+        <p className="dash-section-title">Acciones rápidas</p>
         <div className="dash-quick-actions">
           {QUICK.map(q => (
             <button key={q.path} className="dash-action-btn" onClick={() => navigate(q.path)}>
