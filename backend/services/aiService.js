@@ -76,7 +76,7 @@ async function askOpenAIIfConfigured(query) {
     "Eres un asistente de operaciones de compraventa/importacion de vehiculos. " +
     "Responde en espanol, de forma breve, precisa y accionable para equipo comercial.";
 
-  const response = await fetch(`${baseUrl}/chat/completions`, {
+  const response = await globalThis.fetch(`${baseUrl}/chat/completions`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
