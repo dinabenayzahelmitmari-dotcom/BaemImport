@@ -1,6 +1,4 @@
-﻿otifications.test.js
-
-const request = require("supertest");
+﻿const request = require("supertest");
 const mongoose = require("mongoose");
 const { createApp } = require("../app");
 const User = require("../models/Usuario");

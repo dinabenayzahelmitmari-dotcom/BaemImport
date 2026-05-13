@@ -3,8 +3,6 @@ const express = require("express");
 const router = express.Router();
 const Expense = require("../models/Gasto");
 const { authMiddleware } = require("../middleware/auth");
-
-// Endpoint: GET /
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const { vehiculo, pagado } = req.query;
@@ -17,8 +15,6 @@ router.get("/", authMiddleware, async (req, res) => {
     res.json(expenses);
   } catch { res.status(500).json({ error: "Error al obtener gastos" }); }
 });
-
-// Endpoint: GET /vehicle/:vehiculoId
 router.get("/vehicle/:vehiculoId", authMiddleware, async (req, res) => {
   try {
     const gastos = await Expense.find({ vehiculo: req.params.vehiculoId }).sort({ fecha: -1 });
@@ -26,24 +22,18 @@ router.get("/vehicle/:vehiculoId", authMiddleware, async (req, res) => {
     res.json({ gastos, total });
   } catch { res.status(500).json({ error: "Error al obtener gastos" }); }
 });
-
-// Endpoint: POST /
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const expense = await Expense.create({ ...req.body, creadoPor: req.user._id });
     res.status(201).json(expense);
   } catch (err) { res.status(400).json({ error: err.message }); }
 });
-
-// Endpoint: PUT /:id
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
     const expense = await Expense.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(expense);
   } catch (err) { res.status(400).json({ error: err.message }); }
 });
-
-// Endpoint: DELETE /:id
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     await Expense.findByIdAndDelete(req.params.id);

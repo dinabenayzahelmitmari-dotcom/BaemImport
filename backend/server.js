@@ -1,7 +1,6 @@
-﻿ * Backend runtime entrypoint (side effects here are OK).
- * - Loads backend/.env explicitly (monorepo + packaged exe).
- * - Connects to MongoDB with retry.
- * - Starts HTTP server with port fallback.
+﻿/**
+ * Entry point de runtime: carga .env, conecta MongoDB y levanta HTTP.
+ */
 
 const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, ".env") });
@@ -82,7 +81,7 @@ async function connectMongoWithRetry() {
       } catch (err) {
         const msg = err?.message || String(err);
         console.error("Error MongoDB:", msg);
-        console.error("AsegÃºrate de que MongoDB estÃ¡ arrancado y accesible en MONGO_URI.");
+        console.error("Asegúrate de que MongoDB está arrancado y accesible en MONGO_URI.");
         await new Promise((r) => setTimeout(r, 2000));
       }
     }

@@ -5,7 +5,6 @@ const Activity = require("../models/Actividad");
 const { authMiddleware } = require("../middleware/auth");
 
 // Últimas actividades globales
-// Endpoint: GET /
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 20;
@@ -23,7 +22,6 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 // Actividades de un pedido
-// Endpoint: GET /order/:orderId
 router.get("/order/:orderId", authMiddleware, async (req, res) => {
   try {
     const activities = await Activity.find({ pedido: req.params.orderId })
@@ -36,7 +34,6 @@ router.get("/order/:orderId", authMiddleware, async (req, res) => {
 });
 
 // Crear actividad
-// Endpoint: POST /
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const act = await Activity.create({ ...req.body, usuario: req.user._id });

@@ -7,7 +7,6 @@ const emailService = require("../services/email");
 const pdfService = require("../services/pdf");
 
 // Listar facturas
-// Endpoint: GET /
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const { estado, cliente } = req.query;
@@ -27,7 +26,6 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 // Obtener factura por ID
-// Endpoint: GET /:id
 router.get("/:id", authMiddleware, async (req, res) => {
   try {
     const invoice = await Invoice.findById(req.params.id)
@@ -43,7 +41,6 @@ router.get("/:id", authMiddleware, async (req, res) => {
 });
 
 // Crear factura
-// Endpoint: POST /
 router.post("/", authMiddleware, async (req, res) => {
   try {
     // Calcular totales automáticamente
@@ -71,7 +68,6 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 // Actualizar factura
-// Endpoint: PUT /:id
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
     if (req.body.conceptos) {
@@ -94,7 +90,6 @@ router.put("/:id", authMiddleware, async (req, res) => {
 });
 
 // Eliminar factura
-// Endpoint: DELETE /:id
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     await Invoice.findByIdAndDelete(req.params.id);
@@ -105,7 +100,6 @@ router.delete("/:id", authMiddleware, async (req, res) => {
 });
 
 // Descargar factura como PDF
-// Endpoint: GET /:id/pdf
 router.get("/:id/pdf", authMiddleware, async (req, res) => {
   try {
     const invoice = await Invoice.findById(req.params.id).populate("cliente");
@@ -122,7 +116,6 @@ router.get("/:id/pdf", authMiddleware, async (req, res) => {
 });
 
 // Enviar factura por email
-// Endpoint: POST /:id/enviar
 router.post("/:id/enviar", authMiddleware, async (req, res) => {
   try {
     const invoice = await Invoice.findById(req.params.id).populate("cliente");

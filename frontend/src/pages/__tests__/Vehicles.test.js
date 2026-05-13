@@ -39,7 +39,7 @@ describe("Vehicles page", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText(/vehÃ­culos/i)).toBeInTheDocument();
+    expect(screen.getByText(/vehículos/i)).toBeInTheDocument();
 
     await waitFor(() => {
       expect(axios.get).toHaveBeenCalled();

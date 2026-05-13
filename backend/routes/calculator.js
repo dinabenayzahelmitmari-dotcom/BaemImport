@@ -4,7 +4,6 @@ const router = express.Router();
 const { authMiddleware } = require("../middleware/auth");
 
 // Calculadora de importación Alemania -> España
-// Endpoint: POST /calcular
 router.post("/calcular", authMiddleware, (req, res) => {
   try {
     const {

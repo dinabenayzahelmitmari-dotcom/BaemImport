@@ -15,7 +15,7 @@ const sendClientEmail = async (req, res) => {
 
 const downloadPDF = async (req, res) => {
   try {
-    const data = req.body; // En un caso real, buscar por ID en BBDD
+    const data = req.body;
     const type = (data.type || "PRESUPUESTO").toUpperCase();
 
     let pdfBuffer;

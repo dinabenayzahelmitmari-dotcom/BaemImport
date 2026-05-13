@@ -15,8 +15,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-
-// Endpoint: POST /:orderId/:fase
 router.post("/:orderId/:fase", authMiddleware, upload.single("file"), async (req, res) => {
   try {
     const { orderId, fase } = req.params;

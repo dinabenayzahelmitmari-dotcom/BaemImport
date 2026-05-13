@@ -1,9 +1,4 @@
-/*
- * Modulo del proyecto.
- * Archivo: frontend\src\pages\Alerts.css
- */
-
-.alerts-list { display: flex; flex-direction: column; gap: 10px; }
+﻿.alerts-list { display: flex; flex-direction: column; gap: 10px; }
 
 .alert-card {
   padding: 14px 16px;

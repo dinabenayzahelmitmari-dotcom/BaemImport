@@ -6,7 +6,6 @@ const { authMiddleware } = require("../middleware/auth");
 const { sendEmail } = require("../services/email");
 
 // Crear solicitud (Cliente)
-// Endpoint: POST /
 router.post("/", authMiddleware, async (req, res) => {
   console.log("Nueva solicitud recibida:", req.body);
   try {
@@ -50,7 +49,6 @@ Presupuesto: ${req.body.presupuesto} EUR`,
 });
 
 // Obtener todas las solicitudes (Vendedor/Admin)
-// Endpoint: GET /
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const requests = await VehicleRequest.find().populate("cliente", "nombre email").sort("-createdAt");
@@ -59,7 +57,6 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 // Actualizar estado (Vendedor)
-// Endpoint: PUT /:id
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
     const request = await VehicleRequest.findByIdAndUpdate(req.params.id, { estado: req.body.estado }, { new: true });

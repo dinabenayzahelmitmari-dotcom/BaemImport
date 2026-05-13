@@ -16,14 +16,14 @@ const vehicles = [
 ];
 
 const clients = [
-  { nombre: 'Juan', apellidos: 'GarcÃ­a PÃ©rez', email: 'juan.garcia@gmail.com', telefono: '600123456', direccion: 'Calle Mayor 1, Madrid', dni: '12345678A' },
-  { nombre: 'MarÃ­a', apellidos: 'RodrÃ­guez LÃ³pez', email: 'm.rodriguez@outlook.com', telefono: '611234567', direccion: 'Av. Libertad 45, Valencia', dni: '87654321B' }
+  { nombre: 'Juan', apellidos: 'García Pérez', email: 'juan.garcia@gmail.com', telefono: '600123456', direccion: 'Calle Mayor 1, Madrid', dni: '12345678A' },
+  { nombre: 'María', apellidos: 'Rodríguez López', email: 'm.rodriguez@outlook.com', telefono: '611234567', direccion: 'Av. Libertad 45, Valencia', dni: '87654321B' }
 ];
 
 async function seedFull() {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log('Conectado a MongoDB para simulaciÃ³n...');
+    console.log('Conectado a MongoDB para simulación...');
 
     // Limpiar colecciones
     await Vehicle.deleteMany({});
@@ -32,10 +32,10 @@ async function seedFull() {
     await Task.deleteMany({});
     await Notification.deleteMany({});
 
-    // Insertar vehÃ­culos y clientes
+    // Insertar vehículos y clientes
     const vDocs = await Vehicle.insertMany(vehicles);
     const cDocs = await Client.insertMany(clients);
-    console.log('VehÃ­culos y clientes insertados.');
+    console.log('Vehículos y clientes insertados.');
 
     // Crear un pedido simulado
     await Order.create({
@@ -45,19 +45,19 @@ async function seedFull() {
       precioFinal: 31500,
       documentos: {
         alemania: [
-          { nombre: 'Ficha TÃ©cnica (Teil I)', url: '#' },
+          { nombre: 'Ficha Técnica (Teil I)', url: '#' },
           { nombre: 'Factura Compra Original', url: '#' }
         ],
         espania: [
-          { nombre: 'Solicitud MatriculaciÃ³n', url: '#' }
+          { nombre: 'Solicitud Matriculación', url: '#' }
         ]
       }
     });
 
     // Crear tareas
     await Task.insertMany([
-      { titulo: 'RevisiÃ³n ITV BMW', descripcion: 'Llevar el BMW a la estaciÃ³n ITV de Getafe', estado: 'pendiente', prioridad: 'alta', fechaLimite: new Date(Date.now() + 86400000) },
-      { titulo: 'Llamar a cliente MarÃ­a', descripcion: 'Confirmar recepciÃ³n de documentos del Mercedes', estado: 'completada', prioridad: 'normal' }
+      { titulo: 'Revisión ITV BMW', descripcion: 'Llevar el BMW a la estación ITV de Getafe', estado: 'pendiente', prioridad: 'alta', fechaLimite: new Date(Date.now() + 86400000) },
+      { titulo: 'Llamar a cliente María', descripcion: 'Confirmar recepción de documentos del Mercedes', estado: 'completada', prioridad: 'normal' }
     ]);
 
     const admin = await User.findOne({ email: 'admin@baemimport.com' });
@@ -66,12 +66,12 @@ async function seedFull() {
     await Notification.create({
       destinatario: admin._id,
       titulo: 'Nuevo presupuesto solicitado',
-      mensaje: 'El cliente Juan GarcÃ­a ha solicitado un presupuesto para el VW Golf GTI.',
+      mensaje: 'El cliente Juan García ha solicitado un presupuesto para el VW Golf GTI.',
       tipo: 'info',
       enlace: '/quotes'
     });
 
-    console.log('SimulaciÃ³n completada con Ã©xito.');
+    console.log('Simulación completada con éxito.');
     process.exit(0);
   } catch (err) {
     console.error(err);

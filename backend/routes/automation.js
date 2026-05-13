@@ -7,7 +7,6 @@ const Order = require("../models/Pedido");
 const { authMiddleware } = require("../middleware/auth");
 
 // Convertir solicitud en pedido (Automatización integral)
-// Endpoint: POST /convert/:requestId
 router.post("/convert/:requestId", authMiddleware, async (req, res) => {
   try {
     const request = await VehicleRequest.findById(req.params.requestId).populate("cliente");

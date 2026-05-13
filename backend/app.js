@@ -1,6 +1,7 @@
-﻿ * Express app factory (no side effects like listening or DB connections).
- * Keeping this separate from server.js makes the backend testable and easier
- * to deploy (server.js becomes the runtime entrypoint).
+﻿/**
+ * Express app factory: define middleware, rutas y static frontend.
+ * El arranque de DB/puerto vive en server.js.
+ */
 
 const express = require("express");
 const cors = require("cors");

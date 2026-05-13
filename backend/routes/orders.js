@@ -7,8 +7,6 @@ const Client = require("../models/Cliente");
 const { authMiddleware } = require("../middleware/auth");
 const emailService = require("../services/email");
 const { sendEmail } = require("../services/email");
-
-// Endpoint: GET /
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const { estado, cliente } = req.query;
@@ -33,8 +31,6 @@ router.get("/", authMiddleware, async (req, res) => {
     res.status(500).json({ error: "Error al obtener pedidos" });
   }
 });
-
-// Endpoint: GET /:id
 router.get("/:id", authMiddleware, async (req, res) => {
   try {
     const order = await Order.findById(req.params.id)
@@ -56,8 +52,6 @@ router.get("/:id", authMiddleware, async (req, res) => {
     res.status(500).json({ error: "Error al obtener pedido" });
   }
 });
-
-// Endpoint: POST /
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const data = { ...req.body, creadoPor: req.user._id };
@@ -104,8 +98,6 @@ router.post("/", authMiddleware, async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
-// Endpoint: PUT /:id
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
     const current = await Order.findById(req.params.id).populate("cliente").populate("vehiculo");
@@ -170,8 +162,6 @@ router.put("/:id", authMiddleware, async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
-// Endpoint: DELETE /:id
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     await Order.findByIdAndDelete(req.params.id);

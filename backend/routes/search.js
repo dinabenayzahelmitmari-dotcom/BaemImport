@@ -5,8 +5,6 @@ const Vehicle = require("../models/Vehiculo");
 const Client = require("../models/Cliente");
 const Order = require("../models/Pedido");
 const { authMiddleware } = require("../middleware/auth");
-
-// Endpoint: GET /
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const { q } = req.query;

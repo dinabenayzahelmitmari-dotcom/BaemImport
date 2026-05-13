@@ -5,8 +5,6 @@ const Vehicle = require("../models/Vehiculo");
 const Expense = require("../models/Gasto");
 const { authMiddleware } = require("../middleware/auth");
 const pdfService = require("../services/pdf");
-
-// Endpoint: GET /
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const { estado, marca, combustible, ubicacion, search } = req.query;
@@ -26,8 +24,6 @@ router.get("/", authMiddleware, async (req, res) => {
     res.json(vehicles);
   } catch { res.status(500).json({ error: "Error al obtener vehículos" }); }
 });
-
-// Endpoint: GET /:id
 router.get("/:id", authMiddleware, async (req, res) => {
   try {
     const vehicle = await Vehicle.findById(req.params.id);
@@ -35,8 +31,6 @@ router.get("/:id", authMiddleware, async (req, res) => {
     res.json(vehicle);
   } catch { res.status(500).json({ error: "Error al obtener vehículo" }); }
 });
-
-// Endpoint: GET /:id/pdf
 router.get("/:id/pdf", authMiddleware, async (req, res) => {
   try {
     const vehicle = await Vehicle.findById(req.params.id);
@@ -48,16 +42,12 @@ router.get("/:id/pdf", authMiddleware, async (req, res) => {
     res.send(pdfBuffer);
   } catch (err) { res.status(500).json({ error: "Error al generar PDF: " + err.message }); }
 });
-
-// Endpoint: POST /
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const vehicle = await Vehicle.create(req.body);
     res.status(201).json(vehicle);
   } catch (err) { res.status(400).json({ error: err.message }); }
 });
-
-// Endpoint: PUT /:id
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
     const vehicle = await Vehicle.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
@@ -65,8 +55,6 @@ router.put("/:id", authMiddleware, async (req, res) => {
     res.json(vehicle);
   } catch (err) { res.status(400).json({ error: err.message }); }
 });
-
-// Endpoint: DELETE /:id
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     await Vehicle.findByIdAndDelete(req.params.id);

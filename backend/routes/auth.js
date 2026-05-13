@@ -5,8 +5,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/Usuario");
 const { authMiddleware, adminMiddleware } = require("../middleware/auth");
-
-// Endpoint: POST /login
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -20,8 +18,6 @@ router.post("/login", async (req, res) => {
     res.json({ token, user: { _id: user._id, nombre: user.nombre, email: user.email, rol: user.rol } });
   } catch (_err) { res.status(500).json({ error: "Error al iniciar sesion" }); }
 });
-
-// Endpoint: POST /register
 router.post("/register", async (req, res) => {
   try {
     const { nombre, email, password, rol } = req.body;
@@ -33,14 +29,11 @@ router.post("/register", async (req, res) => {
     res.status(201).json({ token, user: { _id: user._id, nombre: user.nombre, email: user.email, rol: user.rol } });
   } catch (err) { res.status(400).json({ error: err.message }); }
 });
-
-// Endpoint: GET /me
 router.get("/me", authMiddleware, async (req, res) => {
   res.json({ _id: req.user._id, nombre: req.user.nombre, email: req.user.email, rol: req.user.rol });
 });
 
 // Admin: list users
-// Endpoint: GET /users
 router.get("/users", authMiddleware, adminMiddleware, async (req, res) => {
   try {
     const users = await User.find({}, "-password").sort({ createdAt: 1 });
@@ -49,7 +42,6 @@ router.get("/users", authMiddleware, adminMiddleware, async (req, res) => {
 });
 
 // Admin: update user
-// Endpoint: PUT /users/:id
 router.put("/users/:id", authMiddleware, adminMiddleware, async (req, res) => {
   try {
     const { rol, nombre } = req.body;
@@ -62,7 +54,6 @@ router.put("/users/:id", authMiddleware, adminMiddleware, async (req, res) => {
 });
 
 // Admin: delete user
-// Endpoint: DELETE /users/:id
 router.delete("/users/:id", authMiddleware, adminMiddleware, async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);

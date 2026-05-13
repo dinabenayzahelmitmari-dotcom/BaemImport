@@ -3,8 +3,6 @@ const express = require("express");
 const router = express.Router();
 const Client = require("../models/Cliente");
 const { authMiddleware } = require("../middleware/auth");
-
-// Endpoint: GET /
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const { search } = req.query;
@@ -22,8 +20,6 @@ router.get("/", authMiddleware, async (req, res) => {
     res.json(clients);
   } catch { res.status(500).json({ error: "Error al obtener clientes" }); }
 });
-
-// Endpoint: GET /:id
 router.get("/:id", authMiddleware, async (req, res) => {
   try {
     const client = await Client.findById(req.params.id);
@@ -31,16 +27,12 @@ router.get("/:id", authMiddleware, async (req, res) => {
     res.json(client);
   } catch { res.status(500).json({ error: "Error al obtener cliente" }); }
 });
-
-// Endpoint: POST /
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const client = await Client.create(req.body);
     res.status(201).json(client);
   } catch (err) { res.status(400).json({ error: err.message }); }
 });
-
-// Endpoint: PUT /:id
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
     const client = await Client.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -48,8 +40,6 @@ router.put("/:id", authMiddleware, async (req, res) => {
     res.json(client);
   } catch (err) { res.status(400).json({ error: err.message }); }
 });
-
-// Endpoint: DELETE /:id
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     await Client.findByIdAndDelete(req.params.id);

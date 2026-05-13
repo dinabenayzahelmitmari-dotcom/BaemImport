@@ -1,9 +1,4 @@
-/*
- * Modulo del proyecto.
- * Archivo: frontend\src\pages\Login.css
- */
-
-.login-screen {
+﻿.login-screen {
   min-height: 100vh;
   background: var(--white);
   display: flex;

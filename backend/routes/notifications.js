@@ -1,12 +1,9 @@
-﻿otifications.js
-
-const express = require("express");
+﻿const express = require("express");
 const router = express.Router();
 const Notification = require("../models/Notificacion");
 const { authMiddleware } = require("../middleware/auth");
 
 // Obtener notificaciones del usuario actual
-// Endpoint: GET /
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const notifications = await Notification.find({ destinatario: req.user._id })
@@ -20,7 +17,6 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 // Marcar como leida
-// Endpoint: PUT /:id/leer
 router.put("/:id/leer", authMiddleware, async (req, res) => {
   try {
     await Notification.findByIdAndUpdate(req.params.id, { leida: true });
@@ -31,7 +27,6 @@ router.put("/:id/leer", authMiddleware, async (req, res) => {
 });
 
 // Marcar todas como leidas
-// Endpoint: PUT /leer-todas
 router.put("/leer-todas", authMiddleware, async (req, res) => {
   try {
     await Notification.updateMany({ destinatario: req.user._id, leida: false }, { leida: true });
@@ -42,7 +37,6 @@ router.put("/leer-todas", authMiddleware, async (req, res) => {
 });
 
 // Crear notificacion (uso interno del sistema)
-// Endpoint: POST /
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const notif = await Notification.create(req.body);
@@ -54,7 +48,6 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 // Eliminar notificacion
-// Endpoint: DELETE /:id
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     await Notification.findByIdAndDelete(req.params.id);
