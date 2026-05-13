@@ -1,3 +1,4 @@
+﻿
 const express = require("express");
 const router = express.Router();
 const Message = require("../models/Mensaje");
@@ -5,6 +6,7 @@ const User = require("../models/Usuario");
 const { authMiddleware } = require("../middleware/auth");
 
 // Enviar mensaje
+// Endpoint: POST /
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const { destinatario, texto } = req.body;
@@ -19,6 +21,7 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 // Obtener mensajes con un usuario específico
+// Endpoint: GET /:userId
 router.get("/:userId", authMiddleware, async (req, res) => {
   try {
     const messages = await Message.find({
@@ -32,6 +35,7 @@ router.get("/:userId", authMiddleware, async (req, res) => {
 });
 
 // Obtener lista de contactos (Usuarios con los que se ha hablado)
+// Endpoint: GET /contacts/list
 router.get("/contacts/list", authMiddleware, async (req, res) => {
   try {
     const userRole = req.user.rol;

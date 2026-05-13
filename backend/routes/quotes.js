@@ -1,3 +1,4 @@
+﻿
 const express = require("express");
 const router = express.Router();
 const Quote = require("../models/Presupuesto");
@@ -6,6 +7,7 @@ const emailService = require("../services/email");
 const pdfService = require("../services/pdf");
 
 // Listar presupuestos
+// Endpoint: GET /
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const { estado, cliente } = req.query;
@@ -24,6 +26,7 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 // Obtener presupuesto por ID
+// Endpoint: GET /:id
 router.get("/:id", authMiddleware, async (req, res) => {
   try {
     const quote = await Quote.findById(req.params.id)
@@ -38,6 +41,7 @@ router.get("/:id", authMiddleware, async (req, res) => {
 });
 
 // Crear presupuesto
+// Endpoint: POST /
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const quote = await Quote.create({ ...req.body, creadoPor: req.user._id });
@@ -48,6 +52,7 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 // Actualizar presupuesto
+// Endpoint: PUT /:id
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
     const quote = await Quote.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -58,6 +63,7 @@ router.put("/:id", authMiddleware, async (req, res) => {
 });
 
 // Eliminar presupuesto
+// Endpoint: DELETE /:id
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     await Quote.findByIdAndDelete(req.params.id);
@@ -68,6 +74,7 @@ router.delete("/:id", authMiddleware, async (req, res) => {
 });
 
 // Descargar presupuesto como PDF
+// Endpoint: GET /:id/pdf
 router.get("/:id/pdf", authMiddleware, async (req, res) => {
   try {
     const quote = await Quote.findById(req.params.id)
@@ -90,6 +97,7 @@ router.get("/:id/pdf", authMiddleware, async (req, res) => {
 });
 
 // Enviar presupuesto por email
+// Endpoint: POST /:id/enviar
 router.post("/:id/enviar", authMiddleware, async (req, res) => {
   try {
     const quote = await Quote.findById(req.params.id)

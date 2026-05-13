@@ -1,3 +1,4 @@
+﻿
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -31,27 +32,34 @@ import Layout from './components/Layout';
 
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth();
+  // Mientras se comprueba el token (AuthProvider), mostramos un estado de carga.
   if (loading) return (
     <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'#f0f2f5' }}>
       <div className="spinner" style={{ width:36, height:36 }} />
     </div>
   );
+  // Si no hay sesion, redirige a /login. Si la hay, permite renderizar el contenido protegido.
   return user ? children : <Navigate to="/login" replace />;
 }
 
 function AdminRoute({ children }) {
   const { user } = useAuth();
+  // Guard simple por rol para pantallas de administracion.
   if (!user || user.rol !== 'admin') return <Navigate to="/" replace />;
   return children;
 }
 
 export default function App() {
   return (
+    // AuthProvider mantiene la sesion y Router gestiona navegacion SPA.
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          {/* Rutas publicas */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
+          {/* Rutas privadas: Layout define el marco comun (nav, header, etc.) */}
           <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
             <Route index element={<Dashboard />} />
             {/* Vehiculos */}

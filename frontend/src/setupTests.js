@@ -1,3 +1,4 @@
+﻿
 import "@testing-library/jest-dom";
 
 // Silence known React Router v6 future-flag warnings during tests.

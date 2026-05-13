@@ -1,3 +1,4 @@
+﻿
 const express = require("express");
 const router = express.Router();
 const VehicleRequest = require("../models/SolicitudVehiculo");
@@ -5,6 +6,7 @@ const { authMiddleware } = require("../middleware/auth");
 const { sendEmail } = require("../services/email");
 
 // Crear solicitud (Cliente)
+// Endpoint: POST /
 router.post("/", authMiddleware, async (req, res) => {
   console.log("Nueva solicitud recibida:", req.body);
   try {
@@ -15,7 +17,12 @@ router.post("/", authMiddleware, async (req, res) => {
     sendEmail(
       process.env.MAIL_USER,
       `Nueva Solicitud de Vehículo: ${req.body.marca} ${req.body.modelo}`,
-      `Se ha recibido una nueva solicitud de un cliente.\n\nCliente: ${req.user.nombre}\nEmail: ${req.user.email}\nVehículo: ${req.body.marca} ${req.body.modelo}\nPresupuesto: ${req.body.presupuesto} EUR`,
+      `Se ha recibido una nueva solicitud de un cliente.
+
+Cliente: ${req.user.nombre}
+Email: ${req.user.email}
+Vehículo: ${req.body.marca} ${req.body.modelo}
+Presupuesto: ${req.body.presupuesto} EUR`,
       `<h2>Nueva Solicitud de Vehículo</h2>
        <p><strong>Cliente:</strong> ${req.user.nombre}</p>
        <p><strong>Email:</strong> ${req.user.email}</p>
@@ -43,6 +50,7 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 // Obtener todas las solicitudes (Vendedor/Admin)
+// Endpoint: GET /
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const requests = await VehicleRequest.find().populate("cliente", "nombre email").sort("-createdAt");
@@ -51,6 +59,7 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 // Actualizar estado (Vendedor)
+// Endpoint: PUT /:id
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
     const request = await VehicleRequest.findByIdAndUpdate(req.params.id, { estado: req.body.estado }, { new: true });

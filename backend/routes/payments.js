@@ -1,3 +1,4 @@
+﻿
 const express = require("express");
 const router = express.Router();
 const Payment = require("../models/Pago");
@@ -5,6 +6,7 @@ const Order = require("../models/Pedido");
 const { authMiddleware } = require("../middleware/auth");
 
 // Registrar un nuevo pago
+// Endpoint: POST /
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const { pedido, monto, metodo, concepto } = req.body;
@@ -33,6 +35,7 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 // Obtener pagos de un pedido
+// Endpoint: GET /pedido/:orderId
 router.get("/pedido/:orderId", authMiddleware, async (req, res) => {
   try {
     const payments = await Payment.find({ pedido: req.params.orderId }).sort({ fecha: -1 });

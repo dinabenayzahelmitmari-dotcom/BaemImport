@@ -10,6 +10,8 @@
 
 Copia `backend/.env.example` a `backend/.env` y completa los valores.
 
+`backend/.env` no debe versionarse ni incluirse en entregables.
+
 ## Desarrollo local
 
 ```bash
@@ -29,3 +31,14 @@ node backend/server.js
 
 Abre `http://localhost:8080`.
 
+## Entregable saneado (sin credenciales)
+
+Para generar un ZIP de entrega que excluya `.env`, keystores y artefactos sensibles:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/create-deliverable.ps1
+```
+
+Salida:
+
+- `C:\Users\<usuario>\Desktop\BAEMIMPORT-ENTREGABLE-SANITIZADO.zip`

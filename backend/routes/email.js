@@ -1,3 +1,4 @@
+﻿
 const express = require("express");
 const router = express.Router();
 const Client = require("../models/Cliente");
@@ -7,12 +8,13 @@ const emailService = require("../services/email");
 const { sendEmail } = require("../services/email");
 
 // Enviar email manual personalizado
+// Endpoint: POST /manual
 router.post("/manual", authMiddleware, async (req, res) => {
   try {
     const { para, asunto, mensaje } = req.body;
     if (!para || !asunto || !mensaje) return res.status(400).json({ error: "Datos incompletos (para, asunto, mensaje)" });
     
-    await sendEmail(para, asunto, mensaje, `<div>${mensaje.replace(/\n/g, '<br>')}</div>`);
+    await sendEmail(para, asunto, mensaje, `<div>${mensaje.replace(/\n/g, "<br>")}</div>`);
     res.json({ mensaje: "Email enviado con éxito" });
   } catch (err) {
     res.status(500).json({ error: "Error al enviar: " + err.message });
@@ -20,6 +22,7 @@ router.post("/manual", authMiddleware, async (req, res) => {
 });
 
 // Enviar email de bienvenida a cliente
+// Endpoint: POST /bienvenida/:clienteId
 router.post("/bienvenida/:clienteId", authMiddleware, async (req, res) => {
   try {
     const cliente = await Client.findById(req.params.clienteId);
@@ -33,6 +36,7 @@ router.post("/bienvenida/:clienteId", authMiddleware, async (req, res) => {
 });
 
 // Notificar vehiculo listo al cliente de un pedido
+// Endpoint: POST /vehiculo-listo/:pedidoId
 router.post("/vehiculo-listo/:pedidoId", authMiddleware, async (req, res) => {
   try {
     const pedido = await Order.findById(req.params.pedidoId).populate("cliente").populate("vehiculo");
@@ -46,6 +50,7 @@ router.post("/vehiculo-listo/:pedidoId", authMiddleware, async (req, res) => {
 });
 
 // Enviar email personalizado a cliente
+// Endpoint: POST /seguimiento/:clienteId
 router.post("/seguimiento/:clienteId", authMiddleware, async (req, res) => {
   try {
     const { asunto, mensaje } = req.body;
@@ -61,6 +66,7 @@ router.post("/seguimiento/:clienteId", authMiddleware, async (req, res) => {
 });
 
 // Enviar notificacion interna al equipo
+// Endpoint: POST /interno
 router.post("/interno", authMiddleware, async (req, res) => {
   try {
     const { asunto, cuerpo, destinatarios } = req.body;

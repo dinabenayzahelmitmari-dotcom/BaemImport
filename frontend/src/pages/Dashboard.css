@@ -1,3 +1,8 @@
+/*
+ * Modulo del proyecto.
+ * Archivo: frontend\src\pages\Dashboard.css
+ */
+
 .dash-greeting {
   padding: 24px 0 20px;
   border-bottom: 1px solid var(--grey-200);

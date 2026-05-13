@@ -1,3 +1,8 @@
+<#
+ Modulo del proyecto.
+ Archivo: scripts\schedule_delete_exes.ps1
+#>
+
 param(
   [string]$Root = (Resolve-Path ".").Path,
   [string[]]$ExeNames = @("baemimport.exe", "baemimport-new.exe"),

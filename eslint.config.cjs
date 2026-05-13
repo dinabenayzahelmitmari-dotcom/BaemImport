@@ -1,5 +1,6 @@
-const js = require("@eslint/js");
+﻿const js = require("@eslint/js");
 
+// Exporta el modulo para su uso desde otros archivos.
 module.exports = [
   js.configs.recommended,
   {

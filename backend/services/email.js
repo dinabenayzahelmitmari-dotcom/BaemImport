@@ -1,3 +1,4 @@
+﻿
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
@@ -238,10 +239,8 @@ const emailService = {
   },
 };
 
-/**
  * Envío de email genérico (API usada por el resto del backend).
  * Mantenerlo aquí evita duplicar lógica en servicios paralelos.
- */
 async function sendEmail(to, subject, text, html, attachments = []) {
   if (String(process.env.DISABLE_EMAIL || "0") === "1") {
     // Useful for tests / CI: avoid sending real emails.

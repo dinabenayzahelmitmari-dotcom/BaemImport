@@ -18,6 +18,10 @@ flowchart LR
   BE --> FS[(uploads/)]
 ```
 
+## Diagrama E-R
+
+- Ver [ERD.md](./ERD.md) para el modelo relacional/logico de entidades.
+
 ## Componentes Backend
 
 - `backend/app.js`: construye el `express()` con middleware, rutas y static.
@@ -31,4 +35,3 @@ flowchart LR
 1. Login (`/api/auth/login`) devuelve JWT.
 2. El frontend guarda el token y lo envia como `Authorization: Bearer <token>`.
 3. `authMiddleware` valida el token y adjunta `req.user`.
-

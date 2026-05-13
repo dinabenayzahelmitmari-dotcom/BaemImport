@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@capacitor/android": "^8.3.3",
+    "@capacitor/cli": "^8.3.3",
+    "@capacitor/core": "^8.3.3",
+    "@capacitor/ios": "^8.3.3",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
@@ -17,7 +21,14 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false"
+    "test": "react-scripts test --watchAll=false",
+    "android:sync": "npx cap sync android",
+    "android:open": "npx cap open android",
+    "apk:debug": "npm run build && npx cap sync android && cd android && gradlew.bat assembleDebug",
+    "aab:release": "npm run build && npx cap sync android && cd android && gradlew.bat bundleRelease",
+    "ios:sync": "npx cap sync ios",
+    "ios:open": "npx cap open ios",
+    "ios:prepare": "npm run build && npx cap sync ios"
   },
   "proxy": "http://localhost:8080",
   "browserslist": {

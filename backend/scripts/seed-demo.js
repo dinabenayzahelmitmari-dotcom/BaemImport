@@ -1,10 +1,8 @@
-/**
- * Demo seed (idempotent-ish):
+﻿ * Demo seed (idempotent-ish):
  * - Upserts the requested vendor + client users (with password hashing via model hook).
  * - Links Client.usuario -> User for client access control and notifications.
  * - Creates sample vehicles, one order, tasks, one vehicle request, one message, one notification.
  * - Sends one email from the company mailbox (if MAIL_* env vars are configured).
- */
 
 require("dotenv").config({ path: require("path").join(__dirname, "..", ".env") });
 const mongoose = require("mongoose");

@@ -1,3 +1,4 @@
+﻿
 const express = require("express");
 const router = express.Router();
 const Vehicle = require("../models/Vehiculo");
@@ -5,6 +6,7 @@ const Order = require("../models/Pedido");
 const Client = require("../models/Cliente");
 const { authMiddleware } = require("../middleware/auth");
 
+// Endpoint: GET /dashboard
 router.get("/dashboard", authMiddleware, async (req, res) => {
   try {
     const [

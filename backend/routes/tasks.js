@@ -1,8 +1,10 @@
+﻿
 const express = require("express");
 const router = express.Router();
 const Task = require("../models/Tarea");
 const { authMiddleware } = require("../middleware/auth");
 
+// Endpoint: GET /
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const { estado, prioridad, asignadoA } = req.query;
@@ -23,6 +25,7 @@ router.get("/", authMiddleware, async (req, res) => {
   }
 });
 
+// Endpoint: GET /:id
 router.get("/:id", authMiddleware, async (req, res) => {
   try {
     const task = await Task.findById(req.params.id)
@@ -37,6 +40,7 @@ router.get("/:id", authMiddleware, async (req, res) => {
   }
 });
 
+// Endpoint: POST /
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const task = await Task.create({ ...req.body, creadoPor: req.user._id });
@@ -46,6 +50,7 @@ router.post("/", authMiddleware, async (req, res) => {
   }
 });
 
+// Endpoint: PUT /:id
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
     if (req.body.estado === "completada") {
@@ -58,6 +63,7 @@ router.put("/:id", authMiddleware, async (req, res) => {
   }
 });
 
+// Endpoint: DELETE /:id
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     await Task.findByIdAndDelete(req.params.id);

@@ -1,9 +1,11 @@
+﻿
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/Pedido");
 const Vehicle = require("../models/Vehiculo");
 const { authMiddleware } = require("../middleware/auth");
 
+// Endpoint: GET /
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const alertas = [];

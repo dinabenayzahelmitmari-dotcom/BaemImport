@@ -8,7 +8,7 @@
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
     "build:frontend": "cd frontend && npm run build",
     "start:prod": "node backend/server.js",
-    "build:exe": "npm run build:frontend && cd backend && npx pkg -t node18-win-x64 -o ..\\\\baemimport-new server.js",
+    "build:exe": "npm run build:frontend && npx pkg -t node18-win-x64 -o baemimport-new backend/server.js",
     "lint": "npx eslint backend eslint.config.cjs",
     "format": "npx prettier -w .",
     "test:backend": "cd backend && npm test",

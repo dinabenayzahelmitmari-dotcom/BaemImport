@@ -1,3 +1,4 @@
+﻿
 const PDFDocument = require("pdfkit");
 
 const EMPRESA = {
