@@ -31,6 +31,13 @@ node backend/server.js
 
 Abre `http://localhost:8080`.
 
+## Android (APK)
+
+- En emulador Android usa `http://10.0.2.2:8080`.
+- En movil real usa `http://IP-DE-TU-PC:8080` (misma red Wi-Fi).
+- El backend debe estar arrancado con `HOST=0.0.0.0` y `PORT=8080` en `backend/.env`.
+- Si no conecta desde movil real, revisa firewall de Windows y permite Node.js en red privada.
+
 ## Entregable saneado (sin credenciales)
 
 Para generar un ZIP de entrega que excluya `.env`, keystores y artefactos sensibles:

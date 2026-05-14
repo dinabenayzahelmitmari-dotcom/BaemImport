@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import ApiEndpointConfig from '../components/ApiEndpointConfig';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -25,7 +26,13 @@ export default function Register() {
         });
         await login(form.email, form.password);
         navigate('/');
-      } catch (err) { setError(err.response?.data?.error || 'Error al registrarse'); }
+      } catch (err) {
+        if (!err.response) {
+          setError('No se pudo conectar con el servidor. Revisa "Configurar servidor".');
+        } else {
+          setError(err.response?.data?.error || 'Error al registrarse');
+        }
+      }
       finally { setLoading(false); }
     };
   
@@ -86,6 +93,7 @@ export default function Register() {
             ¿Ya tienes cuenta?{' '}
             <Link to="/login" style={{ color:'var(--red)', fontWeight:700 }}>Iniciar sesión</Link>
           </p>
+          <ApiEndpointConfig />
         </div>
       </div>
     </div>

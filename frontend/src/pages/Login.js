@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ApiEndpointConfig from '../components/ApiEndpointConfig';
 
 export default function Login() {
   const { login } = useAuth();
@@ -13,7 +14,13 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault(); setLoading(true); setError('');
     try { await login(form.email, form.password); navigate('/'); }
-    catch (err) { setError(err.response?.data?.error || 'Credenciales incorrectas'); }
+    catch (err) {
+      if (!err.response) {
+        setError('No se pudo conectar con el servidor. Revisa "Configurar servidor".');
+      } else {
+        setError(err.response?.data?.error || 'Credenciales incorrectas');
+      }
+    }
     finally { setLoading(false); }
   };
 
@@ -55,6 +62,7 @@ export default function Login() {
             ¿No tienes cuenta?{' '}
             <Link to="/register" style={{ color:'var(--red)', fontWeight:700 }}>Registrarse</Link>
           </p>
+          <ApiEndpointConfig />
         </div>
       </div>
     </div>
