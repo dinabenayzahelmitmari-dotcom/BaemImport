@@ -30,7 +30,17 @@ router.get("/", authMiddleware, async (req, res) => {
     }
     const scope = await getAccessibleVehicleScope(req.user);
     const vehicles = await Vehicle.find(mergeScopes(filtro, scope)).sort({ createdAt: -1 });
-    res.json(vehicles);
+    // Garantiza coherencia de margen en respuesta (precio - precioCompra),
+    // incluso si el documento fue actualizado via findOneAndUpdate en el pasado.
+    const out = vehicles.map((v) => {
+      const obj = v.toObject({ virtuals: false });
+      const precio = Number(obj.precio);
+      const compra = Number(obj.precioCompra);
+      if (Number.isFinite(precio) && Number.isFinite(compra)) obj.margen = precio - compra;
+      else obj.margen = undefined;
+      return obj;
+    });
+    res.json(out);
   } catch { res.status(500).json({ error: "Error al obtener vehículos" }); }
 });
 router.get("/:id", authMiddleware, async (req, res) => {
@@ -38,7 +48,12 @@ router.get("/:id", authMiddleware, async (req, res) => {
     const scope = await getAccessibleVehicleScope(req.user);
     const vehicle = await Vehicle.findOne(mergeScopes({ _id: req.params.id }, scope));
     if (!vehicle) return res.status(404).json({ error: "Vehículo no encontrado" });
-    res.json(vehicle);
+    const obj = vehicle.toObject({ virtuals: false });
+    const precio = Number(obj.precio);
+    const compra = Number(obj.precioCompra);
+    if (Number.isFinite(precio) && Number.isFinite(compra)) obj.margen = precio - compra;
+    else obj.margen = undefined;
+    res.json(obj);
   } catch { res.status(500).json({ error: "Error al obtener vehículo" }); }
 });
 router.get("/:id/pdf", authMiddleware, async (req, res) => {
