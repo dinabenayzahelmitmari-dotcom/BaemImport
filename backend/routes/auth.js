@@ -21,26 +21,30 @@ router.post("/login", async (req, res) => {
 });
 router.post("/register", async (req, res) => {
   try {
-    const { nombre, email, password } = req.body;
+    const { nombre, email, password, rol } = req.body;
     if (!nombre || !email || !password) return res.status(400).json({ error: "Todos los campos son obligatorios" });
     const exists = await User.findOne({ email: email.toLowerCase() });
     if (exists) return res.status(409).json({ error: "Ya existe un usuario con ese email" });
-    // Registro publico: siempre cliente.
-    const user = await User.create({ nombre, email: email.toLowerCase(), password, rol: "cliente" });
 
-    // Garantiza ficha de cliente vinculada al usuario registrado.
-    const existingClient = await Client.findOne({ email: email.toLowerCase() });
-    if (existingClient) {
-      if (!existingClient.usuario) {
-        existingClient.usuario = user._id;
-        await existingClient.save();
+    // Registro publico: solo cliente o vendedor (nunca admin).
+    const publicRole = rol === "vendedor" ? "vendedor" : "cliente";
+    const user = await User.create({ nombre, email: email.toLowerCase(), password, rol: publicRole });
+
+    // Solo clientes tienen ficha de cliente vinculada.
+    if (publicRole === "cliente") {
+      const existingClient = await Client.findOne({ email: email.toLowerCase() });
+      if (existingClient) {
+        if (!existingClient.usuario) {
+          existingClient.usuario = user._id;
+          await existingClient.save();
+        }
+      } else {
+        await Client.create({
+          usuario: user._id,
+          nombre,
+          email: email.toLowerCase(),
+        });
       }
-    } else {
-      await Client.create({
-        usuario: user._id,
-        nombre,
-        email: email.toLowerCase(),
-      });
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
