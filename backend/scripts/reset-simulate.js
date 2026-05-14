@@ -3,7 +3,6 @@ require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 const mongoose = require("mongoose");
 const { spawn } = require("child_process");
 
-const User = require("../models/Usuario");
 const Client = require("../models/Cliente");
 
 function normalizeRole(role) {
