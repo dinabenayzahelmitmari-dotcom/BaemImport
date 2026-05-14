@@ -67,8 +67,9 @@ Abrir:
 
 ## Scripts utiles
 
-- `npm start`: arranca backend (sirve frontend build en `:8080`)
+- `npm start`: modo produccion local (si falta, construye `frontend/build` y arranca backend en `:8080`)
 - `npm run build:frontend`: genera build de frontend
+- `npm run start:backend`: arranca solo backend (si ya existe `frontend/build`)
 - `npm run lint`: lint backend
 - `npm run test:backend`: tests backend
 - `npm run test:frontend`: tests frontend

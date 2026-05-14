@@ -4,10 +4,11 @@
   "description": "BAEMIMPORT - Importación de Vehículos Alemania-España",
   "main": "backend/server.js",
   "scripts": {
-    "start": "node backend/server.js",
+    "start": "node scripts/start-prod.js",
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
     "build:frontend": "cd frontend && npm run build",
-    "start:prod": "node backend/server.js",
+    "start:prod": "node scripts/start-prod.js",
+    "start:backend": "node backend/server.js",
     "build:exe": "npm run build:frontend && npx pkg -t node18-win-x64 -o baemimport-new backend/server.js",
     "lint": "npx eslint backend eslint.config.cjs",
     "format": "npx prettier -w .",
