@@ -33,4 +33,38 @@ vehicleSchema.pre("save", function (next) {
   next();
 });
 
+// Mantener `margen` coherente tambien en updates por query (findOneAndUpdate, etc).
+// Nota: los middlewares `pre("save")` no se ejecutan en `findOneAndUpdate`.
+vehicleSchema.pre(["findOneAndUpdate", "updateOne"], async function (next) {
+  try {
+    const update = this.getUpdate() || {};
+    const $set = update.$set || update;
+    const touchesPrecio = Object.prototype.hasOwnProperty.call($set, "precio");
+    const touchesCompra = Object.prototype.hasOwnProperty.call($set, "precioCompra");
+    if (!touchesPrecio && !touchesCompra) return next();
+
+    // Necesitamos ambos valores para recalcular el margen.
+    // Si en el update viene solo uno, obtenemos el otro del documento actual.
+    const current = await this.model.findOne(this.getQuery()).select("precio precioCompra").lean();
+    const precio = touchesPrecio ? Number($set.precio) : Number(current?.precio);
+    const precioCompra = touchesCompra ? Number($set.precioCompra) : Number(current?.precioCompra);
+
+    if (Number.isFinite(precio) && Number.isFinite(precioCompra)) {
+      const margen = precio - precioCompra;
+      if (update.$set) update.$set.margen = margen;
+      else update.margen = margen;
+      this.setUpdate(update);
+      return next();
+    }
+
+    // Si falta algun valor, eliminamos el margen para no dejar uno obsoleto.
+    if (!update.$unset) update.$unset = {};
+    update.$unset.margen = 1;
+    this.setUpdate(update);
+    next();
+  } catch (e) {
+    next(e);
+  }
+});
+
 module.exports = mongoose.model("Vehicle", vehicleSchema);

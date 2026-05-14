@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const Task = require("../models/Tarea");
+const Notification = require("../models/Notificacion");
 const { authMiddleware } = require("../middleware/auth");
 const {
   isAdmin,
@@ -75,6 +76,18 @@ router.post("/", authMiddleware, async (req, res) => {
     const payload = { ...req.body, creadoPor: req.user._id };
     if (isSeller(req.user) && !payload.asignadoA) payload.asignadoA = req.user._id;
     const task = await Task.create(payload);
+
+    // Notificacion al asignado (no bloqueante)
+    if (task?.asignadoA) {
+      Notification.create({
+        destinatario: task.asignadoA,
+        titulo: "Nueva tarea asignada",
+        mensaje: task.titulo || "Tienes una nueva tarea asignada.",
+        tipo: "info",
+        enlace: "/tasks",
+      }).catch(console.error);
+    }
+
     res.status(201).json(task);
   } catch (err) {
     res.status(400).json({ error: err.message });

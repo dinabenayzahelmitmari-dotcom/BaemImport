@@ -61,6 +61,36 @@ router.post("/", authMiddleware, async (req, res) => {
     const order = await Order.create(data);
     const populated = await Order.findById(order._id).populate("cliente").populate("vehiculo");
 
+    // Notificaciones APP (campana):
+    // - al creador (interno) y
+    // - al cliente (si tiene usuario asociado)
+    (async () => {
+      try {
+        // Creador
+        await Notification.create({
+          destinatario: req.user._id,
+          titulo: "Pedido creado",
+          mensaje: `Se ha creado el pedido para ${populated.cliente?.nombre || "cliente"}.`,
+          tipo: "success",
+          enlace: `/orders/${order._id}`,
+        }).catch(console.error);
+
+        // Cliente (solo si existe user asociado)
+        const clientDoc = await Client.findById(data.cliente).select("usuario").lean();
+        if (clientDoc?.usuario) {
+          await Notification.create({
+            destinatario: clientDoc.usuario,
+            titulo: "Tu pedido esta en marcha",
+            mensaje: `Hemos creado tu pedido de importacion. Puedes revisar el estado en la app.`,
+            tipo: "info",
+            enlace: `/orders/${order._id}`,
+          }).catch(console.error);
+        }
+      } catch (e) {
+        console.error("Error creando notificaciones de pedido:", e.message);
+      }
+    })();
+
     // Automatizacion: Registrar el pago inicial si existe senial
     if (parseFloat(data.senial) > 0) {
       const Payment = require("../models/Pago");
@@ -139,7 +169,8 @@ router.put("/:id", authMiddleware, async (req, res) => {
           titulo: "Actualizacion de importacion",
           mensaje: `Tu vehiculo ha pasado a la fase: ${nuevaFase}`,
           tipo: "info",
-          leido: false,
+          leida: false,
+          enlace: `/orders/${current._id}`,
         }).catch(console.error);
       }
 

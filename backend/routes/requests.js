@@ -2,6 +2,8 @@
 const express = require("express");
 const router = express.Router();
 const VehicleRequest = require("../models/SolicitudVehiculo");
+const Notification = require("../models/Notificacion");
+const User = require("../models/Usuario");
 const { authMiddleware } = require("../middleware/auth");
 const { sendEmail } = require("../services/email");
 
@@ -11,6 +13,33 @@ router.post("/", authMiddleware, async (req, res) => {
   try {
     const request = new VehicleRequest({ ...req.body, cliente: req.user._id });
     await request.save();
+
+    // Notificacion interna (campana) para admins/vendedores
+    // (no bloquea la respuesta al cliente)
+    (async () => {
+      try {
+        const internos = await User.find({ rol: { $in: ["admin", "vendedor"] }, activo: true })
+          .select("_id")
+          .lean();
+        if (!internos.length) return;
+        const titulo = "Nueva solicitud de vehiculo";
+        const mensaje = `${req.user.nombre || "Cliente"} solicito: ${req.body.marca || ""} ${req.body.modelo || ""}`.trim();
+        // Crear una por una para que se ejecuten los hooks del modelo (email).
+        await Promise.all(
+          internos.map((u) =>
+            Notification.create({
+              destinatario: u._id,
+              titulo,
+              mensaje,
+              tipo: "info",
+              enlace: "/inbox",
+            }).catch(() => null)
+          )
+        );
+      } catch (e) {
+        console.error("Error creando notificacion interna:", e.message);
+      }
+    })();
 
     // Notificar a la empresa (sin bloquear el resto del proceso)
     sendEmail(
