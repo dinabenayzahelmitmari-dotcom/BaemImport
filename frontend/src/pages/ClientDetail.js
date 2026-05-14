@@ -2,11 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 import './DetailPage.css';
 
 export default function ClientDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [client, setClient] = useState(null);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -91,6 +93,12 @@ export default function ClientDetail() {
               <p style={{ fontSize:14, color:'var(--navy)', marginTop:2 }}>{v}</p>
             </div>
           ))}
+          {user?.rol === 'admin' && (
+            <div>
+              <p style={{ fontSize:11, color:'var(--grey-500)', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.5px' }}>Empleado asignado</p>
+              <p style={{ fontSize:14, color:'var(--navy)', marginTop:2 }}>{client.vendedorAsignado?.nombre || 'Sin asignar'}</p>
+            </div>
+          )}
         </div>
         <div style={{ display:'flex', gap:8, marginTop:16, flexWrap:'wrap' }}>
           {client.email && (

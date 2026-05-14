@@ -3,7 +3,9 @@ const express = require("express");
 const router = express.Router();
 const Message = require("../models/Mensaje");
 const User = require("../models/Usuario");
+const Client = require("../models/Cliente");
 const { authMiddleware } = require("../middleware/auth");
+const { isSeller } = require("../utils/accessScope");
 
 // Enviar mensaje
 router.post("/", authMiddleware, async (req, res) => {
@@ -37,12 +39,19 @@ router.get("/contacts/list", authMiddleware, async (req, res) => {
   try {
     const userRole = req.user.rol;
     let contacts;
-    if (userRole === 'cliente') {
-      // Los clientes hablan con vendedores/admins/empleados
-      contacts = await User.find({ rol: { $in: ['vendedor', 'admin', 'empleado'] } }, "nombre rol");
+    if (userRole === "cliente") {
+      // Los clientes hablan con vendedores/admins.
+      contacts = await User.find({ rol: { $in: ["vendedor", "admin"] } }, "nombre rol");
+    } else if (isSeller(req.user)) {
+      // El vendedor solo ve usuarios cliente vinculados a sus clientes asignados.
+      const clients = await Client.find({
+        vendedorAsignado: req.user._id,
+        usuario: { $exists: true, $ne: null },
+      }).select("usuario");
+      const userIds = clients.map((c) => c.usuario);
+      contacts = await User.find({ _id: { $in: userIds }, rol: "cliente" }, "nombre email");
     } else {
-      // Los vendedores ven a los clientes con los que hay mensajes o todos los clientes
-      contacts = await User.find({ rol: 'cliente' }, "nombre email");
+      contacts = await User.find({ rol: "cliente" }, "nombre email");
     }
     res.json(contacts);
   } catch (err) { res.status(500).json({ error: err.message }); }

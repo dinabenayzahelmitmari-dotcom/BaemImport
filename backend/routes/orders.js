@@ -7,19 +7,22 @@ const Client = require("../models/Cliente");
 const { authMiddleware } = require("../middleware/auth");
 const emailService = require("../services/email");
 const { sendEmail } = require("../services/email");
+const {
+  isAdmin,
+  applyClientScopeToFilter,
+  canAccessClient,
+} = require("../utils/accessScope");
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const { estado, cliente } = req.query;
     const filtro = {};
     if (estado) filtro.estado = estado;
 
-    // Si es cliente: solo ve sus pedidos a traves del vinculo Client.usuario -> User
-    if (req.user.rol === "cliente") {
-      const clientObj = await Client.findOne({ usuario: req.user._id }).select("_id");
-      if (!clientObj) return res.json([]);
-      filtro.cliente = clientObj._id;
-    } else if (cliente) {
+    // Admin puede filtrar por cliente concreto.
+    if (isAdmin(req.user) && cliente) {
       filtro.cliente = cliente;
+    } else {
+      await applyClientScopeToFilter(req.user, filtro, "cliente");
     }
 
     const orders = await Order.find(filtro)
@@ -39,12 +42,8 @@ router.get("/:id", authMiddleware, async (req, res) => {
       .populate("creadoPor", "nombre");
     if (!order) return res.status(404).json({ error: "Pedido no encontrado" });
 
-    // Si es cliente, validar ownership
-    if (req.user.rol === "cliente") {
-      const clientObj = await Client.findOne({ usuario: req.user._id }).select("_id");
-      if (!clientObj || String(order.cliente?._id) !== String(clientObj._id)) {
-        return res.status(403).json({ error: "Acceso denegado" });
-      }
+    if (!(await canAccessClient(req.user, order.cliente?._id))) {
+      return res.status(403).json({ error: "Acceso denegado" });
     }
 
     res.json(order);
@@ -55,6 +54,9 @@ router.get("/:id", authMiddleware, async (req, res) => {
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const data = { ...req.body, creadoPor: req.user._id };
+    if (!(await canAccessClient(req.user, data.cliente))) {
+      return res.status(403).json({ error: "No puedes crear pedidos para este cliente" });
+    }
     data.restante = (parseFloat(data.precioFinal) || 0) - (parseFloat(data.senial) || 0);
     const order = await Order.create(data);
     const populated = await Order.findById(order._id).populate("cliente").populate("vehiculo");
@@ -103,12 +105,12 @@ router.put("/:id", authMiddleware, async (req, res) => {
     const current = await Order.findById(req.params.id).populate("cliente").populate("vehiculo");
     if (!current) return res.status(404).json({ error: "Pedido no encontrado" });
 
-    // Si es cliente, validar ownership
-    if (req.user.rol === "cliente") {
-      const clientObj = await Client.findOne({ usuario: req.user._id }).select("_id");
-      if (!clientObj || String(current.cliente?._id) !== String(clientObj._id)) {
-        return res.status(403).json({ error: "Acceso denegado" });
-      }
+    if (!(await canAccessClient(req.user, current.cliente?._id))) {
+      return res.status(403).json({ error: "Acceso denegado" });
+    }
+
+    if (req.body.cliente && !(await canAccessClient(req.user, req.body.cliente))) {
+      return res.status(403).json({ error: "No puedes reasignar el pedido a ese cliente" });
     }
 
     if (req.body.precioFinal !== undefined || req.body.senial !== undefined) {
@@ -164,6 +166,11 @@ router.put("/:id", authMiddleware, async (req, res) => {
 });
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
+    const order = await Order.findById(req.params.id).select("cliente");
+    if (!order) return res.status(404).json({ error: "Pedido no encontrado" });
+    if (!(await canAccessClient(req.user, order.cliente))) {
+      return res.status(403).json({ error: "Acceso denegado" });
+    }
     await Order.findByIdAndDelete(req.params.id);
     res.json({ mensaje: "Pedido eliminado" });
   } catch {

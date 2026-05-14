@@ -5,6 +5,11 @@ const Quote = require("../models/Presupuesto");
 const { authMiddleware } = require("../middleware/auth");
 const emailService = require("../services/email");
 const pdfService = require("../services/pdf");
+const {
+  isAdmin,
+  applyClientScopeToFilter,
+  canAccessClient,
+} = require("../utils/accessScope");
 
 // Listar presupuestos
 router.get("/", authMiddleware, async (req, res) => {
@@ -12,7 +17,11 @@ router.get("/", authMiddleware, async (req, res) => {
     const { estado, cliente } = req.query;
     const filtro = {};
     if (estado) filtro.estado = estado;
-    if (cliente) filtro.cliente = cliente;
+    if (isAdmin(req.user) && cliente) {
+      filtro.cliente = cliente;
+    } else {
+      await applyClientScopeToFilter(req.user, filtro, "cliente");
+    }
     const quotes = await Quote.find(filtro)
       .populate("cliente", "nombre apellidos email telefono")
       .populate("vehiculo", "marca modelo anio precio")
@@ -32,6 +41,9 @@ router.get("/:id", authMiddleware, async (req, res) => {
       .populate("vehiculo")
       .populate("creadoPor", "nombre");
     if (!quote) return res.status(404).json({ error: "Presupuesto no encontrado" });
+    if (!(await canAccessClient(req.user, quote.cliente?._id))) {
+      return res.status(403).json({ error: "Acceso denegado" });
+    }
     res.json(quote);
   } catch {
     res.status(500).json({ error: "Error al obtener presupuesto" });
@@ -41,6 +53,9 @@ router.get("/:id", authMiddleware, async (req, res) => {
 // Crear presupuesto
 router.post("/", authMiddleware, async (req, res) => {
   try {
+    if (!(await canAccessClient(req.user, req.body.cliente))) {
+      return res.status(403).json({ error: "No puedes crear presupuestos para este cliente" });
+    }
     const quote = await Quote.create({ ...req.body, creadoPor: req.user._id });
     res.status(201).json(quote);
   } catch (err) {
@@ -51,6 +66,14 @@ router.post("/", authMiddleware, async (req, res) => {
 // Actualizar presupuesto
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
+    const current = await Quote.findById(req.params.id).select("cliente");
+    if (!current) return res.status(404).json({ error: "Presupuesto no encontrado" });
+    if (!(await canAccessClient(req.user, current.cliente))) {
+      return res.status(403).json({ error: "Acceso denegado" });
+    }
+    if (req.body.cliente && !(await canAccessClient(req.user, req.body.cliente))) {
+      return res.status(403).json({ error: "No puedes reasignar a ese cliente" });
+    }
     const quote = await Quote.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(quote);
   } catch (err) {
@@ -61,6 +84,11 @@ router.put("/:id", authMiddleware, async (req, res) => {
 // Eliminar presupuesto
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
+    const current = await Quote.findById(req.params.id).select("cliente");
+    if (!current) return res.status(404).json({ error: "Presupuesto no encontrado" });
+    if (!(await canAccessClient(req.user, current.cliente))) {
+      return res.status(403).json({ error: "Acceso denegado" });
+    }
     await Quote.findByIdAndDelete(req.params.id);
     res.json({ mensaje: "Presupuesto eliminado" });
   } catch {
@@ -75,6 +103,9 @@ router.get("/:id/pdf", authMiddleware, async (req, res) => {
       .populate("cliente")
       .populate("vehiculo");
     if (!quote) return res.status(404).json({ error: "Presupuesto no encontrado" });
+    if (!(await canAccessClient(req.user, quote.cliente?._id))) {
+      return res.status(403).json({ error: "Acceso denegado" });
+    }
 
     const vehiculoDesc = quote.vehiculo
       ? `${quote.vehiculo.marca} ${quote.vehiculo.modelo} ${quote.vehiculo.anio}`
@@ -97,6 +128,9 @@ router.post("/:id/enviar", authMiddleware, async (req, res) => {
       .populate("cliente")
       .populate("vehiculo");
     if (!quote) return res.status(404).json({ error: "Presupuesto no encontrado" });
+    if (!(await canAccessClient(req.user, quote.cliente?._id))) {
+      return res.status(403).json({ error: "Acceso denegado" });
+    }
     if (!quote.cliente?.email) return res.status(400).json({ error: "El cliente no tiene email registrado" });
 
     const vehiculoDesc = quote.vehiculo

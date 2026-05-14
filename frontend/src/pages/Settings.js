@@ -7,13 +7,13 @@ export default function Settings() {
   const { user } = useAuth();
   const [users, setUsers]     = useState([]);
   const [loading, setLoading] = useState(true);
-  const [form, setForm]       = useState({ nombre:'', email:'', password:'', rol:'empleado' });
+  const [form, setForm]       = useState({ nombre:'', email:'', password:'', rol:'vendedor' });
   const [saving, setSaving]   = useState(false);
   const [msg, setMsg]         = useState({ text:'', ok:false });
 
   const load = () => {
     axios.get('/api/auth/users')
-      .then(r => setUsers(r.data))
+      .then(r => setUsers((r.data || []).filter(u => u.rol === 'admin' || u.rol === 'vendedor')))
       .catch(() => {})
       .finally(() => setLoading(false));
   };
@@ -26,8 +26,8 @@ export default function Settings() {
     e.preventDefault();
     setSaving(true);
     try {
-      await axios.post('/api/auth/register', form);
-      setForm({ nombre:'', email:'', password:'', rol:'empleado' });
+      await axios.post('/api/auth/users', form);
+      setForm({ nombre:'', email:'', password:'', rol:'vendedor' });
       load();
       showMsg('Usuario creado correctamente', true);
     } catch (err) { showMsg(err.response?.data?.error || 'Error al crear usuario', false); }
@@ -35,7 +35,7 @@ export default function Settings() {
   };
 
   const toggleRole = async (u) => {
-    const newRol = u.rol === 'admin' ? 'empleado' : 'admin';
+    const newRol = u.rol === 'admin' ? 'vendedor' : 'admin';
     await axios.put(`/api/auth/users/${u._id}`, { rol: newRol });
     load();
   };
@@ -80,7 +80,7 @@ export default function Settings() {
             <div className="form-group">
               <label className="form-label">Rol</label>
               <select className="form-input form-select" value={form.rol} onChange={e => setForm(f => ({ ...f, rol: e.target.value }))}>
-                <option value="empleado">Empleado</option>
+                <option value="vendedor">Empleado</option>
                 <option value="admin">Administrador</option>
               </select>
             </div>

@@ -8,7 +8,7 @@ import ApiEndpointConfig from '../components/ApiEndpointConfig';
 export default function Register() {
   const navigate = useNavigate();
   const { login } = useAuth();
-    const [form, setForm] = useState({ nombre:'', email:'', password:'', confirmar:'', rol:'cliente' });
+    const [form, setForm] = useState({ nombre:'', email:'', password:'', confirmar:'' });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
   
@@ -21,8 +21,7 @@ export default function Register() {
         await axios.post('/api/auth/register', { 
           nombre: form.nombre, 
           email: form.email, 
-          password: form.password,
-          rol: form.rol 
+          password: form.password
         });
         await login(form.email, form.password);
         navigate('/');
@@ -54,17 +53,6 @@ export default function Register() {
             {error && <div style={{ background:'#fff0f2', border:'1px solid #ffd0d7', color:'var(--red-dark)', padding:'10px 14px', borderRadius:8, fontSize:13, marginBottom:16 }}>{error}</div>}
   
             <form onSubmit={handleSubmit} style={{ display:'flex', flexDirection:'column', gap:14 }}>
-              <div style={{ display:'flex', gap:8, marginBottom:8 }}>
-                <button type="button" 
-                  onClick={() => setForm(f => ({ ...f, rol:'cliente' }))}
-                  className={`btn btn-full ${form.rol === 'cliente' ? 'btn-navy' : 'btn-outline'}`}
-                  style={{ fontSize:11, padding:'8px 0' }}>Soy Cliente</button>
-                <button type="button" 
-                  onClick={() => setForm(f => ({ ...f, rol:'vendedor' }))}
-                  className={`btn btn-full ${form.rol === 'vendedor' ? 'btn-navy' : 'btn-outline'}`}
-                  style={{ fontSize:11, padding:'8px 0' }}>Soy Vendedor</button>
-              </div>
-              
               <div className="form-group">
                 <label className="form-label">Nombre completo</label>
                 <input className="form-input" required autoFocus value={form.nombre}

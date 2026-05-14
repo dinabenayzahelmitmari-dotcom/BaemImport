@@ -2,33 +2,51 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 export default function ClientForm() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const editing = !!id;
-  const [form, setForm] = useState({ nombre:'', apellidos:'', email:'', telefono:'', dni:'', direccion:'', ciudad:'', notas:'' });
+  const [form, setForm] = useState({ nombre:'', apellidos:'', email:'', telefono:'', dni:'', direccion:'', ciudad:'', notas:'', vendedorAsignado:'' });
+  const [sellers, setSellers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState('');
   const [sendWelcome, setSendWelcome] = useState(true);
 
   useEffect(() => {
+    if (user?.rol === 'admin') {
+      axios.get('/api/auth/users/sellers').then(r => setSellers(r.data || [])).catch(() => {});
+    }
     if (editing) {
       axios.get(`/api/clients/${id}`).then(r => {
-        const { nombre, apellidos, email, telefono, dni, direccion, ciudad, notas } = r.data;
-        setForm({ nombre, apellidos: apellidos||'', email: email||'', telefono: telefono||'', dni: dni||'', direccion: direccion||'', ciudad: ciudad||'', notas: notas||'' });
+        const { nombre, apellidos, email, telefono, dni, direccion, ciudad, notas, vendedorAsignado } = r.data;
+        setForm({
+          nombre,
+          apellidos: apellidos||'',
+          email: email||'',
+          telefono: telefono||'',
+          dni: dni||'',
+          direccion: direccion||'',
+          ciudad: ciudad||'',
+          notas: notas||'',
+          vendedorAsignado: vendedorAsignado?._id || vendedorAsignado || '',
+        });
       });
     }
-  }, [id]);
+  }, [id, editing, user?.rol]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); setError('');
     try {
+      const payload = { ...form };
+      if (!payload.vendedorAsignado) delete payload.vendedorAsignado;
       if (editing) {
-        await axios.put(`/api/clients/${id}`, form);
+        await axios.put(`/api/clients/${id}`, payload);
       } else {
-        const res = await axios.post('/api/clients', form);
+        const res = await axios.post('/api/clients', payload);
         if (sendWelcome && form.email) {
           try { await axios.post(`/api/email/bienvenida/${res.data._id}`); } catch {}
         }
@@ -97,6 +115,19 @@ export default function ClientForm() {
             <label className="form-label">Notas internas</label>
             <textarea className="form-input" {...f('notas')} placeholder="Preferencias, historial, observaciones..." rows={3} />
           </div>
+          {user?.rol === 'admin' && (
+            <div className="form-group">
+              <label className="form-label">Empleado asignado</label>
+              <select className="form-input form-select" {...f('vendedorAsignado')}>
+                <option value="">Sin asignar</option>
+                {sellers.map((seller) => (
+                  <option key={seller._id} value={seller._id}>
+                    {seller.nombre} ({seller.email})
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           {!editing && (
             <label style={{ display:'flex', alignItems:'center', gap:8, cursor:'pointer' }}>
               <input type="checkbox" checked={sendWelcome} onChange={e => setSendWelcome(e.target.checked)} />

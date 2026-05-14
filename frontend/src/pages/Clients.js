@@ -2,9 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 export default function Clients() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch]   = useState('');
@@ -47,6 +49,11 @@ export default function Clients() {
                 <div style={{ flex:1, minWidth:0 }}>
                   <p style={{ fontFamily:'var(--font-display)', fontSize:15, fontWeight:700, color:'var(--navy)' }}>{c.nombre} {c.apellidos || ''}</p>
                   <p style={{ fontSize:13, color:'var(--grey-500)', marginTop:2 }}>{[c.telefono, c.email].filter(Boolean).join(' · ')}</p>
+                  {user?.rol === 'admin' && (
+                    <p style={{ fontSize:12, color:'var(--grey-500)', marginTop:2 }}>
+                      Empleado: {c.vendedorAsignado?.nombre || 'Sin asignar'}
+                    </p>
+                  )}
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
               </div>

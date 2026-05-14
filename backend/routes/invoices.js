@@ -5,6 +5,11 @@ const Invoice = require("../models/Factura");
 const { authMiddleware } = require("../middleware/auth");
 const emailService = require("../services/email");
 const pdfService = require("../services/pdf");
+const {
+  isAdmin,
+  applyClientScopeToFilter,
+  canAccessClient,
+} = require("../utils/accessScope");
 
 // Listar facturas
 router.get("/", authMiddleware, async (req, res) => {
@@ -12,7 +17,11 @@ router.get("/", authMiddleware, async (req, res) => {
     const { estado, cliente } = req.query;
     const filtro = {};
     if (estado) filtro.estado = estado;
-    if (cliente) filtro.cliente = cliente;
+    if (isAdmin(req.user) && cliente) {
+      filtro.cliente = cliente;
+    } else {
+      await applyClientScopeToFilter(req.user, filtro, "cliente");
+    }
     const invoices = await Invoice.find(filtro)
       .populate("cliente", "nombre apellidos email telefono")
       .populate("vehiculo", "marca modelo anio")
@@ -34,6 +43,9 @@ router.get("/:id", authMiddleware, async (req, res) => {
       .populate("pedido")
       .populate("creadoPor", "nombre");
     if (!invoice) return res.status(404).json({ error: "Factura no encontrada" });
+    if (!(await canAccessClient(req.user, invoice.cliente?._id))) {
+      return res.status(403).json({ error: "Acceso denegado" });
+    }
     res.json(invoice);
   } catch {
     res.status(500).json({ error: "Error al obtener factura" });
@@ -43,6 +55,9 @@ router.get("/:id", authMiddleware, async (req, res) => {
 // Crear factura
 router.post("/", authMiddleware, async (req, res) => {
   try {
+    if (!(await canAccessClient(req.user, req.body.cliente))) {
+      return res.status(403).json({ error: "No puedes crear facturas para este cliente" });
+    }
     // Calcular totales automáticamente
     const conceptos = req.body.conceptos || [];
     let subtotal = 0;
@@ -70,6 +85,15 @@ router.post("/", authMiddleware, async (req, res) => {
 // Actualizar factura
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
+    const current = await Invoice.findById(req.params.id).select("cliente");
+    if (!current) return res.status(404).json({ error: "Factura no encontrada" });
+    if (!(await canAccessClient(req.user, current.cliente))) {
+      return res.status(403).json({ error: "Acceso denegado" });
+    }
+    if (req.body.cliente && !(await canAccessClient(req.user, req.body.cliente))) {
+      return res.status(403).json({ error: "No puedes reasignar a ese cliente" });
+    }
+
     if (req.body.conceptos) {
       const conceptos = req.body.conceptos;
       let subtotal = 0, totalIva = 0;
@@ -92,6 +116,11 @@ router.put("/:id", authMiddleware, async (req, res) => {
 // Eliminar factura
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
+    const current = await Invoice.findById(req.params.id).select("cliente");
+    if (!current) return res.status(404).json({ error: "Factura no encontrada" });
+    if (!(await canAccessClient(req.user, current.cliente))) {
+      return res.status(403).json({ error: "Acceso denegado" });
+    }
     await Invoice.findByIdAndDelete(req.params.id);
     res.json({ mensaje: "Factura eliminada" });
   } catch {
@@ -104,6 +133,9 @@ router.get("/:id/pdf", authMiddleware, async (req, res) => {
   try {
     const invoice = await Invoice.findById(req.params.id).populate("cliente");
     if (!invoice) return res.status(404).json({ error: "Factura no encontrada" });
+    if (!(await canAccessClient(req.user, invoice.cliente?._id))) {
+      return res.status(403).json({ error: "Acceso denegado" });
+    }
 
     const pdfBuffer = await pdfService.generarFactura(invoice, invoice.cliente);
 
@@ -120,6 +152,9 @@ router.post("/:id/enviar", authMiddleware, async (req, res) => {
   try {
     const invoice = await Invoice.findById(req.params.id).populate("cliente");
     if (!invoice) return res.status(404).json({ error: "Factura no encontrada" });
+    if (!(await canAccessClient(req.user, invoice.cliente?._id))) {
+      return res.status(403).json({ error: "Acceso denegado" });
+    }
     if (!invoice.cliente?.email) return res.status(400).json({ error: "El cliente no tiene email registrado" });
 
     await emailService.facturaEmitida(invoice, invoice.cliente);

@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const clientSchema = new mongoose.Schema(
   {
     usuario: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    vendedorAsignado: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     nombre: { type: String, required: true, trim: true },
     apellidos: { type: String, trim: true },
     email: { type: String, trim: true, lowercase: true },

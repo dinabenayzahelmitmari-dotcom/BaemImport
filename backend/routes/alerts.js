@@ -4,6 +4,11 @@ const router = express.Router();
 const Order = require("../models/Pedido");
 const Vehicle = require("../models/Vehiculo");
 const { authMiddleware } = require("../middleware/auth");
+const {
+  getAccessibleClientIds,
+  toObjectId,
+  getAccessibleVehicleScope,
+} = require("../utils/accessScope");
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const alertas = [];
@@ -11,9 +16,14 @@ router.get("/", authMiddleware, async (req, res) => {
     const en3Dias = new Date(ahora.getTime() + 3 * 24 * 60 * 60 * 1000);
     const hace15Dias = new Date(ahora.getTime() - 15 * 24 * 60 * 60 * 1000);
     const hace30Dias = new Date(ahora.getTime() - 30 * 24 * 60 * 60 * 1000);
+    const clientIds = await getAccessibleClientIds(req.user);
+    const scopedClientIds = clientIds === null ? null : clientIds.map((id) => toObjectId(id)).filter(Boolean);
+    const orderScope = scopedClientIds === null ? {} : { cliente: { $in: scopedClientIds } };
+    const vehicleScope = await getAccessibleVehicleScope(req.user);
 
     // Pedidos con entrega inminente (<=3 días)
     const entregasInminentes = await Order.find({
+      ...orderScope,
       estado: { $in: ["confirmado", "en_gestion"] },
       fechaEntregaEstimada: { $lte: en3Dias, $gte: ahora },
     }).populate("cliente", "nombre apellidos").populate("vehiculo", "marca modelo");
@@ -31,6 +41,7 @@ router.get("/", authMiddleware, async (req, res) => {
 
     // Pedidos con entrega vencida
     const entregasVencidas = await Order.find({
+      ...orderScope,
       estado: { $in: ["confirmado", "en_gestion"] },
       fechaEntregaEstimada: { $lt: ahora },
     }).populate("cliente", "nombre apellidos").populate("vehiculo", "marca modelo");
@@ -47,6 +58,7 @@ router.get("/", authMiddleware, async (req, res) => {
 
     // Pedidos parados más de 15 días en presupuesto
     const presupuestosParados = await Order.find({
+      ...orderScope,
       estado: "presupuesto",
       updatedAt: { $lt: hace15Dias },
     }).populate("cliente", "nombre apellidos").populate("vehiculo", "marca modelo");
@@ -63,6 +75,7 @@ router.get("/", authMiddleware, async (req, res) => {
 
     // Vehículos disponibles sin movimiento > 30 días
     const vehiculosParados = await Vehicle.find({
+      ...vehicleScope,
       estado: "disponible",
       updatedAt: { $lt: hace30Dias },
     });
