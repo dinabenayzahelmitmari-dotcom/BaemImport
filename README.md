@@ -48,6 +48,13 @@ OPENAI_BASE_URL=https://api.openai.com/v1
 Notas:
 - Si no usas email/IA en la demo, puedes dejar esas claves sin valor.
 - Para uso en movil dentro de la misma red, el backend debe aceptar conexiones LAN.
+- Si quieres que TODO lo que registre el profesor/tribunal se guarde en la BBDD del autor, en `MONGO_URI` debe ponerse la cadena de MongoDB Atlas que facilite el autor (no `localhost` ni `127.0.0.1`).
+
+Ejemplo de `MONGO_URI` remota:
+
+```env
+MONGO_URI=mongodb+srv://usuario:password@cluster.mongodb.net/baemimport?retryWrites=true&w=majority
+```
 
 ### 3) Ejecutar app
 

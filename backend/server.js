@@ -71,6 +71,15 @@ const tryListen = (port, attempt = 0) => {
 
 async function connectMongoWithRetry() {
   const uri = process.env.MONGO_URI;
+  if (!uri || !String(uri).trim()) {
+    console.error("Error MongoDB: falta MONGO_URI en backend/.env");
+    process.exit(1);
+  }
+  if (/localhost|127\.0\.0\.1/.test(String(uri))) {
+    console.warn(
+      "[MongoDB] MONGO_URI apunta a local. Los datos se guardaran en la BBDD del equipo que ejecute el proyecto."
+    );
+  }
   // Reintenta indefinidamente: para un .exe es mejor esperar a que Mongo arranque
   // que terminar silenciosamente.
   while (true) {
