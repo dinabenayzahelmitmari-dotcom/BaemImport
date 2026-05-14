@@ -32,7 +32,7 @@ export default function VehicleForm() {
     if (!isEdit) return;
     axios.get(`/api/vehicles/${id}`)
       .then(res => setForm({ ...res.data, extras: res.data.extras?.join(', ') || '' }))
-      .catch(() => navigate('/vehiculos'))
+      .catch(() => navigate('/vehicles'))
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -46,7 +46,7 @@ export default function VehicleForm() {
       const payload = { ...form, extras: form.extras ? form.extras.split(',').map(s => s.trim()).filter(Boolean) : [] };
       if (isEdit) await axios.put(`/api/vehicles/${id}`, payload);
       else await axios.post('/api/vehicles', payload);
-      navigate(isEdit ? `/vehiculos/${id}` : '/vehiculos');
+      navigate(isEdit ? `/vehicles/${id}` : '/vehicles');
     } catch (err) {
       setError(err.response?.data?.error || 'Error al guardar');
       setSaving(false);
@@ -57,7 +57,7 @@ export default function VehicleForm() {
 
   return (
     <div className="page form-page">
-      <button className="back-btn" onClick={() => navigate(isEdit ? `/vehiculos/${id}` : '/vehiculos')}>
+      <button className="back-btn" onClick={() => navigate(isEdit ? `/vehicles/${id}` : '/vehicles')}>
         <BackIcon /> {isEdit ? 'Detalle' : 'Vehículos'}
       </button>
       <div className="page-header fade-in">
@@ -174,7 +174,7 @@ export default function VehicleForm() {
           <button type="submit" className="btn btn-primary btn-full btn-lg" disabled={saving}>
             {saving ? <span className="spinner" style={{ width: 20, height: 20, borderTopColor: 'white' }} /> : isEdit ? 'Guardar cambios' : 'Crear vehículo'}
           </button>
-          <button type="button" className="btn btn-outline btn-full" onClick={() => navigate(isEdit ? `/vehiculos/${id}` : '/vehiculos')}>
+          <button type="button" className="btn btn-outline btn-full" onClick={() => navigate(isEdit ? `/vehicles/${id}` : '/vehicles')}>
             Cancelar
           </button>
         </div>

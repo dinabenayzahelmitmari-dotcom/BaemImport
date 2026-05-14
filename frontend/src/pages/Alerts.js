@@ -57,8 +57,8 @@ export default function Alerts() {
                 className="alert-card card card-pressable"
                 style={{ borderLeft: `4px solid ${cfg.color}` }}
                 onClick={() => {
-                  if (a.pedidoId) navigate(`/pedidos/${a.pedidoId}`);
-                  else if (a.vehiculoId) navigate(`/vehiculos/${a.vehiculoId}`);
+                  if (a.pedidoId) navigate(`/orders/${a.pedidoId}`);
+                  else if (a.vehiculoId) navigate(`/vehicles/${a.vehiculoId}`);
                 }}
               >
                 <div className="alert-top">
