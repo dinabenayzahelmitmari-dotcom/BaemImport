@@ -1,114 +1,100 @@
-# BAEMIMPORT - Plataforma de Gestion de Importacion Automotriz
+# BAEMIMPORT
 
-BAEMIMPORT es una solucion integral diseñada para optimizar y automatizar el flujo operativo de empresas de importacion de vehiculos (principalmente entre Alemania y España). La plataforma cubre todo el ciclo de vida, desde la captacion del lead hasta la entrega a domicilio.
+Plataforma full-stack para gestion de importacion y venta de vehiculos.
+Incluye clientes, vehiculos, pedidos, presupuestos, facturas, tareas, mensajeria y panel por rol.
 
-## Caracteristicas Principales
+## Stack
 
-### 1. Automatizacion de Ventas (Lead-to-Order)
-*   **Buzon Inteligente (Inbox)**: Gestion centralizada de solicitudes de vehiculos.
-*   **Conversion con 1-Clic**: Transforma una solicitud de cliente en un pedido activo y un vehiculo en inventario automaticamente.
-*   **Creacion de Tareas Automatica**: Al iniciar un pedido, el sistema genera un checklist operativo (Documentacion, Transporte, Pagos).
+- Frontend: React
+- Backend: Node.js + Express
+- Base de datos: MongoDB (Mongoose)
+- Auth: JWT
+- Servicios: email (Nodemailer), PDF, subida de archivos
 
-### 2. Gestion Operativa por Fases
-*   **Seguimiento Dual (Alemania/España)**: Control detallado de hitos en origen y destino.
-*   **Transiciones Automaticas**: El sistema cambia de fase proactivamente al detectar hitos logisticos (ejemplo: transporte internacional).
-*   **Gestion Documental Real**: Subida y descarga de archivos (COC, Fichas Tecnicas, Facturas) con almacenamiento seguro.
+## Arranque rapido (profesor/tribunal)
 
-### 3. Comunicacion y Notificaciones
-*   **Chat en Tiempo Real**: Mensajeria directa entre vendedor y cliente.
-*   **Notificaciones Push/Email**: Avisos automaticos al cliente sobre cambios de estado o hitos alcanzados.
-*   **Envio de Correo Manual**: Herramienta para enviar correos personalizados desde la cuenta oficial de la empresa (baemimport@gmail.com).
+### Requisitos
 
-### 4. Gestion Financiera y Facturacion
-*   **Registro de Pagos**: Historial detallado de transferencias, efectivo y financiacion.
-*   **Calculo Automatico de Saldos**: Control en tiempo real del importe pagado y el resto pendiente.
-*   **Generador de PDF Premium**: Creacion instantanea de facturas y presupuestos con branding corporativo y tablas detalladas.
+- Node.js 18 o superior
+- MongoDB local o Atlas
 
-### 5. Inteligencia de Mercado
-*   **Calculadora de ROI**: Herramienta de analisis de viabilidad para cada importacion.
-*   **Informes Descargables**: Generacion de informes de viabilidad en PDF para clientes o analisis interno.
+### 1) Clonar e instalar dependencias
 
----
+```bash
+git clone https://github.com/dinabenayzahelmitmari-dotcom/BaemImport.git
+cd BaemImport
+npm run install:all
+```
 
-## Stack Tecnologico
+### 2) Configurar entorno
 
-*   **Frontend**: React.js, Vanilla CSS (Premium Design System), Axios, jsPDF, jspdf-autotable.
-*   **Backend**: Node.js, Express, MongoDB (Mongoose).
-*   **Servicios**: Multer (Archivos), Nodemailer (Emails), JWT (Seguridad).
+Crear `backend/.env` a partir de `backend/.env.example`:
 
----
+```env
+MONGO_URI=mongodb://127.0.0.1:27017/baemimport
+JWT_SECRET=change_me
+PORT=8080
 
-## Instalacion y Configuracion
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USER=baemimport@gmail.com
+MAIL_PASS=app_password_here
 
-### Requisitos Previos
-*   Node.js v16+
-*   MongoDB Atlas (o local)
-*   Cuenta de Gmail (con Contraseña de Aplicacion para SMTP)
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-4o-mini
+OPENAI_BASE_URL=https://api.openai.com/v1
+```
 
-### Pasos
-1. **Clonar el repositorio**:
-   ```bash
-   git clone [url-repo]
-   ```
-2. **Configurar Backend**:
-   - Acceder a la carpeta backend
-   - Crear archivo `.env` (puedes partir de `backend/.env.example`) con las siguientes variables:
-     ```env
-     PORT=5000
-     MONGO_URI=tu_mongo_uri
-     JWT_SECRET=tu_secreto_super_seguro
-     MAIL_USER=baemimport@gmail.com
-     MAIL_PASS=tu_app_password_de_google
-     ```
-   - Instalar dependencias y ejecutar:
-     ```bash
-     npm install
-     npm start
-     ```
-3. **Configurar Frontend**:
-   - Acceder a la carpeta frontend
-   - Instalar dependencias y ejecutar:
-     ```bash
-     npm install
-     npm start
-     ```
+Notas:
+- Si no usas email/IA en la demo, puedes dejar esas claves sin valor.
+- Para uso en movil dentro de la misma red, el backend debe aceptar conexiones LAN.
 
-## Datos de demostracion (seed)
+### 3) Ejecutar app
 
-Para cargar datos demo (vehiculos, pedido, tareas, mensajes, notificaciones) y crear un vendedor/cliente:
+```bash
+npm start
+```
+
+Abrir:
+- App: `http://localhost:8080`
+
+## Scripts utiles
+
+- `npm start`: arranca backend (sirve frontend build en `:8080`)
+- `npm run build:frontend`: genera build de frontend
+- `npm run lint`: lint backend
+- `npm run test:backend`: tests backend
+- `npm run test:frontend`: tests frontend
+- `npm run build:exe`: genera ejecutable Windows
+
+## Roles y permisos
+
+- `admin`:
+  - ve todo
+  - crea usuarios internos
+  - asigna clientes a vendedores
+- `vendedor` (empleado):
+  - misma interfaz operativa
+  - solo ve clientes/importaciones asignadas
+- `cliente`:
+  - acceso limitado a su informacion
+
+En registro publico se puede elegir `cliente` o `vendedor` (nunca `admin`).
+
+## Datos demo (opcional)
 
 ```bash
 node backend/scripts/seed-demo.js
 ```
 
-## Calidad (lint + tests)
+## Documentacion adicional
 
-Lint backend:
+- `docs/ARCHITECTURE.md`
+- `docs/ERD.md`
+- `docs/DEPLOYMENT.md`
+- `docs/DEFENSA-TRIBUNAL.md`
 
-```bash
-npm run lint
-```
+## Observacion operativa
 
-Tests backend (usa MongoDB local `baemimport_test`):
-
-```bash
-npm run test:backend
-```
-
----
-
-## Roles de Usuario
-
-*   **Administrador/Vendedor**: Control total de inventario, pedidos, chat global, gestion financiera y documentacion.
-*   **Cliente**: Acceso a su panel personal para ver el progreso de su coche, descargar documentos y comunicarse con el vendedor.
-
----
-
-## Seguridad
-*   Autenticacion mediante JWT.
-*   Middleware de proteccion de rutas para prevenir accesos no autorizados.
-*   Validacion de datos en el servidor.
-
----
-
-BAEMIMPORT - Elevando el estandar de la importacion de vehiculos.
+MongoDB necesita espacio libre en disco para arrancar correctamente.
+Si hay errores tipo `No space left on device` o `ECONNREFUSED 127.0.0.1:27017`, liberar espacio y reiniciar MongoDB.
