@@ -62,6 +62,28 @@ export default function App() {
           {/* Rutas privadas: Layout define el marco comun (nav, header, etc.) */}
           <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
             <Route index element={<Dashboard />} />
+
+            {/* Aliases en ES (compatibilidad con URLs antiguas / enlaces manuales) */}
+            <Route path="vehiculos" element={<Vehicles />} />
+            <Route path="vehiculos/new" element={<VehicleForm />} />
+            <Route path="vehiculos/:id" element={<VehicleDetail />} />
+            <Route path="vehiculos/:id/edit" element={<VehicleForm />} />
+            <Route path="clientes" element={<Clients />} />
+            <Route path="clientes/new" element={<ClientForm />} />
+            <Route path="clientes/:id" element={<ClientDetail />} />
+            <Route path="clientes/:id/edit" element={<ClientForm />} />
+            <Route path="pedidos" element={<Orders />} />
+            <Route path="pedidos/new" element={<OrderForm />} />
+            <Route path="pedidos/:id" element={<OrderDetail />} />
+            <Route path="pedidos/:id/edit" element={<OrderForm />} />
+            <Route path="presupuestos" element={<Quotes />} />
+            <Route path="presupuestos/new" element={<QuoteForm />} />
+            <Route path="presupuestos/:id/edit" element={<QuoteForm />} />
+            <Route path="facturas" element={<Invoices />} />
+            <Route path="facturas/new" element={<InvoiceForm />} />
+            <Route path="facturas/:id/edit" element={<InvoiceForm />} />
+            <Route path="tareas" element={<Tasks />} />
+
             {/* Vehiculos */}
             <Route path="vehicles" element={<Vehicles />} />
             <Route path="vehicles/new" element={<VehicleForm />} />

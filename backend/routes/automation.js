@@ -40,7 +40,7 @@ router.post("/convert/:requestId", authMiddleware, async (req, res) => {
     await order.save();
 
     // 3. Marcar solicitud como finalizada
-    request.estado = "convertido";
+    request.estado = "finalizado";
     await request.save();
 
     res.status(201).json({ orderId: order._id, vehicleId: vehicle._id });
