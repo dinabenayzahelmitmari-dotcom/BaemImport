@@ -54,6 +54,7 @@ describe("Orders (business rules)", () => {
 
     const clientDoc = await Client.create({
       usuario: clienteUser._id,
+      vendedorAsignado: vendedor._id,
       nombre: "Cliente",
       apellidos: "Test",
       email: "cliente@test.com",
@@ -119,6 +120,7 @@ describe("Orders (business rules)", () => {
 
     const clientDoc = await Client.create({
       usuario: clienteUser._id,
+      vendedorAsignado: vendedor._id,
       nombre: "Cliente",
       apellidos: "Test",
       email: "cliente2@test.com",
@@ -161,4 +163,3 @@ describe("Orders (business rules)", () => {
     expect(notifs[0].titulo).toMatch(/Actualizacion/i);
   });
 });
-
