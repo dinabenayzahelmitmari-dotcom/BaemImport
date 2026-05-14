@@ -16,7 +16,7 @@ Aplicacion full-stack para la gestion de importacion y venta de vehiculos entre 
 - npm
 - MongoDB local o una `MONGO_URI` remota de MongoDB Atlas
 
-## Arranque rapido para profesor o tribunal
+## Arranque rapido
 
 Esta es la forma mas sencilla de levantar la aplicacion.
 
