@@ -27,13 +27,16 @@ export default function ClientDashboard() {
 
   const loadChat = async () => {
     try {
-      // Primero buscar un vendedor con quien hablar
       const contactsRes = await axios.get('/api/chat/contacts/list');
       if (contactsRes.data.length > 0) {
-        const v = contactsRes.data[0];
+        const currentVendorId = vendor?._id;
+        const v = contactsRes.data.find(contact => contact._id === currentVendorId) || contactsRes.data[0];
         setVendor(v);
         const msgRes = await axios.get(`/api/chat/${v._id}`);
         setMessages(msgRes.data);
+      } else {
+        setVendor(null);
+        setMessages([]);
       }
     } catch (e) { console.error(e); }
   };

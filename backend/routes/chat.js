@@ -40,15 +40,58 @@ router.get("/contacts/list", authMiddleware, async (req, res) => {
     const userRole = req.user.rol;
     let contacts;
     if (userRole === "cliente") {
-      // Los clientes hablan con vendedores/admins.
-      contacts = await User.find({ rol: { $in: ["vendedor", "admin"] } }, "nombre rol");
+      // El cliente prioriza a su vendedor asignado y a las conversaciones ya iniciadas.
+      const clientRecord = await Client.findOne({ usuario: req.user._id }).select("vendedorAsignado");
+      const relatedMessages = await Message.find({
+        $or: [
+          { remitente: req.user._id },
+          { destinatario: req.user._id },
+        ],
+      }).sort({ createdAt: -1 }).select("remitente destinatario");
+      const messagedUserIds = relatedMessages.flatMap((message) => {
+        const ids = [];
+        if (String(message.remitente) !== String(req.user._id)) ids.push(String(message.remitente));
+        if (String(message.destinatario) !== String(req.user._id)) ids.push(String(message.destinatario));
+        return ids;
+      });
+      const prioritizedIds = [];
+      if (clientRecord?.vendedorAsignado) prioritizedIds.push(String(clientRecord.vendedorAsignado));
+      prioritizedIds.push(...messagedUserIds);
+      const uniquePrioritizedIds = [...new Set(prioritizedIds)];
+      const prioritizedContacts = uniquePrioritizedIds.length > 0
+        ? await User.find({
+          _id: { $in: uniquePrioritizedIds },
+          rol: { $in: ["vendedor", "admin"] },
+        }, "nombre email rol")
+        : [];
+      const fallbackContacts = await User.find({
+        rol: { $in: ["vendedor", "admin"] },
+        _id: { $nin: uniquePrioritizedIds },
+      }, "nombre email rol").sort({ nombre: 1 });
+      const orderedPrioritized = uniquePrioritizedIds
+        .map((id) => prioritizedContacts.find((contact) => String(contact._id) === id))
+        .filter(Boolean);
+      contacts = [...orderedPrioritized, ...fallbackContacts];
     } else if (isSeller(req.user)) {
-      // El vendedor solo ve usuarios cliente vinculados a sus clientes asignados.
+      // El vendedor ve clientes asignados y tambien clientes con los que ya tiene mensajes.
       const clients = await Client.find({
         vendedorAsignado: req.user._id,
         usuario: { $exists: true, $ne: null },
       }).select("usuario");
-      const userIds = clients.map((c) => c.usuario);
+      const assignedUserIds = clients.map((c) => String(c.usuario));
+      const relatedMessages = await Message.find({
+        $or: [
+          { remitente: req.user._id },
+          { destinatario: req.user._id },
+        ],
+      }).sort({ createdAt: -1 }).select("remitente destinatario");
+      const messagedUserIds = relatedMessages.flatMap((message) => {
+        const ids = [];
+        if (String(message.remitente) !== String(req.user._id)) ids.push(String(message.remitente));
+        if (String(message.destinatario) !== String(req.user._id)) ids.push(String(message.destinatario));
+        return ids;
+      });
+      const userIds = [...new Set([...assignedUserIds, ...messagedUserIds])];
       contacts = await User.find({ _id: { $in: userIds }, rol: "cliente" }, "nombre email");
     } else {
       contacts = await User.find({ rol: "cliente" }, "nombre email");
