@@ -16,6 +16,12 @@ Aplicacion full-stack para la gestion de importacion y venta de vehiculos entre 
 - npm
 - MongoDB local o una `MONGO_URI` remota de MongoDB Atlas
 
+Notas practicas:
+
+- la aplicacion se ha probado correctamente con Node.js 18, 20 y 22
+- en este entorno, `npm start` dio problemas con Node.js `v24.15.0` en Windows por un error `spawn EINVAL`
+- si aparece ese problema, usar el arranque de contingencia descrito mas abajo
+
 ## Arranque rapido
 
 Esta es la forma mas sencilla de levantar la aplicacion.
@@ -64,6 +70,16 @@ Abrir en el navegador:
 
 `npm start` construye el frontend si hace falta y arranca el backend sirviendo toda la aplicacion desde `:8080`.
 
+## Diferencia entre `npm start` y `npm run dev`
+
+- `npm start`: modo simple para ejecutar la app completa en `http://localhost:8080`
+- `npm run dev`: modo desarrollo con frontend y backend por separado
+
+En desarrollo:
+
+- frontend en `http://localhost:3000`
+- backend API en `http://localhost:8080`
+
 ## Desarrollo local
 
 Para trabajar con frontend y backend a la vez:
@@ -76,6 +92,42 @@ Esto deja:
 
 - frontend en `http://localhost:3000`
 - backend API en `http://localhost:8080`
+
+## Arranque de contingencia
+
+Si `npm start` falla por compatibilidad de entorno, se puede levantar la aplicacion manualmente.
+
+### 1. Levantar MongoDB manualmente
+
+Si se usa MongoDB local y el servicio no arranca solo, iniciar `mongod` manualmente.
+
+Ejemplo habitual en Windows:
+
+```powershell
+"C:\Program Files\MongoDB\Server\8.2\bin\mongod.exe" --dbpath "C:\data\db"
+```
+
+Si `C:\data\db` no existe, crearlo antes.
+
+### 2. Construir el frontend
+
+```bash
+cd frontend
+npm run build
+cd ..
+```
+
+### 3. Arrancar el backend directamente
+
+```bash
+node backend/server.js
+```
+
+### 4. Abrir la app
+
+- `http://localhost:8080`
+
+Esta ruta de contingencia fue valida en esta maquina cuando `npm start` no funciono correctamente con Node.js `v24.15.0` en Windows.
 
 ## Base de datos
 
@@ -182,6 +234,8 @@ Nota: esto crea datos demo. No restaura una base real anterior.
 - comprobar que `MONGO_URI` sea valida
 - si es local, confirmar que MongoDB este arrancado en `127.0.0.1:27017`
 - si es Atlas, confirmar usuario, password y acceso de red
+- si el servicio de MongoDB no arranca, probar `mongod.exe` manualmente con `--dbpath`
+- si falta la carpeta de datos local, crear `C:\data\db`
 
 ### La app abre pero no salen los mismos datos
 
